@@ -99,9 +99,10 @@ BuildKDTree <- function(X, bounded = F, ...){
   add_node <- function(x, node, n, d){
     node$bounded = prod(sapply(c(node$low, node$up), function(t) !is.na(t)))
 
-    if(is.na(nd[node$depth])){nd[node$depth] <<- 1
-    }else{nd[node$depth] <<- nd[node$depth] + 1}
-
+    if(node$bounded){
+      if(is.na(nd[node$depth])){nd[node$depth] <<- 1
+      }else{nd[node$depth] <<- nd[node$depth] + 1}
+    }
     if (node$ndat < 4*log(n)) { node$leaf = TRUE   # node is leaf, return it marked as such
     } else {  # split this node:
       leftnode = node; rightnode = node   # initialize by taking info from parent
