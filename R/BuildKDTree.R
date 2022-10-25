@@ -21,6 +21,7 @@
 #'\item{option}{Define the bounding box by the number of obs. (option = ndat) or quantiles (option = qt) of observations included.}
 #'\item{q}{number/quantile of points to be excluded in each end of a dimension. For example, if data is two-dimensional, option = "ndat" and qt = 50, then exclude 50 obs. in the lower and upper end of x-coordinate, then for the observations within, exclude 50 obs. in the lower and upper end of y-coordinate.  }
 #'}
+#'@param ... Additional parameters if bounded = TRUE
 #'
 #'@return \code{build_tree} returns two values.
 #'\describe{
@@ -28,12 +29,11 @@
 #'\item{nd} The number of bounded regions at every level, starting at level 1.
 #'}
 #'
+#'@export
 #'@examples
 #'# build a k-d tree for standard normal samples
-#'X = matrix(rnorm(20000, 0, 1), ncol = 2)
-#'kd = BuildKDTree(X)
-#'
-#'
+#' X <- matrix(rnorm(1000), ncol = 2)
+#' kd <- BuildKDTree(X)
 BuildKDTree <- function(X, bounded = F, ...){
 
   n <- nrow(X) # No. obs
