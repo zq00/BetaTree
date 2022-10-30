@@ -1,7 +1,6 @@
 #' Build a k-d tree
 #'
-#' Grow a kd-tree by iteratively partitioning along the sample median of each coordinate.
-#' #' NOTE: Here I assume we start at depth 1 at all times!!
+#' Grow a kd-tree by iteratively partitioning along the sample median of each coordinate. Stop partitioning when the number of observatins in a node is less than \eqn{4\log(n)}
 #'
 #' \code{BuildKDTree} constructs a kd-tree from data by iteratively partitioning along the sample median each coordinate.
 #' Each node in the kd-tree represents a region, and it consists of the following information:

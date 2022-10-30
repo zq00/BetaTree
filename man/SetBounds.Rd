@@ -9,7 +9,7 @@ SetBounds(node, ahat, n)
 \arguments{
 \item{node}{A list element representing the region.}
 
-\item{ahat}{A vector of confidence levels at each depth, starting at depth = 1.}
+\item{ahat}{A vector of confidence levels at each depth, starting at depth = 1. Output of the funtion \code{ConfLevel}}
 
 \item{n}{Total number of observations.}
 }
