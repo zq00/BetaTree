@@ -13,7 +13,7 @@
 #' @export
 #' @examples
 #' X <-  matrix(rnorm(2000, 0, 1), ncol = 2)
-#' rect <- BuildHist(X, plot = F)
+#' rect <- BuildHist(X, plot = FALSE)
 #' PlotHist(X, rect)
 PlotHist <- function(X, B, nsample = 10000){
   n <- nrow(X)
