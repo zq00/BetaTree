@@ -8,7 +8,7 @@
 #' are the lower and upper bounds in dimension \eqn{i} for the region \eqn{X}. Then, \eqn{X} and \eqn{Y} are neighbors if and only if
 #' \eqn{[X_{i,\mathrm{low}}], X_{i,\mathrm{up}}] \cap [Y_{i,\mathrm{low}}], Y_{i,\mathrm{up}}] \neq \emptyset} for every \eqn{i=1,\ldots, d}.
 #'
-#' @inherit  FindMode
+#' @inherit  FindModes
 #' @returns A matrix of size N*N, where N is the number of regions in the histogram, i.e. number of rows in the histogram.
 #' @export
 #' @examples

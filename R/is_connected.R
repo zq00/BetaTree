@@ -11,7 +11,7 @@
 #' @param g A graph returned by \link[igraph]{graph_from_adjacency_matrix}
 #' @param ci A matrix of size N*2 of the confidence intervals of empirical densities.
 #'   Each row represents one region in the Beta Tree and the two columns correspond to the lower and upper confidence limits.
-#' @inherit FindMode
+#' @inherit FindModes
 #' @returns \code{unconnected} if the two regions are distinct modes and \code{connected} otherwise.
 #' @export
 
