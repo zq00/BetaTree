@@ -24,9 +24,10 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Suggests: 
-    ggplot2 (>= 3.2.1),
     knitr,
-    rmarkdown
+    rmarkdown,
 VignetteBuilder: knitr
 Imports: 
-    stats
+    stats,
+    ggplot2 (>= 3.2.1),
+    igraph (>= 1.3.0)
