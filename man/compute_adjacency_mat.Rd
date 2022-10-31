@@ -6,13 +6,6 @@
 \usage{
 compute_adjacency_mat(hist, d)
 }
-\arguments{
-\item{hist}{A matrix. Each row represents one region in the histogram.
-If the histogram is constructed for \code{d} dimensional data, then the first \code{d} columns contain the lower bound of each dimension,
-and the next \code{d} columns contain the upper bound. \code{hist} can be the output of \link[BetaTrees]{BuildHist} function.}
-
-\item{d}{A numeric value of the data dimension.}
-}
 \value{
 A matrix of size N*N, where N is the number of regions in the histogram, i.e. number of rows in the histogram.
 }

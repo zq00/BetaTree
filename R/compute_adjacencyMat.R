@@ -8,11 +8,7 @@
 #' are the lower and upper bounds in dimension \eqn{i} for the region \eqn{X}. Then, \eqn{X} and \eqn{Y} are neighbors if and only if
 #' \eqn{[X_{i,\mathrm{low}}], X_{i,\mathrm{up}}] \cap [Y_{i,\mathrm{low}}], Y_{i,\mathrm{up}}] \neq \emptyset} for every \eqn{i=1,\ldots, d}.
 #'
-#' @param hist A matrix. Each row represents one region in the histogram.
-#'   If the histogram is constructed for \code{d} dimensional data, then the first \code{d} columns contain the lower bound of each dimension,
-#'   and the next \code{d} columns contain the upper bound. \code{hist} can be the output of \link[BetaTrees]{BuildHist} function.
-#' @param d A numeric value of the data dimension.
-#'
+#' @inherit  FindMode
 #' @returns A matrix of size N*N, where N is the number of regions in the histogram, i.e. number of rows in the histogram.
 #' @export
 #' @examples
