@@ -26,7 +26,7 @@
 #' X <-  matrix(rnorm(2000, 0, 1), ncol = 2)
 #' rect <- BuildHist(X)
 #' # Plot the histogram
-#' rect <- BuildHist(X, plot = T)
+#' rect <- BuildHist(X, plot = TRUE)
 #' # set confidence level and multiple hypothesis testing correction
 #' rect <- BuildHist(X, alpha = 0.05, method = "weighted_bonferroni")
 BuildHist <- function(X, alpha = 0.1, method = "weighted_bonferroni", bounded = F, plot = F, ...){
