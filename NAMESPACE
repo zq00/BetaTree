@@ -3,6 +3,7 @@
 export(BuildHist)
 export(BuildKDTree)
 export(ConfLevel)
+export(FindModes)
 export(PlotHist)
 export(SetBounds)
 export(compute_adjacency_mat)
