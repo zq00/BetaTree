@@ -13,15 +13,13 @@ is_connected(i, j, g, ci, cutoff = 6)
 
 \item{ci}{A matrix of size N*2 of the confidence intervals of empirical densities.
 Each row represents one region in the Beta Tree and the two columns correspond to the lower and upper confidence limits.}
-
-\item{cutoff}{Maximum path length. By default, we only evaluate paths with length at most \code{cutoff = 6}.}
 }
 \value{
 \code{unconnected} if the two regions are distinct modes and \code{connected} otherwise.
 }
 \description{
 Two regions \code{i} and \code{j} are two \emph{distinct} modes if
-for every path connection \code{i} and \code{j}, there exists at least one \code{R} along the path,
+there \emph{exists} one path connecting \code{i} and \code{j}, there exists at least one \code{R} along the path,
 such that the upper endpoint of confidence interval of \code{R} is \emph{below} the lower endpoints of that of
 both \code{i} and \code{j}.
 }
