@@ -25,6 +25,6 @@ If the number of data points exceeds \code{nsample}, randomly select \code{nsamp
 }
 \examples{
 X <-  matrix(rnorm(2000, 0, 1), ncol = 2)
-rect <- BuildHist(X, plot = F)
+rect <- BuildHist(X, plot = FALSE)
 PlotHist(X, rect)
 }

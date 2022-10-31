@@ -13,6 +13,8 @@ is_connected(i, j, g, ci, cutoff = 6)
 
 \item{ci}{A matrix of size N*2 of the confidence intervals of empirical densities.
 Each row represents one region in the Beta Tree and the two columns correspond to the lower and upper confidence limits.}
+
+\item{cutoff}{Maximum path length. By default, we only evaluate paths with length at most \code{cutoff = 6}.}
 }
 \value{
 \code{unconnected} if the two regions are distinct modes and \code{connected} otherwise.
@@ -25,4 +27,11 @@ both \code{i} and \code{j}.
 }
 \details{
 For computational reasons, we only check paths whose length is at most \code{cutoff}.
+}
+\examples{
+# A mixture of two Gaussians
+X <-  matrix(rnorm(4000, 0, 1), ncol = 2)
+X[1:1000, 1] <- X[1:1000, 1] + 4
+rect <- BuildHist(X) # construct a Beta Tree histogram
+modes <- FindModes(hist = rect, d = 2)$mode
 }
