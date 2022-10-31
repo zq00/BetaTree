@@ -22,6 +22,7 @@
 #' \item{g}{A graph object constructed using the adjacency matrix of the regions in the histogram.}
 #' }
 #' @export
+#' @importFrom igraph graph_from_adjacency_matrix
 #' @examples
 #' # A mixture of two Gaussians
 #' X <-  matrix(rnorm(4000, 0, 1), ncol = 2)

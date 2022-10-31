@@ -19,6 +19,7 @@
 #'@return A matrix of rectangles in the histogram of obs. in the input node.
 #'    A region in the histogram is represented by a row, which contains the lower and upper bounds, empirical density,
 #'    lower and upper confidence bounds of this node, number of obs. and the depth of the node.
+#' @importFrom stats qbeta
 SelectNodes <- function(node, B, ahat, n){
   recurse <- TRUE
   if(node$bounded){
