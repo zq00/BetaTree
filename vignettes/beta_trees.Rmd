@@ -199,9 +199,11 @@ ahat
 
 ## Setting confidence bounds for each region 
 Once we set the confidence levels, we can compute a simultaneous confidence interval for the average density $f(R_k)$ at level $\alpha$ as
+
 $$
 \left(\frac{\mathrm{qBeta}(\hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}, \frac{\mathrm{qBeta}(1 - \hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}\right). 
 $$
+
 To form the Beta Tree histogram, we will select regions whose  empirical density $h_k = (n_k + 1)/n$ falls within the CI of all of its children. To simplify computation, we set the lower and upper confidence bound in each node in the k-d tree `tree` (in the `lower` and `upper` ) as 
 $$
 \mathrm{lower}(R_k) = \max\left(\frac{\mathrm{qBeta}(\hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}, \mathrm{lower}(1st \mathrm{child}), \mathrm{lower}(2nd \mathrm{child})\right)\\
@@ -219,6 +221,27 @@ tree$leftchild$leftchild$rightchild$rightchild$leftchild$leftchild
 ```
 
 ## Selecting regions to form the Beta Tree histogram 
+
+`SelectNodes` selects the largest regions (w.r.t) inclusion such that the empirical density $h_k$ falls inside the interval $[\mathrm{lower}(R_k), \mathrm{upper}(R_k)]$. 
+
+```{r}
+B <- matrix(nrow = 0, ncol = (2*d + 5)) 
+hist <- SelectNodes(tree, B, ahat, n)
+```
+
+Each row in `hist` matrix represents one region in the Beta Tree histogram. The matrix contains $2\times d + 5$ columns. The first $2\times d$ columns stores the lower (first $d$ columns) and upper bounds of the region. The $(2d+1)$ column stores the empirical density $h_k$ and the next two columns store the confidence interval of $f(R_k)$ as defined in the previous section:
+$$
+\left(\frac{\mathrm{qBeta}(\hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}, \frac{\mathrm{qBeta}(1 - \hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}\right). 
+$$
+
+
+
+
+
+
+
+
+
 
 
 
