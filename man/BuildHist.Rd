@@ -34,6 +34,8 @@ BuildHist(
 A matrix of rectangles in the histogram of obs. in the input node.
 A region in the histogram is represented by a row, which contains the following columns: the lower bounds, upper bounds, empirical density,
 lower confidence bounds, upper confidence bounds of this node, number of obs. and the depth of the node.
+If \code{plot = T}, then returns a list of two elements, where \code{hist} is the matrix of rectangles in the histogram
+and \code{fig} is a graph of the histogram
 }
 \description{
 Compute a Beta Tree histogram for multivariate data at given confidence level.

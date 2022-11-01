@@ -4,7 +4,7 @@
 \alias{ConfLevel}
 \title{Set confidence level to each depth}
 \usage{
-ConfLevel(nd, alpha, method, n, d)
+ConfLevel(nd, alpha, method)
 }
 \arguments{
 \item{nd}{A vector. Number of bounded regions at every level.}
@@ -12,10 +12,6 @@ ConfLevel(nd, alpha, method, n, d)
 \item{alpha}{Numeric. confidence level.}
 
 \item{method}{Use \code{bonferroni} or \code{weighted_bonferroni} method to adjust for multiple hypothesis testing.}
-
-\item{n}{Number of observations.}
-
-\item{d}{Numeric value of the number of dimensions of the obs.}
 }
 \value{
 A vector of confidence level at every depth (starting at depth = 1)
