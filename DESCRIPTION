@@ -1,6 +1,6 @@
 Package: BetaTrees
 Title: Computes a BetaTree histogram for multivariate data   
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: 
     person(given = "Qian",
            family = "Zhao",
@@ -9,15 +9,12 @@ Authors@R:
            comment = c(ORCID = "0000-0002-2287-4871"))
      person(given = "Guenther",
            family = "Walther",
-           role = c("aut", "cre"),
-           email = "qzhao1@stanford.edu",
-           comment = c(ORCID = "0000-0002-2287-4871"))
-Description: This package creates BetaTrees histogram. The partition is obtained by growing
-    a kd tree on the order statistics, then on each node (i.e. region) that is bounded, do a goodness of fit (GOF) test to decide whether
-    that region is good representation or needs to split into (grand)children. Test by using as 
-    test sets all nodes that are contained in that node (i.e. children, grandchildren...)
-    For GOF use exact beta confidence bounds from Wald's lemma, and get guaranteed
-    simultaneous level alpha by weighted Bonferroni. 
+           role = c("aut"),
+           email = "gwalther@stanford.edu")
+Description: Creates a Beta Tree histogram. Iteratively partition the space by by growing
+    a kd tree on the order statistics. For each node, computes an exact confidence bound from Wald's lemma, and get guaranteed
+    simultaneous level alpha by weighted Bonferroni. Construct the histogram by selecting the largest node
+    that passes a goodness-of-fit test. 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
