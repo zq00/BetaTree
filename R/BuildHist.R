@@ -35,7 +35,7 @@ BuildHist <- function(X, alpha = 0.1, method = "weighted_bonferroni", bounded = 
   n <- nrow(X); d <- ncol(X)
   kdtree <- BuildKDTree(X, bounded, ...)
   nd <- kdtree$nd
-  ahat <- ConfLevel(nd, alpha, method, n, d)
+  ahat <- ConfLevel(nd, alpha, method)
   kdtree <- SetBounds(kdtree$kdtree, ahat, n)
   B <- matrix(nrow = 0, ncol = (2*d + 5))         # matrix that will hold selected regions
   B <- SelectNodes(kdtree, B, ahat, n)          # traverse tree and select maximal nodes that are bounded and pass GOF
