@@ -105,7 +105,8 @@ BuildKDTree <- function(X, bounded = F, ...){
     if (node$ndat < 4*log(n)) { node$leaf = TRUE   # node is leaf, return it marked as such
     } else {  # split this node:
       leftnode = node; rightnode = node   # initialize by taking info from parent
-      p = ifelse(depth %% d == 0, d,  depth %% d) # partition dimension
+      p = ifelse(node$depth %% d == 0, d,  node$depth %% d ) # partition dimension
+
 
       depth = node$depth + 1
       leftnode$depth = depth; rightnode$depth = depth
