@@ -105,10 +105,11 @@ BuildKDTree <- function(X, bounded = F, ...){
     if (node$ndat < 4*log(n)) { node$leaf = TRUE   # node is leaf, return it marked as such
     } else {  # split this node:
       leftnode = node; rightnode = node   # initialize by taking info from parent
+      p = ifelse(depth %% d == 0, d,  depth %% d) # partition dimension
+
       depth = node$depth + 1
       leftnode$depth = depth; rightnode$depth = depth
 
-      p = depth %% d +1 # partition dimension
       x = x[order(x[,p]),, drop = F] # sort according to the pth coordinate
       m = node$ndat  # number of data in x
       leftnode$ndat = ceiling(m/2)-1; rightnode$ndat = m-ceiling(m/2)
