@@ -152,7 +152,7 @@ tree <- BuildKDTree(X, bounded = F)
 The `tree` object has two components `kdtree` and `nd`. `kdtree` stores the k-d tree. You can refer to the function documentation for the details, here we point out that `leftchild` and `rightchild` points to the two partitions of that node. For example, we can look at one node in the tree.
 
 ```{r}
-tree$kdtree$leftchild$leftchild$leftchild$leftchild$leftchild$leftchild
+tree$kdtree$leftchild$leftchild$rightchild$rightchild$leftchild$leftchild
 ```
 
 `nd` contains the number of *bounded* regions at each depth. This is useful when we adjust the confidence levels at each depth to account for multiple CI. Here, at depth 5 there are `r tree$nd[5]` bounded regions. 
@@ -175,10 +175,48 @@ $$
 
 ## Calculating confidence levels 
 
+Theorem 1 in the paper states that the cumulative distributio function in each region $k$ satisfies 
+$$
+F(R_k)\sim \mathrm{Beta}(n_k+1, n-n_k),
+$$
+and we can use this result to construct a $(1-\alpha)$ confidence interval for the average density $f(R_k) = F(R_k)/|R_k|$ where $|R_k|$ is the volume of $R_k$. 
+
+This confidence interval is valid for only one region, and if we want to achieve simultaneous coverage at level $(1-\alpha)$, we can adjust the confidence level of each region such that the total probability of mis-coverage is at most $\alpha$. Here, we use a **weighted bonferroni** adjustment, which defines the confidence level for regions at level $D$ as
+$$
+\hat{\alpha}_D = \frac{\alpha}{(D_{\max} - D + 2) \times  N_D \times \sum_{B=2}^{D_{\max}-2}\frac{1}{B}}.
+$$
+Here, $D_{\max}$ is the maximum depth of the k-d tree, $N_D$ is the number of *bounded* regions in depth $D$ and the factor $\sum_{B=2}^{D_{\max}-2}\frac{1}{B}$ ensures that $\hat{\alpha}_D$ adds up to $\alpha$. 
+
+`ConfLevel` computes $\hat{\alpha}_D$ at each level. For example, the following code computes $\hat{\alpha}_D$ when $\alpha = 0.1$. You can also use bonferroni adjustment by setting `method = 'bonferroni'`. The Bonferroni adjustment gives equal weight to every depth. 
+
+```{r}
+ahat <- ConfLevel(tree$nd, alpha = 0.01, method = "weighted_bonferroni")
+ahat
+```
+
 , defined by $(n(R)+1)/ n / |R|$, where $n(R)$ is the total num of obs. inside the region, $n$ is the total num of obs. and $|R|$ is the volume of the rectangle. 
 
 
-## Setting confidence bounds
+## Setting confidence bounds for each region 
+Once we set the confidence levels, we can compute a simultaneous confidence interval for the average density $f(R_k)$ at level $\alpha$ as
+$$
+\left(\frac{\mathrm{qBeta}(\hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}, \frac{\mathrm{qBeta}(1 - \hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}\right). 
+$$
+To form the Beta Tree histogram, we will select regions whose  empirical density $h_k = (n_k + 1)/n$ falls within the CI of all of its children. To simplify computation, we set the lower and upper confidence bound in each node in the k-d tree `tree` (in the `lower` and `upper` ) as 
+$$
+\mathrm{lower}(R_k) = \max\left(\frac{\mathrm{qBeta}(\hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}, \mathrm{lower}(1st \mathrm{child}), \mathrm{lower}(2nd \mathrm{child})\right)\\
+\mathrm{upper}(R_k) = \max\left(\frac{\mathrm{qBeta}(1-\hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}, \mathrm{upper}(1st \mathrm{child}), \mathrm{upper}(2nd \mathrm{child})\right)
+$$
+
+`SetBounds` sets these two bounds. Compare the same node in the k-d tree as before -- the `lower` and `upper` levels has been set.
+
+```{r}
+tree <- SetBounds(tree$kdtree, ahat, n)
+```
+
+```{r}
+tree$leftchild$leftchild$rightchild$rightchild$leftchild$leftchild
+```
 
 ## Selecting regions to form the Beta Tree histogram 
 
