@@ -17,11 +17,9 @@
 #' @param nd A vector. Number of bounded regions at every level.
 #' @param alpha Numeric. confidence level.
 #' @param method Use \code{bonferroni} or \code{weighted_bonferroni} method to adjust for multiple hypothesis testing.
-#' @param n Number of observations.
-#' @param d Numeric value of the number of dimensions of the obs.
 #' @return A vector of confidence level at every depth (starting at depth = 1)
 #' @export
-ConfLevel <- function(nd, alpha, method, n, d){
+ConfLevel <- function(nd, alpha, method){
   Dmax <- length(nd)  # depth of tree
   Dmin <- min(which(!is.na(nd)))
   # set sig. level to each depth
