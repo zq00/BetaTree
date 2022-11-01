@@ -2,15 +2,15 @@ Package: BetaTrees
 Title: Computes a BetaTree histogram for multivariate data   
 Version: 1.0.0
 Authors@R: 
-    person(given = "Qian",
+    c(person(given = "Qian",
            family = "Zhao",
            role = c("aut", "cre"),
            email = "qzhao1@stanford.edu",
-           comment = c(ORCID = "0000-0002-2287-4871"))
-     person(given = "Guenther",
+           comment = c(ORCID = "0000-0002-2287-4871")),
+    person(given = "Guenther",
            family = "Walther",
            role = c("aut"),
-           email = "gwalther@stanford.edu")
+           email = "gwalther@stanford.edu"))
 Description: Creates a Beta Tree histogram. Iteratively partition the space by by growing
     a kd tree on the order statistics. For each node, computes an exact confidence bound from Wald's lemma, and get guaranteed
     simultaneous level alpha by weighted Bonferroni. Construct the histogram by selecting the largest node
