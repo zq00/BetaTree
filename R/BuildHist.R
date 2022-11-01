@@ -21,6 +21,8 @@
 #' @returns A matrix of rectangles in the histogram of obs. in the input node.
 #' A region in the histogram is represented by a row, which contains the following columns: the lower bounds, upper bounds, empirical density,
 #' lower confidence bounds, upper confidence bounds of this node, number of obs. and the depth of the node.
+#'  If \code{plot = T}, then returns a list of two elements, where \code{hist} is the matrix of rectangles in the histogram
+#'  and \code{fig} is a graph of the histogram
 #' @export
 #' @examples
 #' X <-  matrix(rnorm(2000, 0, 1), ncol = 2)
@@ -38,13 +40,16 @@ BuildHist <- function(X, alpha = 0.1, method = "weighted_bonferroni", bounded = 
   B <- matrix(nrow = 0, ncol = (2*d + 5))         # matrix that will hold selected regions
   B <- SelectNodes(kdtree, B, ahat, n)          # traverse tree and select maximal nodes that are bounded and pass GOF
 
-  if(plot){
+  if(plot == T){
     if(ncol(X) == 2){
-      PlotHist(X, B)
+      g <- PlotHist(X, B)
+      print(g)
+      return(list(hist = B, fig = g))
     }else{
       cat("The data dimension is not 2!")
+      return(B)
     }
+  }else{
+    return(B)
   }
-
-  B
 }
