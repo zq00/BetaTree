@@ -26,7 +26,7 @@ compute_adjacency_mat <- function(hist, d){
     for(dim in 1:d){ # iterate through each dimension
       if(sum(nbd[[i]]) == 0) break; # region i does not have any neighors
       x <- hist[i, c(dim, d + dim)]; # lower and upper bounds of the region
-      y <- rect[nbd[[i]], c(dim, d + dim), drop = F] # lower and upper bounds of candidate neighbors
+      y <- hist[nbd[[i]], c(dim, d + dim), drop = F] # lower and upper bounds of candidate neighbors
       indices <- which(y[,2] < x[1] | y[,1] > x[2]) # these are NOT in the nbd
       nbd[[i]] <- nbd[[i]][-indices]
     }
