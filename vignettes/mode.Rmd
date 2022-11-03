@@ -1,0 +1,202 @@
+---
+title: "Mode Hunting with Beta Trees"
+author: "Qian Zhao"
+date: '2022-11-02'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(igraph)
+devtools::load_all(path = "~/Desktop/Topics/kdhist/package/BetaTrees")
+
+```
+
+A mode in a continuous distribution is typically defined as the location where the derivative of the density vanishes. Another perspective is that the mode is where the *probability mass is concentrated*. In the context of a histogram, we can think of modes as a region where the average density is high compared to its neighbors. More specifically, suppose two regions $R_1$ and $R_2$ are distinct modes, then along any path connecting these $R_1$ and $R_2$ there exists at least one region $R$ whose average density is lower than both $R_1$ and $R_2$. Because the Beta Trees histogram provides a confidence interval for the average density, we can compare the confidence bounds of these regions. 
+
+This vignettes demonstrates how to use the `BetaTrees` package to identify modes in a Beta Tree histogram.
+
+## Example: mixture of two dimensional Gaussian variables
+
+As an illustration, we sample data from a mixture of two-dimensional Gaussian distribution 
+
+```{r}
+n <- 2000 # num of obs.
+d <- 2 # num of dim.
+```
+
+
+The two-dimensional Gaussian are from the following distribution, and we visualize the the samples of `r n` observations below. 
+
+$$
+\frac{2}{5} \mathcal{N}\left(\left(\begin{matrix}-1.5 \\0.6\end{matrix}\right),\left(\begin{matrix}1 & 0.5 \\ 0.5 & 1\end{matrix}\right) \right) + \frac{3}{5} \mathcal{N}\left(\left(\begin{matrix}2 \\-1.5\end{matrix}\right),\left(\begin{matrix}1 & 0 \\ 0 & 1\end{matrix}\right) \right), 
+$$
+```{r, echo = F}
+mu2d <- list(c(-1.5, 0.6), c(2, -1.5)) # mean 
+sigma12d <- matrix(c(1, 0.5, 0.5, 1), d, d, byrow = T)
+sigma22d <- matrix(c(1, 0, 0, 1), d, d, byrow = T)
+sigma2d <- list(sigma12d, sigma22d) # covariance
+
+N <- apply(rmultinom(n, 1, prob = c(0.4, 0.6)), 2, function(t) which(t == 1)) 
+nn <- table(N) # number of elements from each mixture component
+X <- matrix(0, n, d) # observations
+# sample from each of the mixture
+for(i in 1:2){
+  R <- chol(sigma2d[[i]])
+  G <- matrix(rnorm(nn[i] * 2, 0, 1), nn[i], d) %*% R
+  X[which(N == i), ] <-   t(t(G) + mu2d[[i]])
+}
+```
+
+
+
+```{r, echo = F, fig.height = 3, fig.width= 4, fig.align='center'}
+ggplot() + 
+  geom_point(aes(x = X[,1], y = X[,2] , color = as.factor(N)), size = 0.5) + 
+  theme_bw() + 
+  labs(color = "Component", x = "X", y="Y") + 
+  theme(legend.position = c(0.85, 0.8)) 
+```
+
+First, we use `BuildHist()` function to create and visualize a Beta Tree histogram. Here, we specify a confidence level `alpha = 0.1` and use weighted bonferroni method for multiple testing correction.
+
+```{r, fig.height = 3, fig.width= 4, fig.align='center'}
+hist <- BuildHist(X, alpha = 0.1, method = "weighted_bonferroni", plot= T)
+```
+
+
+From the figure, the densities are higher in the upper left and the lower right regions. Next, we use the `find_mode()` identifies the modes in the Beta Trees histogram. The function has three parameters, the first input is the Beta Tree histogram, the second is the dimension of the data, and the third parameter specifies the cutoff the path length. Here, we set `cutoff=1000`, which means we will look at every path between two regions. However, it is usually infeasible to check every path because of computation constraint, so typically we would set `cutoff = 6`. 
+
+```{r}
+modes <- FindModes(hist = hist$hist, d = d, cutoff = 1000)
+```
+
+The `modes` has three components: `mode` returns the **index** of the modes identified in the `hist`, `hist` returns the input histogram, and `g` returns a graph of all of the regions in the histogram. 
+
+```{r}
+modes$mode 
+hist$hist[modes$mode, ] # detail of the modes
+```
+
+We highlight the two modes as well as plot the means of the two Gaussian mixtures. The shaded regions are the modes in the Beta Tree histogram and the asterisks are the means of the two components of the mixture of Gaussian. 
+
+```{r, echo = F}
+# function to plot the candidate modes
+# INPUTS
+# hist -- the histogram 
+# modes -- the true location of the modes, should have two columns called "x" and "y"
+# candidate_modes -- the candidate modes returned by our algorithm
+PlotModes2D <- function(hist, modes, candidate_modes){
+  colnames(hist) <- c("xmin","ymin","xmax","ymax",'density','lower','upper', "ndat",'level')
+  hist <- as.data.frame(hist)
+  g <- ggplot() +
+        geom_rect(aes(xmin = xmin, xmax = xmax,ymin = ymin, ymax = ymax,fill = density), color = "black",data = hist)  +
+    scale_fill_gradient2(low = "#e0f3db", mid = "#a8ddb5", high = "#43a2ca",aesthetics = "fill") + 
+        geom_rect(aes(xmin = xmin, xmax = xmax,ymin = ymin, ymax = ymax, fill = density), data=hist[candidate_modes, ],  color = "red") + 
+    geom_point(aes(x = x, y= y), data=modes, shape = 8, color = "red", size = 2) +
+        xlab("X") +  ylab("Y") +
+        theme_bw() +  theme(text=element_text(size =18))
+  
+  return(g)
+}
+```
+
+```{r, echo = F, fig.height = 3, fig.width= 4, fig.align='center'}
+Mode2d <- data.frame(rbind(mu2d[[1]], mu2d[[2]])) 
+colnames(Mode2d) <- c('x', 'y')
+PlotModes2D(hist$hist, Mode2d, modes$mode)
+```
+
+
+In the next few sections, we describe how you can use the functions in `BetaTrees` to identify modes in a Beta Trees histogram. 
+
+## Identifying modes in a Beta Tree histogram
+
+`FindModes` proceeds in the following steps: 
+
+1. Order regions reversely by the empirical density. Initiate the list of modes by the region with the highest density. 
+
+2. Iterate through every region by order in (1), test if they are *distinct modes* from the current list of modes. 
+
+3. Return the list of modes. 
+
+In step (2), we say that $R_1$ and $R_2$ are two *distinct modes* if there exists at least one path from $R_1$ to $R_2$ such that there exists at least one region $R$ whose average density is lower than both $R_1$ and $R_2$, i.e., 
+$$
+\mathrm{CI}_\mathrm{up}(R) < \min(\mathrm{CI}_\mathrm{low}(R_1), \mathrm{CI}_\mathrm{up}(R_2)),
+$$
+where $[\mathrm{CI}_\mathrm{low}(R), \mathrm{CI}_\mathrm{up}(R)]$ is the confidence interval of the average empirical density of $R$. The $(1-\alpha)$ confidence interval are stored in the $(2*d+2)$ and $(2*d+3)$ columns of output matrix from `SelectNodes` (or `BuildHist`). The function `is_connected()` tests whether two regions are distinct modes. Another subroutine in step (2) is to compute an adjacency matrix of regions in the histogram. 
+
+### Computing a adjacency matrix of regions in the histogram
+
+Two regions $R_1$ and $R_2$ are neighbors if 
+$$
+[x^{\mathrm{low}}_{1,j}, x^{\mathrm{up}}_{1,j}] \cap [x^{\mathrm{low}}_{2,j}, x^{\mathrm{up}}_{2,j}] \neq \emptyset,\quad \forall j=1,\ldots, d. 
+$$
+Here, we define each region by the lower and upper bound in each coordinate, i.e., $R_1$ can be represented as $[x^{\mathrm{low}}_{1,1}, x^{\mathrm{up}}_{1,1}]\times \ldots \times [x^{\mathrm{low}}_{1,d}, x^{\mathrm{up}}_{1,d}]$. 
+
+`compute_adjacency_mat()` computes the adjacency matrix for all of the regions in the histogram. The two inputs of the function is a Beta Tree histogram `hist` and data dimension `d`. In the output adjacency matrix $A$, $A_{i,j} = 1$ if $i$-th and $j$-th regions are neighbors and 0 otherwise. 
+
+```{r}
+adj <- compute_adjacency_mat(hist = hist$hist, d = d) 
+
+adj[1:5, 1:5] 
+```
+
+### Testing if two regions are distinct modes 
+
+`is_connected()` tests if two regions are distinct modes or not. The following code tests if the first and second modes are distinct modes (the graph `g` is a graph based on the adjacency matrix). The `cutoff` parameter specifies the maximum length of path that the algorithm checks. `is_connected()` outputs `connected` if the test fails, i.e., the two regions are **not** distinct modes. 
+
+```{r}
+g <- igraph::graph_from_adjacency_matrix(adj, mode = "undirected")
+```
+
+
+```{r}
+is_connected(i = modes$mode[1], j = modes$mode[2], g = g, ci = hist$hist[,6:7], cutoff = 6)
+```
+
+To illustrate, we can plot the confidence interval for every region along a path connecting these two regions. As we can see, the upper confidence bound of one of the region is below the lower endpoints of both modes, and this is true for every path with length at most 6. 
+
+```{r, echo = F}
+# function to plot density along the shortest path between two regions A and B
+# INPUTS
+# hist -- the histogram 
+# d -- data dimension
+# g -- adjacency graph of the regions in histogram 
+# A, B -- two regions
+plotdensity <- function(hist, d, g, A, B){
+  # find the shortest path between A and B
+  path <- shortest_paths(g, from = A, to = B)$vpath[[1]]
+  # make a bar plot of the density along the path
+  density <- data.frame(
+    id = factor(1:length(path)),
+    density = hist[path, (2*d + 1)],
+  lower = hist[path, (2*d + 2)],
+  upper = hist[path, (2*d + 3)])
+  # add two lines of the shorter of the lower CI of A and B 
+  g <- ggplot(density) + 
+    geom_point(aes(x = id, y = density)) + 
+    geom_segment(aes(x = id, xend = id, y = lower, yend = upper)) + 
+    geom_hline(yintercept = min(density$lower[1], density$lower[length(path)]),
+               linetype = "dashed") + 
+    ylab("Density") + 
+    theme_bw() + scale_x_discrete(name ="Regions", 
+                    labels =c("Mode 1", rep("", length(path)-2), "Mode 2"))
+  
+  return(g)
+}
+```
+
+```{r, echo = F, fig.height = 3, fig.width= 4, fig.align='center'}
+plotdensity(hist$hist, d = d, g = g, A = modes$mode[1], B = modes$mode[2])
+```
+
+
+
+
+
+
+
+
+
