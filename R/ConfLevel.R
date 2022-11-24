@@ -21,7 +21,7 @@
 #' @export
 ConfLevel <- function(nd, alpha, method){
   Dmax <- length(nd)  # depth of tree
-  Dmin <- min(which(!is.na(nd)))
+  Dmin <- min(which(nd > 0))
   # set sig. level to each depth
   ahat <- numeric(Dmax)
   for(l in Dmin:Dmax){
