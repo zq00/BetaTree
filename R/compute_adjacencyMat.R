@@ -28,6 +28,7 @@ compute_adjacency_mat <- function(hist, d){
       x <- hist[i, c(dim, d + dim)]; # lower and upper bounds of the region
       y <- hist[nbd[[i]], c(dim, d + dim), drop = F] # lower and upper bounds of candidate neighbors
       indices <- which(y[,2] < x[1] | y[,1] > x[2]) # these are NOT in the nbd
+      if(sum(indices) == 0) next;
       nbd[[i]] <- nbd[[i]][-indices]
     }
     if(sum(nbd[[i]]) > 0) {
