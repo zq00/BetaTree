@@ -36,6 +36,11 @@ FindModes <- function(hist, d, cutoff = 6){
   node_order <- order(density, decreasing = T) # order nodes by decreasing order of empirical density
   candidate_mode <- node_order[1] #
 
+  if(nrow(hist) == 1) {
+    cat("The histogram contains a single region!")
+    return(list(mode = c(1),
+                hist = hist))
+  }
   # compute adjacency matrix
   adj <- compute_adjacency_mat(hist, d)
   # compute a graph from the adj
