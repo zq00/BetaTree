@@ -46,9 +46,9 @@ FindModes <- function(hist, d, cutoff = 6){
   # compute a graph from the adj
   g <- igraph::graph_from_adjacency_matrix(adj, mode = "undirected")
   for(i in 2:nrow(hist)){ # iterate through every region
-    flag  <-  F # If T, then the region i is not a mode
+    flag  <-  F # If T, then the region i is NOT a mode
     for(j in candidate_mode){ # iterate through every current mode
-      if(adj[node_order[i], j] == 1) {flag = T; break;} # connected to current mode
+      if(adj[node_order[i], j] == 1) {flag = T; break;} # neighbour of the current mode
       new_val <- is_connected(node_order[i], j, g, ci, cutoff)
       if(new_val == "connected") {flag = T; break; }
     }

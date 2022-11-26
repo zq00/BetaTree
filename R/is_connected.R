@@ -20,15 +20,16 @@ is_connected <- function(i, j, g, ci, cutoff = 6){
   all_path <- igraph::all_simple_paths(g, i, j, mode = "all", cutoff = cutoff)
   if(length(all_path) == 0) return("unconnected") # no path connecting the two regions
 
-  for(k in 1:length(all_path)){
+  for(k in 1:length(all_path)){ # iterate through every path
     path <- all_path[[k]]
     if(length(path) == 2){ # if only i and j are in the path, then they are neighbors
       return("connected")
     }
     val <- sapply(path, function(t) ci[t,2] < ci[i,1] & ci[t,2] < ci[j,1]) # T if the CI of a rectangle along the path dips below the CI of both i AND j
-    if(all(!val)){
+    if(all(!val)){ # all values are F, i.e., no region along the path has lower density compared to i and j
       return("connected")
     }
   }
+
   return("unconnected")
 }
