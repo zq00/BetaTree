@@ -22,9 +22,9 @@ compute_adjacency_mat <- function(hist, d){
   # Find neighbors of each rectangle in the histogram (by removing rectangles NOT in the nbd)
   nbd <- list()
   for(i in 1:N){
-    nbd[[i]] <- (1:N)[-i]# initiate neighbors by every rectangle that is NOT itself
+    nbd[[i]] <- (1:N)[-i] # initialize neighbors by every rectangle that is NOT itself
     for(dim in 1:d){ # iterate through each dimension
-      if(sum(nbd[[i]]) == 0) break; # region i does not have any neighors
+      if(sum(nbd[[i]]) == 0) break; # region i does not have any neighours
       x <- hist[i, c(dim, d + dim)]; # lower and upper bounds of the region
       y <- hist[nbd[[i]], c(dim, d + dim), drop = F] # lower and upper bounds of candidate neighbors
       indices <- which(y[,2] < x[1] | y[,1] > x[2]) # these are NOT in the nbd
@@ -33,7 +33,7 @@ compute_adjacency_mat <- function(hist, d){
     }
     if(sum(nbd[[i]]) > 0) {
       adj[i, nbd[[i]]] <- 1 # fill in adjacency matrix
-      }
+    }
   }
 
   return(adj)
