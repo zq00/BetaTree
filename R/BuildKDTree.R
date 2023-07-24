@@ -98,17 +98,17 @@ BuildKDTree <- function(X, bounded = F, ...){
   add_node <- function(x, node, n, d){
     node$bounded = prod(sapply(c(node$low, node$up), function(t) !is.na(t)))
 
-    if(is.na(nd[node$depth])){ # the first region at depth d
-      nd[node$depth] <<- 0 # initialize with no bounded region
+    if(is.na(nd[node$depth + 1])){ # the first region at depth d
+      nd[node$depth + 1] <<- 0 # initialize with no bounded region
     }
     if(node$bounded){ # if the node is bounded, then count the region
-      nd[node$depth] <<- nd[node$depth] + 1
+      nd[node$depth + 1] <<- nd[node$depth + 1] + 1
     }
 
     if (node$ndat < 4*log(n)) { node$leaf = TRUE   # node is leaf, return it marked as such
     } else {  # split this node:
       leftnode = node; rightnode = node   # initialize by taking info from parent
-      p = ifelse(node$depth %% d == 0, d,  node$depth %% d ) # partition dimension
+      p = node$depth %% d + 1 # partition dimension
 
       depth = node$depth + 1
       leftnode$depth = depth; rightnode$depth = depth
@@ -118,7 +118,7 @@ BuildKDTree <- function(X, bounded = F, ...){
       leftnode$ndat = ceiling(m/2)-1; rightnode$ndat = m-ceiling(m/2)
       xleft = x[1:(ceiling(m/2)-1),, drop = F]; xright = x[(ceiling(m/2)+1):m,, drop = F]
 
-      leftnode$up[p] <- x[ceiling(m/2),p, drop = F];
+      leftnode$up[p] <- x[ceiling(m/2),p, drop = F]
       rightnode$low[p] <- x[ceiling(m/2),p, drop = F]
 
       node$leftchild = add_node(xleft,leftnode, n, d )
