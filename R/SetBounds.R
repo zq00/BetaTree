@@ -23,8 +23,8 @@
 #' @export
 SetBounds <- function(node, ahat, n){
   if (node$bounded){
-    lower <- stats::qbeta(ahat[node$depth] / 2, node$ndat + 1, n - node$ndat) / prod(node$up - node$low)
-    upper <- stats::qbeta(1 - ahat[node$depth] / 2, node$ndat + 1, n - node$ndat) / prod(node$up - node$low)
+    lower <- stats::qbeta(ahat[node$depth + 1] / 2, node$ndat + 1, n - node$ndat) / prod(node$up - node$low)
+    upper <- stats::qbeta(1 - ahat[node$depth + 1] / 2, node$ndat + 1, n - node$ndat) / prod(node$up - node$low)
   }
   if(node$leaf){if (node$bounded) {node$lower <- lower; node$upper <- upper}
   }else{
