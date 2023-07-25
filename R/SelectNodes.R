@@ -27,8 +27,8 @@ SelectNodes <- function(node, B, ahat, n){
     # cat(node$depth, ",", h, ",", node$lower, ",", node$upper, "\n")
     if ((node$lower <= h) & (h <= node$upper)) { # take this node
       recurse <- FALSE
-      lower <- stats::qbeta(ahat[node$depth] / 2, node$ndat + 1, n - node$ndat) / prod(node$up - node$low)
-      upper <- stats::qbeta(1 - ahat[node$depth] / 2, node$ndat + 1, n - node$ndat) / prod(node$up - node$low)
+      lower <- stats::qbeta(ahat[node$depth + 1] / 2, node$ndat + 1, n - node$ndat) / prod(node$up - node$low)
+      upper <- stats::qbeta(1 - ahat[node$depth + 1] / 2, node$ndat + 1, n - node$ndat) / prod(node$up - node$low)
       B <- rbind(B,c(node$low, node$up,h, lower,upper, node$ndat ,node$depth))
     }
   }
