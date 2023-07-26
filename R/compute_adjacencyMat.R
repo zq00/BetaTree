@@ -9,7 +9,7 @@
 #' \eqn{[X_{i,\mathrm{low}}], X_{i,\mathrm{up}}] \cap [Y_{i,\mathrm{low}}], Y_{i,\mathrm{up}}] \neq \emptyset} for every \eqn{i=1,\ldots, d}.
 #'
 #' @inherit  FindModes
-#' @returns A matrix of size N*N, where N is the number of regions in the histogram, i.e. number of rows in the histogram.
+#' @returns A matrix A of size N*N, where N is the number of regions in the histogram, i.e. number of rows in the histogram. \eqn{A_{i,j} = 1} if the i-th and j-th regions are adjacent and 0 otherwise.
 #' @export
 #' @examples
 #' X <-  matrix(rnorm(2000, 0, 1), ncol = 2)
@@ -24,7 +24,7 @@ compute_adjacency_mat <- function(hist, d){
   for(i in 1:N){
     nbd[[i]] <- (1:N)[-i] # initialize neighbors by every rectangle that is NOT itself
     for(dim in 1:d){ # iterate through each dimension
-      if(sum(nbd[[i]]) == 0) break; # region i does not have any neighours
+      if(sum(nbd[[i]]) == 0) break; # region i does not have any neighors
       x <- hist[i, c(dim, d + dim)]; # lower and upper bounds of the region
       y <- hist[nbd[[i]], c(dim, d + dim), drop = F] # lower and upper bounds of candidate neighbors
       indices <- which(y[,2] < x[1] | y[,1] > x[2]) # these are NOT in the nbd
