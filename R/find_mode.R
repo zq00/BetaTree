@@ -34,7 +34,7 @@ FindModes <- function(hist, d, cutoff = 6){
   density <- hist[,(2*d+1)] # empirical density of each region
   ci <- hist[, (2*d+2):(2*d+3)] # lower and upper confidence bounds of each region
   node_order <- order(density, decreasing = T) # order nodes by decreasing order of empirical density
-  candidate_mode <- node_order[1] #
+  candidate_mode <- node_order[1]
 
   if(nrow(hist) == 1) {
     cat("The histogram contains a single region!")
@@ -48,7 +48,7 @@ FindModes <- function(hist, d, cutoff = 6){
   for(i in 2:nrow(hist)){ # iterate through every region
     flag  <-  F # If T, then the region i is NOT a mode
     for(j in candidate_mode){ # iterate through every current mode
-      if(adj[node_order[i], j] == 1) {flag = T; break;} # neighbour of the current mode
+      if(adj[node_order[i], j] == 1) {flag = T; break;} # neighbor of a mode is not a mode
       new_val <- is_connected(node_order[i], j, g, ci, cutoff)
       if(new_val == "connected") {flag = T; break; }
     }
