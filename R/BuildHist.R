@@ -42,9 +42,9 @@ BuildHist <- function(X, alpha = 0.1, method = "weighted_bonferroni", bounded = 
 
   if(plot == T){
     if(ncol(X) == 2){
-      g <- PlotHist(X, B)
+      g <- PlotHist(X, B, ...)
       print(g)
-      return(list(hist = B, fig = g))
+      return(B)
     }else{
       cat("The data dimension is not 2!")
       return(B)
