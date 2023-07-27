@@ -1,5 +1,5 @@
 ---
-title: "Creating a Beta Trees Histogram"
+title: "Creating a Beta Tree Histogram"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{"Creating a Beta Trees Histogram"}
@@ -22,7 +22,15 @@ library(tidyverse)
 devtools::load_all(path = "~/Desktop/Topics/kdhist/package/BetaTrees")
 ```
 
-First introduced by Pearson in 1895, a histogram is one of the basic tools to summarize data. A histogram is created by defining a set of rectangular "bins", and then count the number of observations within each bin. Below is an example of a one-dimensional histogram, where we specify 15 bins in total. We can do the same in two- or higher- dimensions. However, as the dimension increases, creating a histogram becomes challenging because of what we call the curse of dimensionality. In essense, if we include the same number of bins in each didimension, then the number of bins we need to fill the whole space increase *exponentially* as the number of dimension increases, and yet most of these bins will be empty! 
+First introduced by Pearson in 1895, a histogram is one of the basic tools researchers use to summarize continuous data. To create a histogram, one first define a set of rectangular "bins", and then count the number of observations within each bin. Below is an example of a one-dimensional histogram (for 200 obs. from a standard Gaussian), where we specify 15 bins in total. 
+
+```{r, echo = F, fig.width = 4, fig.height = 3, fig.align = "center"}
+x <- rnorm(200, 0, 1)
+hist(x, breaks = seq(min(x), max(x), length.out = 15))
+```
+
+
+We can do the same in two- or higher- dimensions. However, as the dimension increases, creating a histogram becomes challenging because of what we call the curse of dimensionality. In essense, if we include the same number of bins in each didimension, then the number of bins we need to fill the whole space increase *exponentially* as the number of dimension increases, and yet most of these bins will be empty! 
 
 The Beta trees histogram circumvents the "curse of dimensionality" by adapting the histogram to where the data locates. Instead of predefining locations of bines, Beta trees histogram iteratively partitions the space according to the *order statistics*. The Beta trees histogram has three properties 
 
