@@ -1,6 +1,6 @@
-#' Adjacency matrix of regions in the Beta Tree
+#' Compute adjacency matrix of regions in the histogram
 #'
-#' Computes the adjacency matrix of all of the regions in a Beta Tree histogram
+#' Computes the adjacency matrix of regions in a Beta tree histogram
 #'
 #' Two regions are neighbors if and only if the interval (defined by the boundary) in each dimension intersects.
 #' For example, let the two regions \eqn{X} defined by \eqn{[X_{i,\mathrm{low}}], X_{i,\mathrm{up}}]}
@@ -9,12 +9,12 @@
 #' \eqn{[X_{i,\mathrm{low}}], X_{i,\mathrm{up}}] \cap [Y_{i,\mathrm{low}}], Y_{i,\mathrm{up}}] \neq \emptyset} for every \eqn{i=1,\ldots, d}.
 #'
 #' @inherit  FindModes
-#' @returns A matrix A of size N*N, where N is the number of regions in the histogram, i.e. number of rows in the histogram. \eqn{A_{i,j} = 1} if the i-th and j-th regions are adjacent and 0 otherwise.
+#' @returns A matrix A of size N*N, where N is the number of regions in the histogram, i.e. number of rows in \code{hist}. \eqn{A_{i,j} = 1} if the i-th and j-th regions are adjacent and 0 otherwise.
 #' @export
 #' @examples
 #' X <-  matrix(rnorm(2000, 0, 1), ncol = 2)
-#' rect <- BuildHist(X)
-#' adj <- compute_adjacency_mat(hist = rect, d = 2)
+#' B <- BuildHist(X)
+#' adj <- compute_adjacency_mat(hist = B, d = 2)
 
 compute_adjacency_mat <- function(hist, d){
   N <- nrow(hist)
