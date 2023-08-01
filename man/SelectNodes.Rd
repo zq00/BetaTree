@@ -7,30 +7,31 @@
 SelectNodes(node, B, ahat, n)
 }
 \arguments{
-\item{node}{A k-d tree with confidence thresholds, output from \code{SetBounds}.}
+\item{node}{A k-d tree output from \code{SetBounds}.}
 
-\item{B}{A matrix.}
+\item{B}{A matrix containing nodes that have been selected.}
 
-\item{ahat}{A vector of confidence levels at each depth, starting at depth = 1. Output of the funtion \code{ConfLevel}}
+\item{ahat}{A vector of significance levels at each depth, starting at depth = 0. Output of the funtion \code{ConfLevel}}
 
 \item{n}{Total number of observations.}
 }
 \value{
-A matrix of rectangles in the histogram of obs. in the input node.
-A region in the histogram is represented by a row, which contains the lower and upper bounds, empirical density,
-lower and upper confidence bounds of this node, number of obs. and the depth of the node.
+A matrix of selected regions within and including the input node.
+Each row represents one selected region and has \eqn{2d + 5} columns, containing the lower and upper bounds of the region,
+the empirical density, lower and upper confidence bounds of the average density in this region,
+number of obs. inside and the depth of the node.
 }
 \description{
-Extract maximal (w.r.t. inclusion, i.e. tree order) nodes that are
+Extract maximal (w.r.t. inclusion) nodes that are
 bounded and whose empirical density is within confidence bounds.
 }
 \details{
-A bounded node is selected if the empirical density is within the confidence bounds.
-The empirical density is
+A bounded node is selected if the empirical density is inside the confidence bounds of all of its children.
+The empirical density is defined as
 \deqn{
 h = \frac{n+1}{N |R|},
 }
-where \eqn{N} is the number of obs., and \eqn{n} is the number of obs. in the region,
+where \eqn{N} is the total number of obs., \eqn{n} is the number of obs. in the region,
 and \eqn{|R|} is the volume of the region.
-Otherwise, if the node is not a leaf, move on to the left and right children of the node.
+If the node is not selected and is not a leaf, then move on to the left and right children of the node.
 }

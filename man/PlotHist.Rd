@@ -2,9 +2,9 @@
 % Please edit documentation in R/PlotHist.R
 \name{PlotHist}
 \alias{PlotHist}
-\title{Plot a 2D Beta Tree histogram}
+\title{Plot a 2D Beta tree histogram}
 \usage{
-PlotHist(X, B, nsample = 10000)
+PlotHist(X, B, nsample = 10000, ...)
 }
 \arguments{
 \item{X}{data matrix of size n by 2.}
@@ -12,16 +12,18 @@ PlotHist(X, B, nsample = 10000)
 \item{B}{matrix of rectangles returned by the function \link[BetaTrees]{SelectNodes} or \link[BetaTrees]{BuildHist}.}
 
 \item{nsample}{maximum number of data points to display in the plot.}
+
+\item{...}{additional parameter for the graph: \code{low}, \code{mid}, \code{high} specifies the colors in \link[ggplot2]{scale_fill_gradient2} function.}
 }
 \value{
 A \code{ggplot} object.
 }
 \description{
-Draw a Beta tree histogram from the rectangles returned by \code{SelectNodes}.
+Draw a Beta tree histogram.
 }
 \details{
 \code{PlotHist} plots the histogram superimposed on the original dataset.
-If the number of data points exceeds \code{nsample}, randomly select \code{nsample} obvervations to show in the graph. Default value is \eqn{n_sample=10^4}
+If the number of data points exceeds \code{nsample}, randomly select \code{nsample} obs. to show in the graph. Default value is \eqn{n_sample=10^4}
 }
 \examples{
 X <-  matrix(rnorm(2000, 0, 1), ncol = 2)
