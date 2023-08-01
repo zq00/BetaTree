@@ -9,10 +9,10 @@ is_connected(i, j, g, ci, cutoff = 6)
 \arguments{
 \item{i, j}{Test if the \eqn{i}-th and the \eqn{j}-th regions are distinct modes or not.}
 
-\item{g}{A graph returned by \link[igraph]{graph_from_adjacency_matrix}}
+\item{g}{A graph from the adjacency matrix returned by \link[igraph]{graph_from_adjacency_matrix}.}
 
 \item{ci}{A matrix of size N*2 of the confidence intervals of empirical densities.
-Each row represents one region in the Beta Tree and the two columns correspond to the lower and upper confidence limits.}
+Each row stores the lower and upper confidence limits of one region in the Beta tree.}
 
 \item{cutoff}{Maximum path length. By default, we only evaluate paths with length at most \code{cutoff = 6}.}
 }
@@ -21,17 +21,10 @@ Each row represents one region in the Beta Tree and the two columns correspond t
 }
 \description{
 Two regions \code{i} and \code{j} are two \emph{distinct} modes if
-there \emph{exists} one path connecting \code{i} and \code{j}, there exists at least one \code{R} along the path,
-such that the upper endpoint of confidence interval of \code{R} is \emph{below} the lower endpoints of that of
+for \emph{every} path connecting \code{i} and \code{j}, there exists at least one region \code{R} along the path,
+such that the upper endpoint of confidence interval ofthe average density of \code{R} is \emph{below} the lower endpoints of that of
 both \code{i} and \code{j}.
 }
 \details{
 For computational reasons, we only check paths whose length is at most \code{cutoff}.
-}
-\examples{
-# A mixture of two Gaussians
-X <-  matrix(rnorm(4000, 0, 1), ncol = 2)
-X[1:1000, 1] <- X[1:1000, 1] + 4
-rect <- BuildHist(X) # construct a Beta Tree histogram
-modes <- FindModes(hist = rect, d = 2)$mode
 }
