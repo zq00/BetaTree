@@ -11,19 +11,20 @@ Authors@R:
            family = "Walther",
            role = c("aut"),
            email = "gwalther@stanford.edu"))
-Description: Creates a Beta Tree histogram. Iteratively partition the space by by growing
-    a kd tree on the order statistics. For each node, computes an exact confidence bound from Wald's lemma, and get guaranteed
-    simultaneous level alpha by weighted Bonferroni. Construct the histogram by selecting the largest node
-    that passes a goodness-of-fit test. 
+Description: Creates a Beta tree histogram. Iteratively partition the space by by growing
+    a k-d tree on the order statistics, computes simultaneous confidence bound of average density in each region, and
+    select largest regions where data are approximately uniform. 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Suggests: 
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    tidyverse (>= 1.1.1),
+    mvtnorm (>= 1.1.3)
 VignetteBuilder: knitr
 Imports: 
     stats,
