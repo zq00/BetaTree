@@ -2,7 +2,7 @@
 title: "Creating a Beta Tree Histogram"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{"Creating a Beta Trees Histogram"}
+  %\VignetteIndexEntry{Creating a Beta Tree Histogram}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,46 +18,35 @@ knitr::opts_chunk$set(
 
 ```{r setup, include = F }
 library(tidyverse)
-# library(BetaTrees)
-devtools::load_all(path = "~/Desktop/Topics/kdhist/package/BetaTrees")
+library(BetaTrees)
+library(mvtnorm)
 ```
 
-First introduced by Pearson in 1895, a histogram is one of the basic tools researchers use to summarize continuous data. To create a histogram, one first define a set of rectangular "bins", and then count the number of observations within each bin. Below is an example of a one-dimensional histogram (for 200 obs. from a standard Gaussian), where we specify 15 bins in total. 
+First introduced by Pearson in 1895, a histogram is one of the basic tools researchers use to summarize continuous data. To create a histogram for 1-dim data, one first define a set of "bins" (i.e., intervals), and then count the number of observations within each bin. We can do the same for two- or higher- dimensional data. However, as the number dimension increases, creating a histogram becomes challenging because of the *curse of dimensionality*. In essence, if we use the same number of bins in each dimension, the number of bins required to fill the whole space increases *exponentially* with the dimension, and yet most of these bins will be empty.  
 
-```{r, echo = F, fig.width = 4, fig.height = 3, fig.align = "center"}
-x <- rnorm(200, 0, 1)
-hist(x, breaks = seq(min(x), max(x), length.out = 15))
-```
-
-
-We can do the same in two- or higher- dimensions. However, as the dimension increases, creating a histogram becomes challenging because of what we call the curse of dimensionality. In essense, if we include the same number of bins in each didimension, then the number of bins we need to fill the whole space increase *exponentially* as the number of dimension increases, and yet most of these bins will be empty! 
-
-The Beta trees histogram circumvents the "curse of dimensionality" by adapting the histogram to where the data locates. Instead of predefining locations of bines, Beta trees histogram iteratively partitions the space according to the *order statistics*. The Beta trees histogram has three properties 
+The Beta trees histogram circumvents the curse of dimensionality by adapting the histogram to where the data locates. Instead of predefining locations of bins, Beta trees histogram iteratively partitions the space according to the *order statistics*. The Beta trees histogram has three properties: 
 
 - **Adapts** to where observations are located 
 
-- Provides a **simultaneous** confidence interval of the probability mass in each regions of the histogram 
+- Provides **simultaneous** confidence intervals of the probability mass in each region of the histogram 
 
-- **Summarizes** data succinctly by choosing the largest bins such that data are relatively uniformly distributed inside the region. 
+- **Summarizes** data succinctly by choosing the largest region such that data is close to uniformly distributed inside. 
 
-The confidence intervals (CI) created by the Beta Trees histogram also allows us to identify modes in the underlying density, which we describe in another document "Identifying modes using a Beta Trees histogram". 
+The confidence intervals (CI) created by Beta trees histogram also allows us to identify modes in the underlying density, which we describe in another note "Identifying modes using a Beta Tree histogram". 
 
-This document demonstrates how to use functions in the package to create a Beta-Trees histogram through an example of a mixture of 2-dimensional Gaussian distribution. 
+This document demonstrates how to use functions in the package to create a Beta-Tree histogram through an example of a mixture of 2-dimensional Gaussian distribution. 
 
-## Example: mixture of two dimensional Gaussian variables
+## Example: Creating a beta-tree histogram for 2-dim Gaussian
 
-As an illustration, we create a Beta Tree histogram for a mixture of two-dimensional Gaussian data. 
-
-```{r}
+```{r, echo = F}
 n <- 2000 # num of obs.
 d <- 2 # num of dim.
 ```
 
-
-The two-dimensional Gaussian are from the distribution below, and we visualize the the samples of `r n` observations below. 
+As an illustration, we create a Beta Tree histogram for a mixture of two-dimensional Gaussian data ($n =$ `r n`) sampled from the following distribution and visualized below: 
 
 $$
-\frac{2}{5} \mathcal{N}\left(\left(\begin{matrix}-1.5 \\0.6\end{matrix}\right),\left(\begin{matrix}1 & 0.5 \\ 0.5 & 1\end{matrix}\right) \right) + \frac{3}{5} \mathcal{N}\left(\left(\begin{matrix}2 \\-1.5\end{matrix}\right),\left(\begin{matrix}1 & 0 \\ 0 & 1\end{matrix}\right) \right), 
+\frac{2}{5} N\left(\left(\begin{matrix}-1.5 \\0.6\end{matrix}\right),\left(\begin{matrix}1 & 0.5 \\ 0.5 & 1\end{matrix}\right) \right) + \frac{3}{5} N\left(\left(\begin{matrix}2 \\-1.5\end{matrix}\right),\left(\begin{matrix}1 & 0 \\ 0 & 1\end{matrix}\right) \right), 
 $$
 
 ```{r, echo = F}
@@ -78,46 +67,39 @@ for(i in 1:2){
 ```
 
 
-
 ```{r, echo = F, fig.height = 3, fig.width= 4, fig.align='center'}
 ggplot() + 
   geom_point(aes(x = X[,1], y = X[,2] , color = as.factor(N)), size = 0.5) + 
   theme_bw() + 
-  labs(color = "Component", x = "X", y="Y") + 
+  labs(color = "Mixture", x = "X", y="Y") + 
   theme(legend.position = c(0.85, 0.8)) 
 ```
 
-`BuildHist()` function creates a Beta Tree histogram. Here, we specify a confidence level `alpha = 0.1` and use weighted bonferroni method for multiple testing correction. This implies the following:  the confidence interval satisfies that it is simulatneously valid at confidence level `alpha = 0.1`. 
+We can use the `BuildHist()` function to create a Beta Tree histogram. (If `plot = T`, then the function plots the Beta-tree histogram if the data is two-dimensional. )
 
-```{r}
-hist <- BuildHist(X, alpha = 0.1, method = "weighted_bonferroni")
+```{r, fig.height = 3, fig.width= 5, fig.align='center'}
+hist <- BuildHist(X, alpha = 0.1, method = "weighted_bonferroni", plot = T)
 ```
 
-The `hist` is a matrix describing each region in the beta-tree histogram. Each row represents one region, and this histogram includes `r nrow(hist)` regions. Let's look at the first region in the histogram: 
+Besides the data matrix `X`, we input two parameters: one minus confidence level `alpha = 0.1` and a multiple testing correction method `method = "weighted_bonferroni"`. This means that the confidence interval the histogram provides is simultaneously valid for every region at confidence level `1-alpha = 0.9`. The return value of the `BuildHist` is a matrix describing each region in the beta-tree histogram. Each row represents one region, and this histogram includes `r nrow(hist)` regions. Let's look at the first region in the histogram: 
 
 ```{r}
 hist[1,]
 ```
 
-and the columns provides the following information: 
+The columns provide the following information: 
 
 - the first two columns are the lower bounds in $x$ and $y$-coordinates of each region; the next two columns are the upper bounds in $x$ and $y$-coordinates of each region, i.e., this rectangle is defined by the bounds `r paste("[", round(hist[1,1],2),round(hist[1,3],2), "] *[", round(hist[1,2],2),round(hist[1,4],2),"]")`.
 
--  the fifth column stores the empirical density $h(R)$ in this region
+-  the fifth column stores the empirical density in this region
 
-- the sixth and seventh columns store the lower and upper confidence bound (CI) of the average probability density in the region. With probability at least $(1-\alpha)$, the CI covers all the average density in all of the regions. 
+- the sixth and seventh columns store the lower and upper confidence bound (CI) of the average probability density in the region. With probability at least $(1-\alpha)$, the CI covers the average density in all of the regions. 
 
-- the eighth column stores the number of observations $n(R)$ in this region
+- the eighth column stores the number of observations in this region
 
 - the last column stores the depth of the region in the k-d tree, which we will describe in the next section. 
 
-You can set two more parameters in the function: `plot` and `bounded` . If `plot = T`, then the function outputs a visualization Beta-trees histogram if the data is two-dimensional.
-
-```{r, fig.height = 3, fig.width= 5, fig.align='center'}
-hist <- BuildHist(X, alpha = 0.1, method = "weighted_bonferroni", plot = TRUE)
-```
-
-As we will explain in the next few sections, the histogram only includes **bounded** regions. If you select `bounded = T`, then you can specify how to initialize a rectangular bounded region. You will need to provide two additional inputs `option` and `ndat` which we will explain in the next section. In the example below, we ask to intialize the region by choosing the 0.05 and 0.95 quantiles in each dimension.
+The histogram above does not have a rectangular boundary. As we will explain in the next few sections, this is because the histogram only includes **bounded** regions. Alternatively, you can initialize a bounded rectangular region if you specify `bounded = T`. You will then need to provide two additional parameters `option` and `ndat` (which we will explain in the next section). Below, we initialize the bounded rectangle at the 0.05 and 0.95 quantiles in each dimension.
 
 ```{r, fig.height = 3, fig.width= 5, fig.align='center'}
 hist <- BuildHist(X, alpha = 0.1, method = "weighted_bonferroni", bounded = T, 
@@ -125,32 +107,36 @@ hist <- BuildHist(X, alpha = 0.1, method = "weighted_bonferroni", bounded = T,
                   plot = TRUE)
 ```
 
-In the next section, we will describe how the KD tree is constructed. 
+In the next section, we will describe how the Beta tree histogram is constructed. 
 
-##  Creating a Beta Tree Histogram
+##  How a beta-tree histogram is constructed
 
-We create a Beta Tree Histogram in four steps: 
+The Beta tree histogram is constructed in four steps: 
 
-1. Constructing a k-d tree.
-2. Calculating confidence levels.
-3. Setting confidence bounds for every region.
+1. Building a k-d tree.
+2. Calculating confidence levels for every region.
+3. Setting confidence bounds.
 4. Select regions that pass a goodness-of-fit test. 
 
-## Constructing a k-d tree 
+You can think of the algorithm as taking two passes: a top-down pass partitioning the sample space into small regions and a bottom-up pass selecting largest regions in which the observations are approximately uniform.
 
-A [k-d tree](https://en.wikipedia.org/wiki/K-d_tree) is a spatial-partitioning data structure for organizing observations in a k-dimensional space. Motivated by the k-d tree, Beta trees histogram starts by iteratively partitioning the sample space at the sample median. In detail, we start with all of the observations (this is our root node). At each step, we choose (1) an axis along which to partition (2) a location for partitioning. For (1), we iterate through all of the coordinates, i.e., the first partition is along $x$-axis and the second partition is along the $y$-axis etc. For (2), we partition along the sample *median* in the partitioning coordinate. 
+## Building a k-d tree 
+
+Beta trees histogram starts by iteratively partitioning the sample space along the sample median. This is motivated by [k-d trees](https://en.wikipedia.org/wiki/K-d_tree), which is a spatial-partitioning data structure for organizing observations in a k-dimensional space. 
+
+In detail, we start with all of the observations (this is the root node). At each step, we choose (1) an axis along which to partition (2) a location for partitioning. For (1), we iterate through all of the coordinates, i.e., the first partition is along $x$-axis and the second partition is along the $y$-axis etc. As to (2), we partition along the sample *median* in the partitioning coordinate. 
 
 In the two-dimensional example above, in the first partition, we split the sample space into two half-spaces:
 $$
-R_1 = \{x\in\mathbb{R}^2:x_1<X_{1,\left(\lceil{n/2}\rceil\right)} \}, \quad
-R_2 = \{x\in\mathbb{R}^2:x_1>X_{1,\left(\lceil{n/2}\rceil\right)} \}
+R_1 = \{x\in\mathbb{R}^2:x_1<X_{1,\lceil{n/2}\rceil} \}, \quad
+R_2 = \{x\in\mathbb{R}^2:x_1>X_{1,\lceil{n/2}\rceil} \}
 $$
-Note here that the obs. at the sample median is not included in the two regions. In the second step, we split $R_1$ and $R_2$ repsectively. $R_1$ is splitted into two children 
+Note that the obs. at the sample median is not included in the two regions. In the second step, we split $R_1$ and $R_2$ repsectively. $R_1$ is splitted into two children 
 $$
-R_1 = \{x\in R_1:x_2<X^1_{2,\left(\lceil{n_1/2}\rceil\right)}, X^1\in R_1 \}, \quad
-R_2 = \{x\in R_1:x_2>X^1_{2,\left(\lceil{n_1/2}\rceil\right)}, X^1\in R_1 \},
+R_1 = \{x\in R_1:x_2<X^1_{2,\lceil{n_1/2}\rceil} \}, \quad
+R_2 = \{x\in R_1:x_2>X^1_{2,\lceil{n_1/2}\rceil} \},
 $$
-where $X^1$ are all of the observations in $R_1$. We continue splitting a region until the number of observations inside is less than $4\log n$, where $n$ is the total num of obs. 
+where $X^1_{2,\lceil{n_1/2}\rceil}$ is the $\lceil{n_1/2}\rceil$ order statistics in the $y$-coordinate for the observations $X^1$ in $R_1$ (the total num. of obs. in $R_1$ is $n_1$). We continue splitting a region until the number of observations inside is less than $4\log n$, where $n$ is the total num of obs. 
 
 The function `BuildKDTree` constructs a k-d tree. 
 
@@ -158,68 +144,90 @@ The function `BuildKDTree` constructs a k-d tree.
 tree <- BuildKDTree(X, bounded = F)
 ```
 
-The `tree` object has two components `kdtree` and `nd`. `kdtree` stores the k-d tree. You can refer to the function documentation for the details, here we point out that `leftchild` and `rightchild` points to the two partitions of that node. For example, we can look at one node in the tree.
+The `tree` object has two components: `kdtree` and `nd`. The object `kdtree` stores the root node of k-d tree as a list (you can refer to the function documentation for more detail). We point out here that  `leftchild` and `rightchild` points to the two partitions of that region, `low` ad `up` are the lower and upper bounds of the region and `ndat` is the number of obs.. The following is one node in the tree. 
 
 ```{r}
 tree$kdtree$leftchild$leftchild$rightchild$rightchild$leftchild$leftchild
 ```
 
-`nd` contains the number of *bounded* regions at each depth. This is useful when we adjust the confidence levels at each depth to account for multiple CI. Here, at depth 5 there are `r tree$nd[5]` bounded regions. 
+`nd` contains the number of *bounded* regions at each depth of the tree (the root node has depth = 0). This is useful when we adjust the confidence levels at each depth to account for multiple CI. Here, at depth 5 there are `r tree$nd[5]` bounded regions. 
 
 ```{r}
 tree$nd
 ```
 
-As you can see, there are no bounded regions in the first 4 levels. Because the histogram only includes bounded regions, many obs. not be inlcuded in the final histogram. Alternatively, you can specify an option `bounded = T` in the `BuildKDTree` function. In that case, the function constructs the first two partitions to initialize a bounded region. Here we provide two options to specify the bounded region: (1) if `option = 'qt'`, then we partition at the sample quantiles. For example, if `q = c(0.05, 0.05)`, then the first partition defines a region $R_0$  
-$$
-R_0 = \{x\in\mathbb{R}^2:X_{1,\left(\lceil{0.05 * n}\rceil\right)}<x_1<X_{1,\left(n - \lceil{0.05 * n}\rceil\right)} \}, 
-$$
-and the second partition defines a region $R_1$, which we set as the root node. The histogram above is created using 
+As you can see, there are no bounded regions in the first 4 levels. You can initialize a bounded region by the option `bounded = T` . The function then constructs the first two partitions to initialize a bounded region. We provide two options to specify the bounded region: 
+
+1. if `option = 'qt'`, then we set the bounds at the sample quantiles. For example, if `q = c(0.05, 0.05)`, then we first define a region $R_0$
 
 $$
-R_1  = \{x\in R_0:X^0_{2,\left(\lceil{0.05 * n_0}\rceil\right)}<x_2<X^0_{2,\left(n_0 - \lceil{0.05 * n_0}\rceil\right)}, X^0\in R_0 \}
+R_0 = \{x\in\mathbb{R}^2:X_{1,\lceil{0.05 * n}\rceil}< x_1 < X_{1,n - \lceil{0.05 * n}\rceil + 1}  \}, 
 $$
+and then a region $R_1$
 
-(2) if `option = 'ndat'`, then we partition at the sample order statistics. For example, if `q = c(25, 25)`, then the partitions are at the order statistics 25 and $(n-25)$ etc. 
+$$
+R_1  = \{x\in R_0:X^0_{2,\lceil{0.05 * n_0}\rceil} < x_2 <  X^0_{2,n_0 - \lceil{0.05 * n_0}\rceil + 1} \},
+$$
+where $X^0$ are all the obs. inside $R_0$. The root node contains all of the observations inside $R_1$. 
 
-## Calculating confidence levels 
+(2) if `option = 'ndat'`, then we set the bounds at order statistics. For example, if `q = c(25, 25)`, then we first define a region $R_0$
 
-Theorem 1 in the paper states that the cumulative distributio function in each region $k$ satisfies 
+$$
+R_0 = \{x\in\mathbb{R}^2:X_{1,25}< x_1 < X_{1,n - 25 + 1}  \}, 
+$$
+and then a region $R_1$
+
+$$
+R_1  = \{x\in R_0:X^0_{2,25 } < x_2 <  X^0_{2,n_0 - 25 + 1} \},
+$$
+where $X^0$ are all the obs. inside $R_0$. The root node contains all of the observations inside $R_1$. 
+
+## Calculating confidence levels for every region
+
+We are able to use the construct CI for the probability density in region because the cdf in a region $R_k$ satisfies 
+
 $$
 F(R_k)\sim \mathrm{Beta}(n_k+1, n-n_k),
 $$
-and we can use this result to construct a $(1-\alpha)$ confidence interval for the average density $f(R_k) = F(R_k)/|R_k|$ where $|R_k|$ is the volume of $R_k$. 
+where $n_k$ is the num of obs in $R_k$ and $n$ is the total num of obs. With this result, we can construct a $(1-\alpha)$ confidence interval for the average density $f(R_k) = F(R_k)/|R_k|$ ($|R_k|$ is the volume of $R_k$):
 
-This confidence interval is valid for only one region, and if we want to achieve simultaneous coverage at level $(1-\alpha)$, we can adjust the confidence level of each region such that the total probability of mis-coverage is at most $\alpha$. Here, we use a **weighted bonferroni** adjustment, which defines the confidence level for regions at level $D$ as
 $$
-\hat{\alpha}_D = \frac{\alpha}{(D_{\max} - D + 2) \times  N_D \times \sum_{B=2}^{D_{\max}-2}\frac{1}{B}}.
+C_k(\alpha) = \left(qBeta(\frac{\alpha}{2},n_k+1, n-n_k), qBeta(1-\frac{\alpha}{2},n_k+1, n-n_k)\right).
 $$
+
+This confidence interval is valid for only the region $R_k$. If we want to simultaneously cover all the regions  at level $(1-\alpha)$, we can redefine the confidence level for each region such that the total probability of mis-coverage is at most $\alpha$. For example, we can use a **weighted bonferroni** adjustment, which assigns the same level for every region in the same tree depth. The confidence level for regions at tree depth $D$ is defined as $1-\alpha_D$, <span style="color: red;">The following formula needs to be re-written after checking with Guenther</span>
+
+$$
+\hat{\alpha}_D = \frac{\alpha}{N_D (D_{\max} - D + 2)   \sum_{B=2}^{D_{\max}-2}\frac{1}{B}}.
+$$
+
 Here, $D_{\max}$ is the maximum depth of the k-d tree, $N_D$ is the number of *bounded* regions in depth $D$ and the factor $\sum_{B=2}^{D_{\max}-2}\frac{1}{B}$ ensures that $\hat{\alpha}_D$ adds up to $\alpha$. 
 
-`ConfLevel` computes $\hat{\alpha}_D$ at each level. For example, the following code computes $\hat{\alpha}_D$ when $\alpha = 0.1$. You can also use bonferroni adjustment by setting `method = 'bonferroni'`. The Bonferroni adjustment gives equal weight to every depth. 
+The function `ConfLevel` computes $\hat{\alpha}_D$ at each level. For example, the following code computes $\hat{\alpha}_D$ when $\alpha = 0.1$. You can also use bonferroni adjustment by setting `method = 'bonferroni'`. The Bonferroni adjustment gives equal weight to regions at the same tree depth. 
 
 ```{r}
 ahat <- ConfLevel(tree$nd, alpha = 0.01, method = "weighted_bonferroni")
 ahat
 ```
 
-, defined by $(n(R)+1)/ n / |R|$, where $n(R)$ is the total num of obs. inside the region, $n$ is the total num of obs. and $|R|$ is the volume of the rectangle. 
 
 
-## Setting confidence bounds for each region 
-Once we set the confidence levels, we can compute a simultaneous confidence interval for the average density $f(R_k)$ at level $\alpha$ as
+## Setting confidence bounds 
+
+Once we define the confidence levels, we compute simultaneous confidence intervals for the average density $f(R_k)$ as
 
 $$
 \left(\frac{\mathrm{qBeta}(\hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}, \frac{\mathrm{qBeta}(1 - \hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}\right). 
 $$
 
-To form the Beta Tree histogram, we will select regions whose  empirical density $h_k = (n_k + 1)/n$ falls within the CI of all of its children. To simplify computation, we set the lower and upper confidence bound in each node in the k-d tree `tree` (in the `lower` and `upper` ) as 
+To form the Beta Tree histogram, we will use a bottom-up pass to  select the largest regions that we are confident that the obs. inside are from a uniform distribution. In other words, we pick the largest $R_k$ whose empirical density $h_k = (n_k + 1)/n$ falls within the CI of all of its children. To simplify computation, we set the lower and upper confidence bound of each node in the k-d tree `tree` (in the `lower` and `upper` ) as the intersection of the CI with that of all of its descendants 
+
 $$
-\mathrm{lower}(R_k) = \max\left(\frac{\mathrm{qBeta}(\hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}, \mathrm{lower}(1st \mathrm{child}), \mathrm{lower}(2nd \mathrm{child})\right)\\
-\mathrm{upper}(R_k) = \max\left(\frac{\mathrm{qBeta}(1-\hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}, \mathrm{upper}(1st \mathrm{child}), \mathrm{upper}(2nd \mathrm{child})\right)
+\mathrm{lower}(R_k) = \max\left(\frac{\mathrm{qBeta}(\hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}, \mathrm{lower}(\text{1st child}), \mathrm{lower}(\text{2nd child})\right)\\
+\mathrm{upper}(R_k) = \max\left(\frac{\mathrm{qBeta}(1-\hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}, \mathrm{upper}(\text{1st child}), \mathrm{upper}(\text{2nd child})\right)
 $$
 
-`SetBounds` sets these two bounds. Compare the same node in the k-d tree as before -- the `lower` and `upper` levels has been set.
+The function `SetBounds` sets these two bounds. Let's compare the same node in the k-d tree as before, whereas the `lower` and `upper` levels were empty before, the two values are not filled in.
 
 ```{r}
 tree <- SetBounds(tree$kdtree, ahat, n)
@@ -229,9 +237,9 @@ tree <- SetBounds(tree$kdtree, ahat, n)
 tree$leftchild$leftchild$rightchild$rightchild$leftchild$leftchild
 ```
 
-## Selecting regions to form the Beta Tree histogram 
+## Selecting regions to form the Beta tree histogram 
 
-`SelectNodes` selects the largest regions (w.r.t) inclusion such that the empirical density $h_k$ falls inside the interval $[\mathrm{lower}(R_k), \mathrm{upper}(R_k)]$. 
+The function `SelectNodes` selects the largest regions (w.r.t) inclusion such that the empirical density $h_k$ falls inside the interval $[\mathrm{lower}(R_k), \mathrm{upper}(R_k)]$. 
 
 ```{r}
 B <- matrix(nrow = 0, ncol = (2*d + 5)) 
@@ -243,8 +251,7 @@ $$
 \left(\frac{\mathrm{qBeta}(\hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}, \frac{\mathrm{qBeta}(1 - \hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}\right). 
 $$
 
-
-
+The last two columns stores the number of obs. inside the region and its tree depth. `hist` is what `BuildHist` function returns. 
 
 
 
