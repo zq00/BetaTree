@@ -22,10 +22,10 @@ Computes the adjacency matrix of regions in a Beta tree histogram
 }
 \details{
 Two regions are neighbors if and only if the interval (defined by the boundary) in each dimension intersects.
-For example, let the two regions \eqn{X} defined by \eqn{[X_{i,\mathrm{low}}], X_{i,\mathrm{up}}]}
-and \eqn{Y} defined by \eqn{[Y_{i,\mathrm{low}}], Y_{i,\mathrm{up}}]} (for \eqn{i=1,\ldots, d}), where \eqn{[X_{i,\mathrm{low}}]} and \eqn{X_{i,\mathrm{up}}]}
+For example, let the two regions \eqn{X} defined by \eqn{[X_{i,\mathrm{low}}, X_{i,\mathrm{up}}]}
+and \eqn{Y} defined by \eqn{[Y_{i,\mathrm{low}}, Y_{i,\mathrm{up}}]} (for \eqn{i=1,\ldots, d}), where \eqn{X_{i,\mathrm{low}}} and \eqn{X_{i,\mathrm{up}}}
 are the lower and upper bounds in dimension \eqn{i} for the region \eqn{X}. Then, \eqn{X} and \eqn{Y} are neighbors if and only if
-\eqn{[X_{i,\mathrm{low}}], X_{i,\mathrm{up}}] \cap [Y_{i,\mathrm{low}}], Y_{i,\mathrm{up}}] \neq \emptyset} for every \eqn{i=1,\ldots, d}.
+\eqn{[X_{i,\mathrm{low}}, X_{i,\mathrm{up}}] \cap [Y_{i,\mathrm{low}}, Y_{i,\mathrm{up}}] \neq \emptyset} for every \eqn{i=1,\ldots, d}.
 }
 \examples{
 X <-  matrix(rnorm(2000, 0, 1), ncol = 2)
