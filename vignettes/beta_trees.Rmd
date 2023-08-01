@@ -150,7 +150,7 @@ The `tree` object has two components: `kdtree` and `nd`. The object `kdtree` sto
 tree$kdtree$leftchild$leftchild$rightchild$rightchild$leftchild$leftchild
 ```
 
-`nd` contains the number of *bounded* regions at each depth of the tree (the root node has depth = 0). This is useful when we adjust the confidence levels at each depth to account for multiple CI. Here, at depth 5 there are `r tree$nd[5]` bounded regions. 
+`nd` contains the number of *bounded* regions at each depth of the tree (the root node has depth = 0). This is useful when we adjust the confidence levels at each depth to account for multiple CI. Here, at depth 4 there are `r tree$nd[5]` bounded regions. 
 
 ```{r}
 tree$nd
@@ -195,13 +195,13 @@ $$
 C_k(\alpha) = \left(qBeta(\frac{\alpha}{2},n_k+1, n-n_k), qBeta(1-\frac{\alpha}{2},n_k+1, n-n_k)\right).
 $$
 
-This confidence interval is valid for only the region $R_k$. If we want to simultaneously cover all the regions  at level $(1-\alpha)$, we can redefine the confidence level for each region such that the total probability of mis-coverage is at most $\alpha$. For example, we can use a **weighted bonferroni** adjustment, which assigns the same level for every region in the same tree depth. The confidence level for regions at tree depth $D$ is defined as $1-\alpha_D$, <span style="color: red;">The following formula needs to be re-written after checking with Guenther</span>
+This confidence interval is valid for only the region $R_k$. If we want to simultaneously cover all the regions  at level $(1-\alpha)$, we can redefine the significance level for each region such that the total probability of mis-coverage is at most $\alpha$. For example, we can use a **weighted bonferroni** adjustment, which assigns the same level for every region in the same tree depth. The significance level for regions at tree depth $D$ is defined as $\alpha_D$,
 
 $$
-\hat{\alpha}_D = \frac{\alpha}{N_D (D_{\max} - D + 2)   \sum_{B=2}^{D_{\max}-2}\frac{1}{B}}.
+\hat{\alpha}_D = \frac{\alpha}{N_D (D_{\max} - D + 2)   \sum_{B=2}^{D_{\max}-D_{\min}+2}\frac{1}{B}},\quad D\geq D_\min
 $$
 
-Here, $D_{\max}$ is the maximum depth of the k-d tree, $N_D$ is the number of *bounded* regions in depth $D$ and the factor $\sum_{B=2}^{D_{\max}-2}\frac{1}{B}$ ensures that $\hat{\alpha}_D$ adds up to $\alpha$. 
+Here, $D_{\max}$ is the maximum depth of the k-d tree, $D_{\min}$ is the minimum depth where there are bounded regions, $N_D$ is the number of *bounded* regions in depth $D$ and the factor $\sum_{B=2}^{D_{\max}-D_{\min} + 1}\frac{1}{B}$ ensures that $\hat{\alpha}_D$ adds up to $\alpha$. 
 
 The function `ConfLevel` computes $\hat{\alpha}_D$ at each level. For example, the following code computes $\hat{\alpha}_D$ when $\alpha = 0.1$. You can also use bonferroni adjustment by setting `method = 'bonferroni'`. The Bonferroni adjustment gives equal weight to regions at the same tree depth. 
 
