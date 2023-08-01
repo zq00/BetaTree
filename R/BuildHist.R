@@ -1,36 +1,34 @@
-#' Build a Beta Tree
+#' Build a Beta tree histogram
 #'
-#' Compute a Beta Tree histogram for multivariate data at given confidence level.
+#' Compute a Beta tree histogram for multivariate data at a given confidence level.
 #'
-#' Construct the Beta Tree histogram by iteratively partitioning sample space along the sample median.
-#' Then, construct *simultaneous* confidence interval (at level \eqn{\alpha}) for all of the regions using Bonferroni
-#' or weighted Bonferroni adjustment. Finally, select the largest bounded regions (w.r.t. inclusion) that that pass a goodness of fit (GOF) test, i.e.,
-#' the empirical density lies within the confidence interval of both a node and both of its children.
-#' The function can plot the histogram if the data is two-dimensional.
+#' Construct the Beta tree histogram by (1) iteratively partitioning sample space along the sample median (similar to a k-d tree).
+#' (2) construct *simultaneous* confidence interval (at level \eqn{\alpha}) for all of the regions (adjust for multiple testing with Bonferroni
+#' or weighted Bonferroni adjustment). (3) select the largest bounded regions (w.r.t. inclusion) that that pass a goodness of fit (GOF) test, i.e.,
+#' the empirical density lies within the confidence interval of all of the further partitions of the region (i.e., descendants of the node in the k-d tree).
 #'
-#' @section Multiple testing correction:
-#'
-#' If Bonferroni correction is selected, then the confidence level at each region is defined as
-#'
-#' @param X a data matrix of size n*p.
-#' @param alpha confidence level, default level is \code{alpha = 0.1}.
-#' @param method use \code{method = "bonferroni"} or \code{method = "weighted_bonferroni"}(default) to adjust for multiple hypothesis testing.
+#' @param X A data matrix of size n by d.
+#' @param alpha Significance level, default is \code{alpha = 0.1}. The CI covers the average density in every region of the Beta tree histogram simultaneously with probability \eqn{1-\alpha}.
+#' @param method Use \code{method = "bonferroni"} or \code{method = "weighted_bonferroni"}(default) to adjust for multiple hypothesis testing.
 #' @param plot if \code{TRUE} (default), plot the histogram if the data is two-dimensional.
 #' @param ... Additional parameter if \code{bounded = T}.
 #' @inherit BuildKDTree
-#' @returns A matrix of rectangles in the histogram of obs. in the input node.
-#' A region in the histogram is represented by a row, which contains the following columns: the lower bounds, upper bounds, empirical density,
-#' lower confidence bounds, upper confidence bounds of this node, number of obs. and the depth of the node.
-#'  If \code{plot = T}, then returns a list of two elements, where \code{hist} is the matrix of rectangles in the histogram
-#'  and \code{fig} is a graph of the histogram
+#' @returns A matrix. Each row represents one regions in the histogram.
+#' The first \eqn{d} columns are the lower bounds of the region; the next \eqn{d} columns are the upper bounds (\eqn{d} is data dimension);
+#' the \eqn{2d+1} column stores the empirical density in the region; the next two columns  are
+#' the lower and upper confidence bounds of the average density in the region; the last two columns are the number of obs. inside the region and the depth of the node in the k-d tree.
+#'
 #' @export
 #' @examples
 #' X <-  matrix(rnorm(2000, 0, 1), ncol = 2)
-#' rect <- BuildHist(X)
+#' B <- BuildHist(X)
 #' # Plot the histogram
-#' rect <- BuildHist(X, plot = TRUE)
-#' # set confidence level and multiple hypothesis testing correction
-#' rect <- BuildHist(X, alpha = 0.05, method = "weighted_bonferroni")
+#' B <- BuildHist(X, plot = TRUE)
+#' # Set significance level and multiple hypothesis testing correction
+#' B <- BuildHist(X, alpha = 0.05, method = "weighted_bonferroni")
+#' # Initialize a bounding box
+#' B <- BuildHist(X, alpha = 0.05, method = "weighted_bonferroni",
+#'      bounded = TRUE, option = "ndat", qt = c(1,1))
 BuildHist <- function(X, alpha = 0.1, method = "weighted_bonferroni", bounded = F, plot = F, ...){
   n <- nrow(X); d <- ncol(X)
   kdtree <- BuildKDTree(X, bounded, ...)
