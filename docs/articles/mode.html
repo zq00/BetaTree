@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mode Hunting with Beta Trees • BetaTrees</title>
+<title>Mode Hunting Using Beta Trees • BetaTrees</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Mode Hunting with Beta Trees">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Mode Hunting Using Beta Trees">
 <meta property="og:description" content="BetaTrees">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -50,10 +50,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/beta_trees.html">Creating a Beta Trees Histogram</a>
+      <a href="../articles/beta_trees.html">Creating a Beta Tree Histogram</a>
     </li>
     <li>
-      <a href="../articles/mode.html">Mode Hunting with Beta Trees</a>
+      <a href="../articles/mode.html">Mode Hunting Using Beta Trees</a>
     </li>
   </ul>
 </li>
@@ -71,10 +71,8 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Mode Hunting with Beta Trees</h1>
-                        <h4 data-toc-skip class="author">Qian Zhao</h4>
+      <h1 data-toc-skip>Mode Hunting Using Beta Trees</h1>
             
-            <h4 data-toc-skip class="date">2022-11-02</h4>
       
       
       <div class="hidden name"><code>mode.Rmd</code></div>
@@ -83,159 +81,155 @@
 
     
     
-<p>A mode in a continuous distribution is typically defined as the
-location where the derivative of the density vanishes. Another
-perspective is that the mode is where the <em>probability mass is
-concentrated</em>. In the context of a histogram, we can think of modes
-as a region where the average density is high compared to its neighbors.
-More specifically, suppose two regions <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span> are distinct modes, then along any
-path connecting these <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span> there exists at least one region
+<p>In this vignette, we will demonstrate how to use a Beta Tree
+histogram to identify modes in a continuous probability
+distribution.</p>
+<p>The mode of a continuous probability distribution is a local maxima
+of the probability density. For example, the following plot shows the
+density contours of a mixture of 2-dim Gaussian and the asterisks
+indicate the two modes of the distribution function. We are often
+interested to identify modes in a distribution because they indicate
+sub-populations (here, the two modes indicate the two mixture
+components).</p>
+<p><img src="mode_files/figure-html/unnamed-chunk-3-1.png" width="384" style="display: block; margin: auto;"></p>
+<p>For a histogram, we can think of a mode as a region whose average
+density is higher compared to its neighbors. To put another way, suppose
+two regions <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span> are distinct modes, then along any
+path connecting <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span> there exists at least one region
 <span class="math inline">\(R\)</span> whose average density is lower
-than both <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span>. Because the Beta Trees histogram
-provides a confidence interval for the average density, we can compare
-the confidence bounds of these regions.</p>
-<p>This vignettes demonstrates how to use the <code>BetaTrees</code>
-package to identify modes in a Beta Tree histogram.</p>
+than both <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span>.</p>
 <div class="section level2">
-<h2 id="example-mixture-of-two-dimensional-gaussian-variables">Example: mixture of two dimensional Gaussian variables<a class="anchor" aria-label="anchor" href="#example-mixture-of-two-dimensional-gaussian-variables"></a>
+<h2 id="example-detecting-modes-in-a-mixture-of-2-dim-gaussian">Example: Detecting modes in a mixture of 2-dim Gaussian<a class="anchor" aria-label="anchor" href="#example-detecting-modes-in-a-mixture-of-2-dim-gaussian"></a>
 </h2>
-<p>As an illustration, we sample data from a mixture of two-dimensional
-Gaussian distribution</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">2000</span> <span class="co"># num of obs.</span>
-<span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="co"># num of dim.</span></code></pre></div>
-<p>The two-dimensional Gaussian are from the following distribution, and
-we visualize the the samples of 2000 observations below.</p>
+<p>In this example, we simulate <span class="math inline">\(n=\)</span>
+2000 obs. from a 2-dim Gaussian mixture we showed before</p>
 <p><span class="math display">\[
-\frac{2}{5} \mathcal{N}\left(\left(\begin{matrix}-1.5
+\frac{2}{5} {N}\left(\left(\begin{matrix}-1.5
 \\0.6\end{matrix}\right),\left(\begin{matrix}1 &amp; 0.5 \\ 0.5 &amp;
 1\end{matrix}\right) \right) + \frac{3}{5}
-\mathcal{N}\left(\left(\begin{matrix}2
+{N}\left(\left(\begin{matrix}2
 \\-1.5\end{matrix}\right),\left(\begin{matrix}1 &amp; 0 \\ 0 &amp;
 1\end{matrix}\right) \right),
 \]</span></p>
-<p><img src="mode_files/figure-html/unnamed-chunk-3-1.png" width="384" style="display: block; margin: auto;"></p>
-<p>First, we use <code><a href="../reference/BuildHist.html">BuildHist()</a></code> function to create and
-visualize a Beta Tree histogram. Here, we specify a confidence level
-<code>alpha = 0.1</code> and use weighted bonferroni method for multiple
-testing correction.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<p>We will start by creating a Beta tree histogram. Here, we set the
+confidence level <code>alpha = 0.1</code> and use weighted bonferroni
+method for multiple testing correction. The densities are higher in the
+upper left and the lower right regions, suggesting there are two modes
+in the distribution.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">hist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/BuildHist.html">BuildHist</a></span><span class="op">(</span><span class="va">X</span>, alpha <span class="op">=</span> <span class="fl">0.1</span>, method <span class="op">=</span> <span class="st">"weighted_bonferroni"</span>, plot<span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
-<p><img src="mode_files/figure-html/unnamed-chunk-4-1.png" width="384" style="display: block; margin: auto;"></p>
-<p>From the figure, the densities are higher in the upper left and the
-lower right regions. Next, we use the <code>find_mode()</code>
-identifies the modes in the Beta Trees histogram. The function has three
-parameters, the first input is the Beta Tree histogram, the second is
-the dimension of the data, and the third parameter specifies the cutoff
-the path length. Here, we set <code>cutoff=1000</code>, which means we
-will look at every path between two regions. However, it is usually
-infeasible to check every path because of computation constraint, so
-typically we would set <code>cutoff = 6</code>.</p>
+<p><img src="mode_files/figure-html/unnamed-chunk-7-1.png" width="480" style="display: block; margin: auto;"></p>
+<p>We use the <code>find_mode()</code> function to identify modes in a
+Beta trees histogram. This function has three parameters, the first is
+the Beta tree histogram (output of the <code>BuildHist</code> function),
+the second is the data dimension <code>d</code>, and the third is the
+cutoff value of the path length (we only check paths whose length is at
+most <code>cutoff</code>). We set <code>cutoff=1000</code> here, which
+means we will look at every path between two regions. However, it might
+be infeasible to check every path because of computation constraint, so
+typically we would set a smaller cutoff, e.g.,
+<code>cutoff = 6</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">modes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FindModes.html">FindModes</a></span><span class="op">(</span>hist <span class="op">=</span> <span class="va">hist</span>, d <span class="op">=</span> <span class="va">d</span>, cutoff <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></code></pre></div>
+<p><code>FindModes</code> function returns a list with three components:
+<code>mode</code> returns the index of the modes, <code>hist</code>
+returns the input histogram, and <code>g</code> returns the adjacency
+graph of regions in the histogram.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">modes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FindModes.html">FindModes</a></span><span class="op">(</span>hist <span class="op">=</span> <span class="va">hist</span><span class="op">$</span><span class="va">hist</span>, d <span class="op">=</span> <span class="va">d</span>, cutoff <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></code></pre></div>
-<p>The <code>modes</code> has three components: <code>mode</code>
-returns the <strong>index</strong> of the modes identified in the
-<code>hist</code>, <code>hist</code> returns the input histogram, and
-<code>g</code> returns a graph of all of the regions in the
-histogram.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">modes</span><span class="op">$</span><span class="va">mode</span> </code></pre></div>
-<pre><code><span class="co">## [1] 17  6</span></code></pre>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hist</span><span class="op">$</span><span class="va">hist</span><span class="op">[</span><span class="va">modes</span><span class="op">$</span><span class="va">mode</span>, <span class="op">]</span> <span class="co"># detail of the modes</span></code></pre></div>
-<pre><code><span class="co">##           [,1]       [,2]      [,3]       [,4]       [,5]       [,6]       [,7]</span>
-<span class="co">## [1,]  2.254748 -2.1878717  2.761390 -1.5006028 0.08902943 0.05791669 0.12804614</span>
-<span class="co">## [2,] -1.846913  0.2546279 -1.172347  0.9667757 0.06557166 0.04281985 0.09404548</span>
-<span class="co">##      [,8] [,9]</span>
-<span class="co">## [1,]   61    6</span>
-<span class="co">## [2,]   62    6</span></code></pre>
-<p>We highlight the two modes as well as plot the means of the two
-Gaussian mixtures. The shaded regions are the modes in the Beta Tree
-histogram and the asterisks are the means of the two components of the
-mixture of Gaussian.</p>
-<p><img src="mode_files/figure-html/unnamed-chunk-8-1.png" width="384" style="display: block; margin: auto;"></p>
-<p>In the next few sections, we describe how you can use the functions
-in <code>BetaTrees</code> to identify modes in a Beta Trees
-histogram.</p>
+<code class="sourceCode R"><span class="va">modes</span><span class="op">$</span><span class="va">mode</span> <span class="co"># which regions are the modes?</span></code></pre></div>
+<pre><code><span class="co">## [1] 20  8</span></code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">hist</span><span class="op">[</span><span class="va">modes</span><span class="op">$</span><span class="va">mode</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span> <span class="co"># lower and upper bounds of the two modes</span></code></pre></div>
+<pre><code><span class="co">##           [,1]       [,2]      [,3]       [,4]</span>
+<span class="co">## [1,]  1.079403 -1.4891923  2.193951 -0.8053697</span>
+<span class="co">## [2,] -1.738694  0.8557582 -1.246862  1.3160574</span></code></pre>
+<p>We highlight the two modes in the histogram, and the asterisks are
+the two true modes. The two modes in the Beta trees histogram are close
+to the actual modes in the distribution.</p>
+<p><img src="mode_files/figure-html/unnamed-chunk-11-1.png" width="432" style="display: block; margin: auto;"></p>
+<p>In the next section, we describe details of <code>FindModes</code>
+function.</p>
 </div>
 <div class="section level2">
-<h2 id="identifying-modes-in-a-beta-tree-histogram">Identifying modes in a Beta Tree histogram<a class="anchor" aria-label="anchor" href="#identifying-modes-in-a-beta-tree-histogram"></a>
+<h2 id="identifying-modes-of-a-beta-tree-histogram">Identifying modes of a Beta tree histogram<a class="anchor" aria-label="anchor" href="#identifying-modes-of-a-beta-tree-histogram"></a>
 </h2>
-<p><code>FindModes</code> proceeds in the following steps:</p>
-<ol style="list-style-type: decimal">
-<li><p>Order regions reversely by the empirical density. Initiate the
-list of modes by the region with the highest density.</p></li>
-<li><p>Iterate through every region by order in (1), test if they are
-<em>distinct modes</em> from the current list of modes.</p></li>
-<li><p>Return the list of modes.</p></li>
-</ol>
-<p>In step (2), we say that <span class="math inline">\(R_1\)</span> and
-<span class="math inline">\(R_2\)</span> are two <em>distinct modes</em>
-if there exists at least one path from <span class="math inline">\(R_1\)</span> to <span class="math inline">\(R_2\)</span> such that there exists at least one
+<p>Let’s rephrase the question of mode detection as the following: how
+can we tell that the two regions highlighted in red (let’s call them
+<span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span>) are two distinct modes? (If we know
+how to do this, then we can detect mdoes by iterating through all the
+regions , compare each one with current modes, and declare it a mode if
+it is distinct from all the current modes.) Suppose that <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span> are distinct modes, then along every
+path that connects <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span>, there should exist at least one
 region <span class="math inline">\(R\)</span> whose average density is
-lower than both <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span>, i.e., <span class="math display">\[
+lower than both <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span>. Because the Beta tree histogram
+returns CI for the average density, we compare the lower and upper bound
+of the CI, that is, there should exist a region <span class="math inline">\(R\)</span> such that</p>
+<p><span class="math display">\[
 \mathrm{CI}_\mathrm{up}(R) &lt; \min(\mathrm{CI}_\mathrm{low}(R_1),
 \mathrm{CI}_\mathrm{up}(R_2)),
 \]</span> where <span class="math inline">\([\mathrm{CI}_\mathrm{low}(R),
 \mathrm{CI}_\mathrm{up}(R)]\)</span> is the confidence interval of the
-average empirical density of <span class="math inline">\(R\)</span>. The
-<span class="math inline">\((1-\alpha)\)</span> confidence interval are
-stored in the <span class="math inline">\((2*d+2)\)</span> and <span class="math inline">\((2*d+3)\)</span> columns of output matrix from
-<code>SelectNodes</code> (or <code>BuildHist</code>). The function
-<code><a href="../reference/is_connected.html">is_connected()</a></code> tests whether two regions are distinct
-modes. Another subroutine in step (2) is to compute an adjacency matrix
-of regions in the histogram.</p>
-<div class="section level3">
-<h3 id="computing-a-adjacency-matrix-of-regions-in-the-histogram">Computing a adjacency matrix of regions in the histogram<a class="anchor" aria-label="anchor" href="#computing-a-adjacency-matrix-of-regions-in-the-histogram"></a>
-</h3>
-<p>Two regions <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span> are neighbors if <span class="math display">\[
+average density of <span class="math inline">\(R\)</span>.</p>
+<p>For example, we plot the confidence interval for every region along
+the shortest path <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span>. As we can see, the upper confidence
+bound of the third region is below the lower endpoints of both modes.
+Suppose this is true for every path, then we declare <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span> are two distinct modes.</p>
+<p><img src="mode_files/figure-html/unnamed-chunk-14-1.png" width="384" style="display: block; margin: auto;"></p>
+<p>Note that we have only examined one path here, and to check every
+path, we use the function <code><a href="../reference/is_connected.html">is_connected()</a></code>. It returns
+<code>connected</code> if the two regions are <strong>not</strong>
+distinct modes. The function has five input values: <code>i</code> and
+<code>j</code> are the indices of the two regions, <code>g</code> is a
+graph based on the adjacency matrix (we will describe later),
+<code>ci</code> are the lower and upper confidence bounds, and
+<code>cutoff</code> specifies the maximum length of path the function
+checks.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">BetaTrees</span><span class="fu">::</span><span class="fu"><a href="../reference/is_connected.html">is_connected</a></span><span class="op">(</span>i <span class="op">=</span> <span class="va">modes</span><span class="op">$</span><span class="va">mode</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, j <span class="op">=</span> <span class="va">modes</span><span class="op">$</span><span class="va">mode</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, g <span class="op">=</span> <span class="va">g</span>, ci <span class="op">=</span> <span class="va">hist</span><span class="op">[</span>,<span class="fl">6</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span>, cutoff <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] "unconnected"</span></code></pre>
+<p>We need the adjacency matrix in order to compute the path between two
+regions. The function <code><a href="../reference/compute_adjacency_mat.html">compute_adjacency_mat()</a></code> computes the
+adjacency matrix for all of the regions in the histogram. The two inputs
+of the function is a Beta tree histogram <code>hist</code> and data
+dimension <code>d</code>. In the output adjacency matrix <span class="math inline">\(A\)</span>, <span class="math inline">\(A_{i,j} =
+1\)</span> if <span class="math inline">\(i\)</span>-th and <span class="math inline">\(j\)</span>-th regions are neighbors and 0
+otherwise. We say that <span class="math inline">\(R_1\)</span> and
+<span class="math inline">\(R_2\)</span> are neighbors if <span class="math display">\[
 [x^{\mathrm{low}}_{1,j}, x^{\mathrm{up}}_{1,j}] \cap
 [x^{\mathrm{low}}_{2,j}, x^{\mathrm{up}}_{2,j}] \neq \emptyset,\quad
 \forall j=1,\ldots, d.
-\]</span> Here, we define each region by the lower and upper bound in
+\]</span> Here, we represent each region by the lower and upper bound in
 each coordinate, i.e., <span class="math inline">\(R_1\)</span> can be
 represented as <span class="math inline">\([x^{\mathrm{low}}_{1,1},
 x^{\mathrm{up}}_{1,1}]\times \ldots \times [x^{\mathrm{low}}_{1,d},
 x^{\mathrm{up}}_{1,d}]\)</span>.</p>
-<p><code><a href="../reference/compute_adjacency_mat.html">compute_adjacency_mat()</a></code> computes the adjacency matrix
-for all of the regions in the histogram. The two inputs of the function
-is a Beta Tree histogram <code>hist</code> and data dimension
-<code>d</code>. In the output adjacency matrix <span class="math inline">\(A\)</span>, <span class="math inline">\(A_{i,j} =
-1\)</span> if <span class="math inline">\(i\)</span>-th and <span class="math inline">\(j\)</span>-th regions are neighbors and 0
-otherwise.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">adj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compute_adjacency_mat.html">compute_adjacency_mat</a></span><span class="op">(</span>hist <span class="op">=</span> <span class="va">hist</span><span class="op">$</span><span class="va">hist</span>, d <span class="op">=</span> <span class="va">d</span><span class="op">)</span> 
-
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">adj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compute_adjacency_mat.html">compute_adjacency_mat</a></span><span class="op">(</span>hist <span class="op">=</span> <span class="va">hist</span>, d <span class="op">=</span> <span class="va">d</span><span class="op">)</span> 
 <span class="va">adj</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span> </code></pre></div>
 <pre><code><span class="co">##      [,1] [,2] [,3] [,4] [,5]</span>
 <span class="co">## [1,]    0    1    0    0    1</span>
 <span class="co">## [2,]    1    0    0    0    1</span>
 <span class="co">## [3,]    0    0    0    1    1</span>
-<span class="co">## [4,]    0    0    1    0    1</span>
-<span class="co">## [5,]    1    1    1    1    0</span></code></pre>
-</div>
-<div class="section level3">
-<h3 id="testing-if-two-regions-are-distinct-modes">Testing if two regions are distinct modes<a class="anchor" aria-label="anchor" href="#testing-if-two-regions-are-distinct-modes"></a>
-</h3>
-<p><code><a href="../reference/is_connected.html">is_connected()</a></code> tests if two regions are distinct modes
-or not. The following code tests if the first and second modes are
-distinct modes (the graph <code>g</code> is a graph based on the
-adjacency matrix). The <code>cutoff</code> parameter specifies the
-maximum length of path that the algorithm checks.
-<code><a href="../reference/is_connected.html">is_connected()</a></code> outputs <code>connected</code> if the test
-fails, i.e., the two regions are <strong>not</strong> distinct
-modes.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_adjacency_matrix.html" class="external-link">graph_from_adjacency_matrix</a></span><span class="op">(</span><span class="va">adj</span>, mode <span class="op">=</span> <span class="st">"undirected"</span><span class="op">)</span></code></pre></div>
+<span class="co">## [4,]    0    0    1    0    0</span>
+<span class="co">## [5,]    1    1    1    0    0</span></code></pre>
+<p>From the adjacency matrix, we compute a undirected graph
+<code>g</code> (using function <code>graph_from_adjacency_matrix</code>
+from <code>igraph</code> package).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/is_connected.html">is_connected</a></span><span class="op">(</span>i <span class="op">=</span> <span class="va">modes</span><span class="op">$</span><span class="va">mode</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, j <span class="op">=</span> <span class="va">modes</span><span class="op">$</span><span class="va">mode</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, g <span class="op">=</span> <span class="va">g</span>, ci <span class="op">=</span> <span class="va">hist</span><span class="op">$</span><span class="va">hist</span><span class="op">[</span>,<span class="fl">6</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span>, cutoff <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "unconnected"</span></code></pre>
-<p>To illustrate, we can plot the confidence interval for every region
-along a path connecting these two regions. As we can see, the upper
-confidence bound of one of the region is below the lower endpoints of
-both modes, and this is true for every path with length at most 6.</p>
-<p><img src="mode_files/figure-html/unnamed-chunk-13-1.png" width="384" style="display: block; margin: auto;"></p>
-</div>
+<code class="sourceCode R"><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_adjacency_matrix.html" class="external-link">graph_from_adjacency_matrix</a></span><span class="op">(</span><span class="va">adj</span>, mode <span class="op">=</span> <span class="st">"undirected"</span><span class="op">)</span></code></pre></div>
+<p>To summarize, <code>FindModes</code> proceeds in the following
+steps:</p>
+<ol style="list-style-type: decimal">
+<li><p>Order regions by the empirical density (in descending order).
+Initiate the list of modes by the region with the highest
+density.</p></li>
+<li><p>Iterate through every region by order in (1), test if it is
+<em>distinct modes</em> from the current list of modes using
+<code>is_connected</code> function. If it is <code>unconnected</code>
+from all the current modes, then we add it to the list of
+modes.</p></li>
+<li><p>Return the list of modes.</p></li>
+</ol>
 </div>
   </div>
 

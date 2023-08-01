@@ -12,10 +12,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Computes a BetaTree histogram for multivariate data   ">
-<meta property="og:description" content="Creates a Beta Tree histogram. Iteratively partition the space by by growing
-    a kd tree on the order statistics. For each node, computes an exact confidence bound from Wald's lemma, and get guaranteed
-    simultaneous level alpha by weighted Bonferroni. Construct the histogram by selecting the largest node
-    that passes a goodness-of-fit test. ">
+<meta property="og:description" content="Creates a Beta tree histogram. Iteratively partition the space by growing
+    a k-d tree on the order statistics, computes simultaneous confidence bound of average density in each region, and
+    select largest regions where data are approximately uniform. ">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -53,10 +52,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/beta_trees.html">Creating a Beta Trees Histogram</a>
+      <a href="articles/beta_trees.html">Creating a Beta Tree Histogram</a>
     </li>
     <li>
-      <a href="articles/mode.html">Mode Hunting with Beta Trees</a>
+      <a href="articles/mode.html">Mode Hunting Using Beta Trees</a>
     </li>
   </ul>
 </li>
@@ -79,7 +78,7 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>This R package constructs a Beta Tree histogram for multivariate data.</p>
+<p>This R package constructs a Beta tree histogram for multivariate data by growing a k-d tree on the order statistics, computing simultaneous confidence bound of average density in each region, and selecting the largest regions where data are approximately uniform. The Beta tree histogram provides a succinct description of the data, as well as simultaneous confidence intervals of the average density in each region.</p>
 </div>
 <div class="section level2">
 <h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
@@ -100,7 +99,7 @@
 <div class="section level2">
 <h2 id="function-documentation">Function documentation<a class="anchor" aria-label="anchor" href="#function-documentation"></a>
 </h2>
-<p>You can find the function documentations under the Reference tab. To get started, you can take a look at the function <code>BuilgHist()</code>, which computes a Beta Trees histogram.</p>
+<p>You can find the function documentations under the Reference tab. To get started, you can take a look at the function <code>BuilgHist()</code>, which computes a Beta tree histogram.</p>
 </div>
 <div class="section level2">
 <h2 id="source-code">Source code<a class="anchor" aria-label="anchor" href="#source-code"></a>

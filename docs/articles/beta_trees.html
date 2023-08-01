@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Creating a Beta Trees Histogram • BetaTrees</title>
+<title>Creating a Beta Tree Histogram • BetaTrees</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Creating a Beta Trees Histogram">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Creating a Beta Tree Histogram">
 <meta property="og:description" content="BetaTrees">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -50,10 +50,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/beta_trees.html">Creating a Beta Trees Histogram</a>
+      <a href="../articles/beta_trees.html">Creating a Beta Tree Histogram</a>
     </li>
     <li>
-      <a href="../articles/mode.html">Mode Hunting with Beta Trees</a>
+      <a href="../articles/mode.html">Mode Hunting Using Beta Trees</a>
     </li>
   </ul>
 </li>
@@ -71,7 +71,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Creating a Beta Trees Histogram</h1>
+      <h1 data-toc-skip>Creating a Beta Tree Histogram</h1>
             
       
       
@@ -82,158 +82,155 @@
     
     
 <p>First introduced by Pearson in 1895, a histogram is one of the basic
-tools to summarize data. A histogram is created by defining a set of
-rectangular “bins”, and then count the number of observations within
-each bin. Below is an example of a one-dimensional histogram, where we
-specify 15 bins in total. We can do the same in two- or higher-
-dimensions. However, as the dimension increases, creating a histogram
-becomes challenging because of what we call the curse of dimensionality.
-In essense, if we include the same number of bins in each didimension,
-then the number of bins we need to fill the whole space increase
-<em>exponentially</em> as the number of dimension increases, and yet
-most of these bins will be empty!</p>
-<p>The Beta trees histogram circumvents the “curse of dimensionality” by
+tools researchers use to summarize continuous data. To create a
+histogram for 1-dim data, one first define a set of “bins” (i.e.,
+intervals), and then count the number of observations within each bin.
+We can do the same for two- or higher- dimensional data. However, as the
+number dimension increases, creating a histogram becomes challenging
+because of the <em>curse of dimensionality</em>. In essence, if we use
+the same number of bins in each dimension, the number of bins required
+to fill the whole space increases <em>exponentially</em> with the
+dimension, and yet most of these bins will be empty.</p>
+<p>The Beta trees histogram circumvents the curse of dimensionality by
 adapting the histogram to where the data locates. Instead of predefining
-locations of bines, Beta trees histogram iteratively partitions the
-space according to the <em>order statistics</em>. The Beta trees
-histogram has three properties</p>
+locations of bins, Beta trees histogram iteratively partitions the space
+according to the <em>order statistics</em>. The Beta trees histogram has
+three properties:</p>
 <ul>
 <li><p><strong>Adapts</strong> to where observations are
 located</p></li>
-<li><p>Provides a <strong>simultaneous</strong> confidence interval of
-the probability mass in each regions of the histogram</p></li>
+<li><p>Provides <strong>simultaneous</strong> confidence intervals of
+the probability mass in each region of the histogram</p></li>
 <li><p><strong>Summarizes</strong> data succinctly by choosing the
-largest bins such that data are relatively uniformly distributed inside
-the region.</p></li>
+largest region such that data is close to uniformly distributed
+inside.</p></li>
 </ul>
-<p>The confidence intervals (CI) created by the Beta Trees histogram
-also allows us to identify modes in the underlying density, which we
-describe in another document “Identifying modes using a Beta Trees
-histogram”.</p>
+<p>The confidence intervals (CI) created by Beta trees histogram also
+allows us to identify modes in the underlying density, which we describe
+in another note “Identifying modes using a Beta Tree histogram”.</p>
 <p>This document demonstrates how to use functions in the package to
-create a Beta-Trees histogram through an example of a mixture of
+create a Beta-Tree histogram through an example of a mixture of
 2-dimensional Gaussian distribution.</p>
 <div class="section level2">
-<h2 id="example-mixture-of-two-dimensional-gaussian-variables">Example: mixture of two dimensional Gaussian variables<a class="anchor" aria-label="anchor" href="#example-mixture-of-two-dimensional-gaussian-variables"></a>
+<h2 id="example-creating-a-beta-tree-histogram-for-2-dim-gaussian">Example: Creating a beta-tree histogram for 2-dim Gaussian<a class="anchor" aria-label="anchor" href="#example-creating-a-beta-tree-histogram-for-2-dim-gaussian"></a>
 </h2>
 <p>As an illustration, we create a Beta Tree histogram for a mixture of
-two-dimensional Gaussian data.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">2000</span> <span class="co"># num of obs.</span>
-<span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="co"># num of dim.</span></code></pre></div>
-<p>The two-dimensional Gaussian are from the distribution below, and we
-visualize the the samples of 2000 observations below.</p>
+two-dimensional Gaussian data (<span class="math inline">\(n =\)</span>
+2000) sampled from the following distribution and visualized below:</p>
 <p><span class="math display">\[
-\frac{2}{5} \mathcal{N}\left(\left(\begin{matrix}-1.5
+\frac{2}{5} N\left(\left(\begin{matrix}-1.5
 \\0.6\end{matrix}\right),\left(\begin{matrix}1 &amp; 0.5 \\ 0.5 &amp;
-1\end{matrix}\right) \right) + \frac{3}{5}
-\mathcal{N}\left(\left(\begin{matrix}2
+1\end{matrix}\right) \right) + \frac{3}{5} N\left(\left(\begin{matrix}2
 \\-1.5\end{matrix}\right),\left(\begin{matrix}1 &amp; 0 \\ 0 &amp;
 1\end{matrix}\right) \right),
 \]</span></p>
 <p><img src="beta_trees_files/figure-html/unnamed-chunk-4-1.png" width="384" style="display: block; margin: auto;"></p>
-<p><code><a href="../reference/BuildHist.html">BuildHist()</a></code> function creates a Beta Tree histogram.
-Here, we specify a confidence level <code>alpha = 0.1</code> and use
-weighted bonferroni method for multiple testing correction. This implies
-the following: the confidence interval satisfies that it is
-simulatneously valid at confidence level <code>alpha = 0.1</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/BuildHist.html">BuildHist</a></span><span class="op">(</span><span class="va">X</span>, alpha <span class="op">=</span> <span class="fl">0.1</span>, method <span class="op">=</span> <span class="st">"weighted_bonferroni"</span><span class="op">)</span></code></pre></div>
-<p>The <code>hist</code> is a matrix describing each region in the
+<p>We can use the <code><a href="../reference/BuildHist.html">BuildHist()</a></code> function to create a Beta
+Tree histogram. (If <code>plot = T</code>, then the function plots the
+Beta-tree histogram if the data is two-dimensional. )</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">hist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/BuildHist.html">BuildHist</a></span><span class="op">(</span><span class="va">X</span>, alpha <span class="op">=</span> <span class="fl">0.1</span>, method <span class="op">=</span> <span class="st">"weighted_bonferroni"</span>, plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<p><img src="beta_trees_files/figure-html/unnamed-chunk-5-1.png" width="480" style="display: block; margin: auto;"></p>
+<p>Besides the data matrix <code>X</code>, we input two parameters: one
+minus confidence level <code>alpha = 0.1</code> and a multiple testing
+correction method <code>method = "weighted_bonferroni"</code>. This
+means that the confidence interval the histogram provides is
+simultaneously valid for every region at confidence level
+<code>1-alpha = 0.9</code>. The return value of the
+<code>BuildHist</code> is a matrix describing each region in the
 beta-tree histogram. Each row represents one region, and this histogram
-includes 24 regions. Let’s look at the first region in the
+includes 25 regions. Let’s look at the first region in the
 histogram:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">hist</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span>
-<span class="co">#&gt; [1] -2.56613342 -0.68129093 -1.40232246 -0.35586994  0.04224662  0.02154253</span>
-<span class="co">#&gt; [7]  0.07173925 31.00000000  7.00000000</span></code></pre></div>
-<p>and the columns provides the following information:</p>
+<span class="co">#&gt; [1] -2.34922539 -0.86472897 -0.78330297 -0.34938179  0.01982667  0.01011008</span>
+<span class="co">#&gt; [7]  0.03366780 31.00000000  6.00000000</span></code></pre></div>
+<p>The columns provide the following information:</p>
 <ul>
 <li><p>the first two columns are the lower bounds in <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>-coordinates of each region; the next
 two columns are the upper bounds in <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>-coordinates of each region, i.e., this
-rectangle is defined by the bounds [ -2.57 -1.4 ] *[ -0.68 -0.36
+rectangle is defined by the bounds [ -2.35 -0.78 ] *[ -0.86 -0.35
 ].</p></li>
-<li><p>the fifth column stores the empirical density <span class="math inline">\(h(R)\)</span> in this region</p></li>
+<li><p>the fifth column stores the empirical density in this
+region</p></li>
 <li><p>the sixth and seventh columns store the lower and upper
 confidence bound (CI) of the average probability density in the region.
-With probability at least <span class="math inline">\((1-\alpha)\)</span>, the CI covers all the average
+With probability at least <span class="math inline">\((1-\alpha)\)</span>, the CI covers the average
 density in all of the regions.</p></li>
-<li><p>the eighth column stores the number of observations <span class="math inline">\(n(R)\)</span> in this region</p></li>
+<li><p>the eighth column stores the number of observations in this
+region</p></li>
 <li><p>the last column stores the depth of the region in the k-d tree,
 which we will describe in the next section.</p></li>
 </ul>
-<p>You can set two more parameters in the function: <code>plot</code>
-and <code>bounded</code> . If <code>plot = T</code>, then the function
-outputs a visualization Beta-trees histogram if the data is
-two-dimensional.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/BuildHist.html">BuildHist</a></span><span class="op">(</span><span class="va">X</span>, alpha <span class="op">=</span> <span class="fl">0.1</span>, method <span class="op">=</span> <span class="st">"weighted_bonferroni"</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p><img src="beta_trees_files/figure-html/unnamed-chunk-7-1.png" width="480" style="display: block; margin: auto;"></p>
-<p>As we will explain in the next few sections, the histogram only
-includes <strong>bounded</strong> regions. If you select
-<code>bounded = T</code>, then you can specify how to initialize a
-rectangular bounded region. You will need to provide two additional
-inputs <code>option</code> and <code>ndat</code> which we will explain
-in the next section. In the example below, we ask to intialize the
-region by choosing the 0.05 and 0.95 quantiles in each dimension.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>The histogram above does not have a rectangular boundary. As we will
+explain in the next few sections, this is because the histogram only
+includes <strong>bounded</strong> regions. Alternatively, you can
+initialize a bounded rectangular region if you specify
+<code>bounded = T</code>. You will then need to provide two additional
+parameters <code>option</code> and <code>ndat</code> (which we will
+explain in the next section). Below, we initialize the bounded rectangle
+at the 0.05 and 0.95 quantiles in each dimension.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">hist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/BuildHist.html">BuildHist</a></span><span class="op">(</span><span class="va">X</span>, alpha <span class="op">=</span> <span class="fl">0.1</span>, method <span class="op">=</span> <span class="st">"weighted_bonferroni"</span>, bounded <span class="op">=</span> <span class="cn">T</span>, 
                   option <span class="op">=</span> <span class="st">"qt"</span>, q<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>,<span class="fl">0.05</span><span class="op">)</span>, 
                   plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p><img src="beta_trees_files/figure-html/unnamed-chunk-8-1.png" width="480" style="display: block; margin: auto;"></p>
-<p>In the next section, we will describe how the KD tree is
+<p><img src="beta_trees_files/figure-html/unnamed-chunk-7-1.png" width="480" style="display: block; margin: auto;"></p>
+<p>In the next section, we will describe how the Beta tree histogram is
 constructed.</p>
 </div>
 <div class="section level2">
-<h2 id="creating-a-beta-tree-histogram">Creating a Beta Tree Histogram<a class="anchor" aria-label="anchor" href="#creating-a-beta-tree-histogram"></a>
+<h2 id="how-a-beta-tree-histogram-is-constructed">How a beta-tree histogram is constructed<a class="anchor" aria-label="anchor" href="#how-a-beta-tree-histogram-is-constructed"></a>
 </h2>
-<p>We create a Beta Tree Histogram in four steps:</p>
+<p>The Beta tree histogram is constructed in four steps:</p>
 <ol style="list-style-type: decimal">
-<li>Constructing a k-d tree.</li>
-<li>Calculating confidence levels.</li>
-<li>Setting confidence bounds for every region.</li>
+<li>Building a k-d tree.</li>
+<li>Calculating confidence levels for every region.</li>
+<li>Setting confidence bounds.</li>
 <li>Select regions that pass a goodness-of-fit test.</li>
 </ol>
+<p>You can think of the algorithm as taking two passes: a top-down pass
+partitioning the sample space into small regions and a bottom-up pass
+selecting largest regions in which the observations are approximately
+uniform.</p>
 </div>
 <div class="section level2">
-<h2 id="constructing-a-k-d-tree">Constructing a k-d tree<a class="anchor" aria-label="anchor" href="#constructing-a-k-d-tree"></a>
+<h2 id="building-a-k-d-tree">Building a k-d tree<a class="anchor" aria-label="anchor" href="#building-a-k-d-tree"></a>
 </h2>
-<p>A <a href="https://en.wikipedia.org/wiki/K-d_tree" class="external-link">k-d tree</a> is a
+<p>Beta trees histogram starts by iteratively partitioning the sample
+space along the sample median. This is motivated by <a href="https://en.wikipedia.org/wiki/K-d_tree" class="external-link">k-d trees</a>, which is a
 spatial-partitioning data structure for organizing observations in a
-k-dimensional space. Motivated by the k-d tree, Beta trees histogram
-starts by iteratively partitioning the sample space at the sample
-median. In detail, we start with all of the observations (this is our
-root node). At each step, we choose (1) an axis along which to partition
-(2) a location for partitioning. For (1), we iterate through all of the
+k-dimensional space.</p>
+<p>In detail, we start with all of the observations (this is the root
+node). At each step, we choose (1) an axis along which to partition (2)
+a location for partitioning. For (1), we iterate through all of the
 coordinates, i.e., the first partition is along <span class="math inline">\(x\)</span>-axis and the second partition is along
-the <span class="math inline">\(y\)</span>-axis etc. For (2), we
+the <span class="math inline">\(y\)</span>-axis etc. As to (2), we
 partition along the sample <em>median</em> in the partitioning
 coordinate.</p>
 <p>In the two-dimensional example above, in the first partition, we
 split the sample space into two half-spaces: <span class="math display">\[
-R_1 = \{x\in\mathbb{R}^2:x_1&lt;X_{1,\left(\lceil{n/2}\rceil\right)} \},
-\quad
-R_2 = \{x\in\mathbb{R}^2:x_1&gt;X_{1,\left(\lceil{n/2}\rceil\right)} \}
-\]</span> Note here that the obs. at the sample median is not included
-in the two regions. In the second step, we split <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span> repsectively. <span class="math inline">\(R_1\)</span> is splitted into two children <span class="math display">\[
-R_1 = \{x\in R_1:x_2&lt;X^1_{2,\left(\lceil{n_1/2}\rceil\right)}, X^1\in
-R_1 \}, \quad
-R_2 = \{x\in R_1:x_2&gt;X^1_{2,\left(\lceil{n_1/2}\rceil\right)}, X^1\in
-R_1 \},
-\]</span> where <span class="math inline">\(X^1\)</span> are all of the
-observations in <span class="math inline">\(R_1\)</span>. We continue
-splitting a region until the number of observations inside is less than
-<span class="math inline">\(4\log n\)</span>, where <span class="math inline">\(n\)</span> is the total num of obs.</p>
+R_1 = \{x\in\mathbb{R}^2:x_1&lt;X_{1,\lceil{n/2}\rceil} \}, \quad
+R_2 = \{x\in\mathbb{R}^2:x_1&gt;X_{1,\lceil{n/2}\rceil} \}
+\]</span> Note that the obs. at the sample median is not included in the
+two regions. In the second step, we split <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span> repsectively. <span class="math inline">\(R_1\)</span> is splitted into two children <span class="math display">\[
+R_1 = \{x\in R_1:x_2&lt;X^1_{2,\lceil{n_1/2}\rceil} \}, \quad
+R_2 = \{x\in R_1:x_2&gt;X^1_{2,\lceil{n_1/2}\rceil} \},
+\]</span> where <span class="math inline">\(X^1_{2,\lceil{n_1/2}\rceil}\)</span> is the <span class="math inline">\(\lceil{n_1/2}\rceil\)</span> order statistics in
+the <span class="math inline">\(y\)</span>-coordinate for the
+observations <span class="math inline">\(X^1\)</span> in <span class="math inline">\(R_1\)</span> (the total num. of obs. in <span class="math inline">\(R_1\)</span> is <span class="math inline">\(n_1\)</span>). We continue splitting a region
+until the number of observations inside is less than <span class="math inline">\(4\log n\)</span>, where <span class="math inline">\(n\)</span> is the total num of obs.</p>
 <p>The function <code>BuildKDTree</code> constructs a k-d tree.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/BuildKDTree.html">BuildKDTree</a></span><span class="op">(</span><span class="va">X</span>, bounded <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
-<p>The <code>tree</code> object has two components <code>kdtree</code>
-and <code>nd</code>. <code>kdtree</code> stores the k-d tree. You can
-refer to the function documentation for the details, here we point out
-that <code>leftchild</code> and <code>rightchild</code> points to the
-two partitions of that node. For example, we can look at one node in the
-tree.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>The <code>tree</code> object has two components: <code>kdtree</code>
+and <code>nd</code>. The object <code>kdtree</code> stores the root node
+of k-d tree as a list (you can refer to the function documentation for
+more detail). We point out here that <code>leftchild</code> and
+<code>rightchild</code> points to the two partitions of that region,
+<code>low</code> ad <code>up</code> are the lower and upper bounds of
+the region and <code>ndat</code> is the number of obs.. The following is
+one node in the tree.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tree</span><span class="op">$</span><span class="va">kdtree</span><span class="op">$</span><span class="va">leftchild</span><span class="op">$</span><span class="va">leftchild</span><span class="op">$</span><span class="va">rightchild</span><span class="op">$</span><span class="va">rightchild</span><span class="op">$</span><span class="va">leftchild</span><span class="op">$</span><span class="va">leftchild</span>
 <span class="co">#&gt; $leftchild</span>
 <span class="co">#&gt; NULL</span>
@@ -245,13 +242,13 @@ tree.</p>
 <span class="co">#&gt; [1] 30</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $depth</span>
-<span class="co">#&gt; [1] 7</span>
+<span class="co">#&gt; [1] 6</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $low</span>
-<span class="co">#&gt; [1] -1.4023225 -0.9135046</span>
+<span class="co">#&gt; [1] -0.783303 -1.331250</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $up</span>
-<span class="co">#&gt; [1] -0.5857733 -0.1549037</span>
+<span class="co">#&gt; [1]  0.4849015 -0.3761551</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $lower</span>
 <span class="co">#&gt; NULL</span>
@@ -265,104 +262,124 @@ tree.</p>
 <span class="co">#&gt; $leaf</span>
 <span class="co">#&gt; [1] TRUE</span></code></pre></div>
 <p><code>nd</code> contains the number of <em>bounded</em> regions at
-each depth. This is useful when we adjust the confidence levels at each
-depth to account for multiple CI. Here, at depth 5 there are 4 bounded
-regions.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+each depth of the tree (the root node has depth = 0). This is useful
+when we adjust the confidence levels at each depth to account for
+multiple CI. Here, at depth 4 there are 4 bounded regions.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tree</span><span class="op">$</span><span class="va">nd</span>
-<span class="co">#&gt; [1] NA NA NA NA  4 12 36 21</span></code></pre></div>
+<span class="co">#&gt; [1]  0  0  0  0  4 12 36 21</span></code></pre></div>
 <p>As you can see, there are no bounded regions in the first 4 levels.
-Because the histogram only includes bounded regions, many obs. not be
-inlcuded in the final histogram. Alternatively, you can specify an
-option <code>bounded = T</code> in the <code>BuildKDTree</code>
-function. In that case, the function constructs the first two partitions
-to initialize a bounded region. Here we provide two options to specify
-the bounded region: (1) if <code>option = 'qt'</code>, then we partition
-at the sample quantiles. For example, if <code>q = c(0.05, 0.05)</code>,
-then the first partition defines a region <span class="math inline">\(R_0\)</span><br><span class="math display">\[
-R_0 = \{x\in\mathbb{R}^2:X_{1,\left(\lceil{0.05 *
-n}\rceil\right)}&lt;x_1&lt;X_{1,\left(n - \lceil{0.05 * n}\rceil\right)}
-\},
-\]</span> and the second partition defines a region <span class="math inline">\(R_1\)</span>, which we set as the root node. The
-histogram above is created using</p>
-<p><span class="math display">\[
-R_1  = \{x\in R_0:X^0_{2,\left(\lceil{0.05 *
-n_0}\rceil\right)}&lt;x_2&lt;X^0_{2,\left(n_0 - \lceil{0.05 *
-n_0}\rceil\right)}, X^0\in R_0 \}
-\]</span></p>
-<ol start="2" style="list-style-type: decimal">
-<li>if <code>option = 'ndat'</code>, then we partition at the sample
-order statistics. For example, if <code>q = c(25, 25)</code>, then the
-partitions are at the order statistics 25 and <span class="math inline">\((n-25)\)</span> etc.</li>
+You can initialize a bounded region by the option
+<code>bounded = T</code> . The function then constructs the first two
+partitions to initialize a bounded region. We provide two options to
+specify the bounded region:</p>
+<ol style="list-style-type: decimal">
+<li>if <code>option = 'qt'</code>, then we set the bounds at the sample
+quantiles. For example, if <code>q = c(0.05, 0.05)</code>, then we first
+define a region <span class="math inline">\(R_0\)</span>
+</li>
 </ol>
+<p><span class="math display">\[
+R_0 = \{x\in\mathbb{R}^2:X_{1,\lceil{0.05 * n}\rceil}&lt; x_1 &lt;
+X_{1,n - \lceil{0.05 * n}\rceil + 1}  \},
+\]</span> and then a region <span class="math inline">\(R_1\)</span></p>
+<p><span class="math display">\[
+R_1  = \{x\in R_0:X^0_{2,\lceil{0.05 * n_0}\rceil} &lt; x_2
+&lt;  X^0_{2,n_0 - \lceil{0.05 * n_0}\rceil + 1} \},
+\]</span> where <span class="math inline">\(X^0\)</span> are all the
+obs. inside <span class="math inline">\(R_0\)</span>. The root node
+contains all of the observations inside <span class="math inline">\(R_1\)</span>.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>if <code>option = 'ndat'</code>, then we set the bounds at order
+statistics. For example, if <code>q = c(25, 25)</code>, then we first
+define a region <span class="math inline">\(R_0\)</span>
+</li>
+</ol>
+<p><span class="math display">\[
+R_0 = \{x\in\mathbb{R}^2:X_{1,25}&lt; x_1 &lt; X_{1,n - 25 + 1}  \},
+\]</span> and then a region <span class="math inline">\(R_1\)</span></p>
+<p><span class="math display">\[
+R_1  = \{x\in R_0:X^0_{2,25 } &lt; x_2 &lt;  X^0_{2,n_0 - 25 + 1} \},
+\]</span> where <span class="math inline">\(X^0\)</span> are all the
+obs. inside <span class="math inline">\(R_0\)</span>. The root node
+contains all of the observations inside <span class="math inline">\(R_1\)</span>.</p>
 </div>
 <div class="section level2">
-<h2 id="calculating-confidence-levels">Calculating confidence levels<a class="anchor" aria-label="anchor" href="#calculating-confidence-levels"></a>
+<h2 id="calculating-confidence-levels-for-every-region">Calculating confidence levels for every region<a class="anchor" aria-label="anchor" href="#calculating-confidence-levels-for-every-region"></a>
 </h2>
-<p>Theorem 1 in the paper states that the cumulative distributio
-function in each region <span class="math inline">\(k\)</span> satisfies
-<span class="math display">\[
+<p>We are able to use the construct CI for the probability density in
+region because the cdf in a region <span class="math inline">\(R_k\)</span> satisfies</p>
+<p><span class="math display">\[
 F(R_k)\sim \mathrm{Beta}(n_k+1, n-n_k),
-\]</span> and we can use this result to construct a <span class="math inline">\((1-\alpha)\)</span> confidence interval for the
+\]</span> where <span class="math inline">\(n_k\)</span> is the num of
+obs in <span class="math inline">\(R_k\)</span> and <span class="math inline">\(n\)</span> is the total num of obs. With this
+result, we can construct a <span class="math inline">\((1-\alpha)\)</span> confidence interval for the
 average density <span class="math inline">\(f(R_k) =
-F(R_k)/|R_k|\)</span> where <span class="math inline">\(|R_k|\)</span>
-is the volume of <span class="math inline">\(R_k\)</span>.</p>
-<p>This confidence interval is valid for only one region, and if we want
-to achieve simultaneous coverage at level <span class="math inline">\((1-\alpha)\)</span>, we can adjust the confidence
-level of each region such that the total probability of mis-coverage is
-at most <span class="math inline">\(\alpha\)</span>. Here, we use a
-<strong>weighted bonferroni</strong> adjustment, which defines the
-confidence level for regions at level <span class="math inline">\(D\)</span> as <span class="math display">\[
-\hat{\alpha}_D = \frac{\alpha}{(D_{\max} - D + 2) \times  N_D \times
-\sum_{B=2}^{D_{\max}-2}\frac{1}{B}}.
-\]</span> Here, <span class="math inline">\(D_{\max}\)</span> is the
-maximum depth of the k-d tree, <span class="math inline">\(N_D\)</span>
-is the number of <em>bounded</em> regions in depth <span class="math inline">\(D\)</span> and the factor <span class="math inline">\(\sum_{B=2}^{D_{\max}-2}\frac{1}{B}\)</span>
-ensures that <span class="math inline">\(\hat{\alpha}_D\)</span> adds up
-to <span class="math inline">\(\alpha\)</span>.</p>
-<p><code>ConfLevel</code> computes <span class="math inline">\(\hat{\alpha}_D\)</span> at each level. For
+F(R_k)/|R_k|\)</span> (<span class="math inline">\(|R_k|\)</span> is the
+volume of <span class="math inline">\(R_k\)</span>):</p>
+<p><span class="math display">\[
+C_k(\alpha) = \left(qBeta(\frac{\alpha}{2},n_k+1, n-n_k),
+qBeta(1-\frac{\alpha}{2},n_k+1, n-n_k)\right).
+\]</span></p>
+<p>This confidence interval is valid for only the region <span class="math inline">\(R_k\)</span>. If we want to simultaneously cover
+all the regions at level <span class="math inline">\((1-\alpha)\)</span>, we can redefine the
+significance level for each region such that the total probability of
+mis-coverage is at most <span class="math inline">\(\alpha\)</span>. For
+example, we can use a <strong>weighted bonferroni</strong> adjustment,
+which assigns the same level for every region in the same tree depth.
+The significance level for regions at tree depth <span class="math inline">\(D\)</span> is defined as <span class="math inline">\(\alpha_D\)</span>,</p>
+<p><span class="math display">\[
+\hat{\alpha}_D = \frac{\alpha}{N_D (D_{\max} - D +
+2)   \sum_{B=2}^{D_{\max}-D_{\min}+2}\frac{1}{B}},\quad D\geq D_\min
+\]</span></p>
+<p>Here, <span class="math inline">\(D_{\max}\)</span> is the maximum
+depth of the k-d tree, <span class="math inline">\(D_{\min}\)</span> is
+the minimum depth where there are bounded regions, <span class="math inline">\(N_D\)</span> is the number of <em>bounded</em>
+regions in depth <span class="math inline">\(D\)</span> and the factor
+<span class="math inline">\(\sum_{B=2}^{D_{\max}-D_{\min} +
+1}\frac{1}{B}\)</span> ensures that <span class="math inline">\(\hat{\alpha}_D\)</span> adds up to <span class="math inline">\(\alpha\)</span>.</p>
+<p>The function <code>ConfLevel</code> computes <span class="math inline">\(\hat{\alpha}_D\)</span> at each level. For
 example, the following code computes <span class="math inline">\(\hat{\alpha}_D\)</span> when <span class="math inline">\(\alpha = 0.1\)</span>. You can also use bonferroni
 adjustment by setting <code>method = 'bonferroni'</code>. The Bonferroni
-adjustment gives equal weight to every depth.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+adjustment gives equal weight to regions at the same tree depth.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ahat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ConfLevel.html">ConfLevel</a></span><span class="op">(</span><span class="va">tree</span><span class="op">$</span><span class="va">nd</span>, alpha <span class="op">=</span> <span class="fl">0.01</span>, method <span class="op">=</span> <span class="st">"weighted_bonferroni"</span><span class="op">)</span>
 <span class="va">ahat</span>
-<span class="co">#&gt; [1] 5.000000e-01 5.000000e-01 5.000000e-01 5.000000e-01 3.896104e-04</span>
+<span class="co">#&gt; [1] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 3.896104e-04</span>
 <span class="co">#&gt; [6] 1.623377e-04 7.215007e-05 1.855288e-04</span></code></pre></div>
-<p>, defined by <span class="math inline">\((n(R)+1)/ n / |R|\)</span>,
-where <span class="math inline">\(n(R)\)</span> is the total num of obs.
-inside the region, <span class="math inline">\(n\)</span> is the total
-num of obs. and <span class="math inline">\(|R|\)</span> is the volume
-of the rectangle.</p>
 </div>
 <div class="section level2">
-<h2 id="setting-confidence-bounds-for-each-region">Setting confidence bounds for each region<a class="anchor" aria-label="anchor" href="#setting-confidence-bounds-for-each-region"></a>
+<h2 id="setting-confidence-bounds">Setting confidence bounds<a class="anchor" aria-label="anchor" href="#setting-confidence-bounds"></a>
 </h2>
-<p>Once we set the confidence levels, we can compute a simultaneous
-confidence interval for the average density <span class="math inline">\(f(R_k)\)</span> at level <span class="math inline">\(\alpha\)</span> as</p>
+<p>Once we define the confidence levels, we compute simultaneous
+confidence intervals for the average density <span class="math inline">\(f(R_k)\)</span> as</p>
 <p><span class="math display">\[
 \left(\frac{\mathrm{qBeta}(\hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|},
 \frac{\mathrm{qBeta}(1 - \hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}\right).
 \]</span></p>
-<p>To form the Beta Tree histogram, we will select regions whose
-empirical density <span class="math inline">\(h_k = (n_k + 1)/n\)</span>
-falls within the CI of all of its children. To simplify computation, we
-set the lower and upper confidence bound in each node in the k-d tree
-<code>tree</code> (in the <code>lower</code> and <code>upper</code> ) as
-<span class="math display">\[
+<p>To form the Beta Tree histogram, we will use a bottom-up pass to
+select the largest regions that we are confident that the obs. inside
+are from a uniform distribution. In other words, we pick the largest
+<span class="math inline">\(R_k\)</span> whose empirical density <span class="math inline">\(h_k = (n_k + 1)/n\)</span> falls within the CI of
+all of its children. To simplify computation, we set the lower and upper
+confidence bound of each node in the k-d tree <code>tree</code> (in the
+<code>lower</code> and <code>upper</code> ) as the intersection of the
+CI with that of all of its descendants</p>
+<p><span class="math display">\[
 \mathrm{lower}(R_k) = \max\left(\frac{\mathrm{qBeta}(\hat{\alpha}_D, n_k
-+ 1, n-n_k)}{|R_k|}, \mathrm{lower}(1st \mathrm{child}),
-\mathrm{lower}(2nd \mathrm{child})\right)\\
++ 1, n-n_k)}{|R_k|}, \mathrm{lower}(\text{1st child}),
+\mathrm{lower}(\text{2nd child})\right)\\
 \mathrm{upper}(R_k) = \max\left(\frac{\mathrm{qBeta}(1-\hat{\alpha}_D,
-n_k + 1, n-n_k)}{|R_k|}, \mathrm{upper}(1st \mathrm{child}),
-\mathrm{upper}(2nd \mathrm{child})\right)
+n_k + 1, n-n_k)}{|R_k|}, \mathrm{upper}(\text{1st child}),
+\mathrm{upper}(\text{2nd child})\right)
 \]</span></p>
-<p><code>SetBounds</code> sets these two bounds. Compare the same node
-in the k-d tree as before – the <code>lower</code> and
-<code>upper</code> levels has been set.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<p>The function <code>SetBounds</code> sets these two bounds. Let’s
+compare the same node in the k-d tree as before, whereas the
+<code>lower</code> and <code>upper</code> levels were empty before, the
+two values are not filled in.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SetBounds.html">SetBounds</a></span><span class="op">(</span><span class="va">tree</span><span class="op">$</span><span class="va">kdtree</span>, <span class="va">ahat</span>, <span class="va">n</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tree</span><span class="op">$</span><span class="va">leftchild</span><span class="op">$</span><span class="va">leftchild</span><span class="op">$</span><span class="va">rightchild</span><span class="op">$</span><span class="va">rightchild</span><span class="op">$</span><span class="va">leftchild</span><span class="op">$</span><span class="va">leftchild</span>
 <span class="co">#&gt; $leftchild</span>
 <span class="co">#&gt; NULL</span>
@@ -374,19 +391,19 @@ in the k-d tree as before – the <code>lower</code> and
 <span class="co">#&gt; [1] 30</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $depth</span>
-<span class="co">#&gt; [1] 7</span>
+<span class="co">#&gt; [1] 6</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $low</span>
-<span class="co">#&gt; [1] -1.4023225 -0.9135046</span>
+<span class="co">#&gt; [1] -0.783303 -1.331250</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $up</span>
-<span class="co">#&gt; [1] -0.5857733 -0.1549037</span>
+<span class="co">#&gt; [1]  0.4849015 -0.3761551</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $lower</span>
-<span class="co">#&gt; [1] 0.01103009</span>
+<span class="co">#&gt; [1] 0.005640778</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $upper</span>
-<span class="co">#&gt; [1] 0.04661584</span>
+<span class="co">#&gt; [1] 0.0238393</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $bounded</span>
 <span class="co">#&gt; [1] 1</span>
@@ -395,12 +412,12 @@ in the k-d tree as before – the <code>lower</code> and
 <span class="co">#&gt; [1] TRUE</span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="selecting-regions-to-form-the-beta-tree-histogram">Selecting regions to form the Beta Tree histogram<a class="anchor" aria-label="anchor" href="#selecting-regions-to-form-the-beta-tree-histogram"></a>
+<h2 id="selecting-regions-to-form-the-beta-tree-histogram">Selecting regions to form the Beta tree histogram<a class="anchor" aria-label="anchor" href="#selecting-regions-to-form-the-beta-tree-histogram"></a>
 </h2>
-<p><code>SelectNodes</code> selects the largest regions (w.r.t)
-inclusion such that the empirical density <span class="math inline">\(h_k\)</span> falls inside the interval <span class="math inline">\([\mathrm{lower}(R_k),
+<p>The function <code>SelectNodes</code> selects the largest regions
+(w.r.t) inclusion such that the empirical density <span class="math inline">\(h_k\)</span> falls inside the interval <span class="math inline">\([\mathrm{lower}(R_k),
 \mathrm{upper}(R_k)]\)</span>.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">B</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">0</span>, ncol <span class="op">=</span> <span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="va">d</span> <span class="op">+</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span> 
 <span class="va">hist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SelectNodes.html">SelectNodes</a></span><span class="op">(</span><span class="va">tree</span>, <span class="va">B</span>, <span class="va">ahat</span>, <span class="va">n</span><span class="op">)</span></code></pre></div>
 <p>Each row in <code>hist</code> matrix represents one region in the
@@ -413,6 +430,9 @@ section: <span class="math display">\[
 \left(\frac{\mathrm{qBeta}(\hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|},
 \frac{\mathrm{qBeta}(1 - \hat{\alpha}_D, n_k + 1, n-n_k)}{|R_k|}\right).
 \]</span></p>
+<p>The last two columns stores the number of obs. inside the region and
+its tree depth. <code>hist</code> is what <code>BuildHist</code>
+function returns.</p>
 </div>
   </div>
 
