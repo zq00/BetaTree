@@ -147,7 +147,7 @@ PlotModes2D(hist, Mode2d, modes$mode)
 
 In the next section, we describe details of `FindModes` function. 
 
-## Identifying modes of a Beta Tree histogram
+## Identifying modes of a Beta tree histogram
 
 Let's rephrase the question of mode detection as the following: how can we tell that the two regions highlighted in red (let's call them $R_1$ and $R_2$) are two distinct modes? (If we know how to do this, then we can detect mdoes by iterating through all the regions , compare each one with current modes, and declare it a mode if it is distinct from all the current modes.) Suppose that $R_1$ and $R_2$ are distinct modes, then along every path that connects $R_1$ and $R_2$, there should exist at least one region $R$ whose average density is lower than both $R_1$ and $R_2$. Because the Beta tree histogram returns CI for the average density, we compare the lower and upper bound of the CI, that is, there should exist a region $R$ such that
 
