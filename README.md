@@ -2,7 +2,7 @@
 
 ## Overview
 
-This R package constructs a Beta tree histogram for multivariate data by growing a k-d tree on the order statistics, computing simultaneous confidence bound of average density in each region, and selecting the largest regions where data are approximately uniform. The Beta tree histogram automatically provides a succinct description of the data, as well as simultaneous confidence intervals of the average density in each region. 
+This R package constructs a Beta tree histogram for multivariate data by growing a k-d tree on the order statistics, computing simultaneous confidence bound of average density in each region, and selecting the largest regions where data are approximately uniform. The Beta tree histogram provides a succinct description of the data, as well as simultaneous confidence intervals of the average density in each region. 
 
 ## Getting started
 
