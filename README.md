@@ -6,6 +6,7 @@ This R package constructs a Beta tree histogram for multivariate data by growing
 
 ## Getting started
 
+- Package website: https://zq00.github.io/BetaTrees/ 
 - You can find the package **vignettes** under the Articles tab. 
 - You can read more about the Beta Tree histogram in the paper.  
 
