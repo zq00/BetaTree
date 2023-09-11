@@ -102,13 +102,13 @@ We will start by creating a Beta-tree histogram. Here, we set the confidence lev
 hist <- BuildHist(X, alpha = 0.1, method = "weighted_bonferroni", plot= T)
 ```
 
-We use the `find_mode()` function to identify modes in a Beta-trees histogram. This function has three parameters, the first is the Beta-tree histogram (output of the `BuildHist` function), the second is the data dimension `d`, and the third is the cutoff value of the path length (we only check paths whose length is at most `cutoff`). We set `cutoff=1000` here, which means we will look at every path between two regions. However, it might be infeasible to check every path because of computation restraints, so typically we would set a smaller cutoff, e.g., `cutoff = 6`. 
+We use the `FindModes()` function to identify modes in a Beta-trees histogram. This function has three parameters, the first is the Beta-tree histogram (output of the `BuildHist` function), the second is the data dimension `d`, and the third is the cutoff value of the path length (we only check paths whose length is at most `cutoff`). We set `cutoff=1000` here, which means we will look at every path between two regions. However, it might be infeasible to check every path because of computation restraints, so typically we would set a smaller cutoff, e.g., `cutoff = 6`. 
 
 ```{r}
-modes <- find_mode(hist = hist, d = d, cutoff = 1000)
+modes <- FindModes(hist = hist, d = d, cutoff = 1000)
 ```
 
-The `find_mode` function returns a list with three components: `mode` returns the index of the modes, `hist` returns the input histogram, and `g` returns the adjacency graph of regions in the histogram. 
+The `FindModes` function returns a list with three components: `mode` returns the index of the modes, `hist` returns the input histogram, and `g` returns the adjacency graph of regions in the histogram. 
 
 ```{r}
 modes$mode # which regions are the modes?
@@ -145,7 +145,7 @@ PlotModes2D(hist, Mode2d, modes$mode)
 ```
 
 
-In the next section, we describe details of the `find_mode` function. 
+In the next section, we describe details of the `FindModes` function. 
 
 ## Identifying modes of a Beta-tree histogram
 
