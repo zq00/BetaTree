@@ -1,4 +1,4 @@
-Package: BetaTrees
+Package: BetaTree
 Title: Computes a BetaTree histogram for multivariate data   
 Version: 1.0.0
 Authors@R: 
