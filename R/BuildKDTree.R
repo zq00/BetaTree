@@ -2,7 +2,7 @@
 #'
 #' Grow a k-d tree by iteratively partitioning along the sample median of each coordinate.
 #'
-#' \code{BuildKDTree} constructs a kd-tree from data by iteratively partitioning along the sample median of each coordinate. In 2-dim, first partition along x-axis, and then the y-axis and alternate between the two.
+#' \code{BuildKDTree} constructs a kd-tree from data by iteratively partitioning along the sample median of each coordinate. In 2-dim, first partition along x-axis, and then the y-axis and alternate between the two (similarly, iterate each coordiate in higher dimensions).
 #'      Stop partitioning a node when the number of obs. inside is less than \eqn{4\log(n)}.
 #'
 #'@param X  A data matrix of size n by d.
