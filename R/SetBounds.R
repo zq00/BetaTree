@@ -19,7 +19,7 @@
 #' We set the lower and upper bound of each region as
 #' \deqn{
 #' \widetilde{\text{lower}} = \max\left(\text{lower}, \text{lower}(\text{1st child}), \text{lower}(\text{2nd child})\right) \\
-#' \widetilde{\text{upper}} = \max\left(\text{upper}, \text{upper}(\text{1st child}), \text{upper}(\text{2nd child})\right),
+#' \widetilde{\text{upper}} = \min\left(\text{upper}, \text{upper}(\text{1st child}), \text{upper}(\text{2nd child})\right),
 #' }
 #' so that when we select nodes, we pick the largest nodes such that the empirical density is between \eqn{\widetilde{\text{lower}}} and  \eqn{\widetilde{\text{upper}}}.
 #' The significance levels are computed with the function \link[BetaTrees]{ConfLevel}.
