@@ -1,10 +1,10 @@
-#' Compute adjacency matrix of regions in the histogram
+#' Compute the adjacency matrix of regions in the histogram
 #'
 #' Computes the adjacency matrix of regions in a Beta tree histogram
 #'
 #' Two regions are neighbors if and only if the closures of the intervals in each direction intersect.
-#' For example, let the two regions \eqn{X} defined by \eqn{[X_{i,\mathrm{low}}, X_{i,\mathrm{up}}]}
-#' and \eqn{Y} defined by \eqn{[Y_{i,\mathrm{low}}, Y_{i,\mathrm{up}}]} (for \eqn{i=1,\ldots, d}), where \eqn{X_{i,\mathrm{low}}} and \eqn{X_{i,\mathrm{up}}}
+#' For example, let the two regions \eqn{X} defined by \eqn{(X_{i,\mathrm{low}}, X_{i,\mathrm{up}})}
+#' and \eqn{Y} defined by \eqn{(Y_{i,\mathrm{low}}, Y_{i,\mathrm{up}})} (for \eqn{i=1,\ldots, d}), where \eqn{X_{i,\mathrm{low}}} and \eqn{X_{i,\mathrm{up}}}
 #' are the lower and upper bounds in dimension \eqn{i} for the region \eqn{X}. Then, \eqn{X} and \eqn{Y} are neighbors if and only if
 #' \eqn{[X_{i,\mathrm{low}}, X_{i,\mathrm{up}}] \cap [Y_{i,\mathrm{low}}, Y_{i,\mathrm{up}}] \neq \emptyset} for every \eqn{i=1,\ldots, d}.
 #'
