@@ -2,14 +2,14 @@
 #'
 #' Two regions \code{i} and \code{j} are two *distinct* modes if
 #' for *every* path connecting \code{i} and \code{j}, there exists at least one region \code{R} along the path,
-#' such that the upper endpoint of confidence interval ofthe average density of \code{R} is *below* the lower endpoints of that of
+#' such that the upper endpoint of the confidence interval of the average density of \code{R} is *below* the lower endpoints for
 #' both \code{i} and \code{j}.
 #'
 #' For computational reasons, we only check paths whose length is at most \code{cutoff}.
 #'
 #' @param i,j Test if the \eqn{i}-th and the \eqn{j}-th regions are distinct modes or not.
 #' @param g A graph from the adjacency matrix returned by \link[igraph]{graph_from_adjacency_matrix}.
-#' @param ci A matrix of size N*2 of the confidence intervals of empirical densities.
+#' @param ci A matrix of size N*2 of the confidence intervals for the average densities.
 #'   Each row stores the lower and upper confidence limits of one region in the Beta tree.
 #' @inheritParams FindModes
 #' @returns \code{unconnected} if the two regions are distinct modes and \code{connected} otherwise.
