@@ -7,10 +7,10 @@
 #'   of both \code{i} and \code{j}.
 #' This function iterates through all the regions in the Beta tree histogram in
 #'   descending order of empirical density and marks a region as a mode if it is a distinct mode
-#'   from current modes.
+#'   from all currently discovered distinct modes.
 #'
 #' @param hist A matrix. Each row represents one region in the histogram.
-#'   If the histogram is constructed for \code{d} dimensional data, then the first \code{d} columns contain the lower bound of each dimension,
+#'   If the histogram is constructed for \code{d} dimensional data, then the first \code{d} columns contain the lower bounds for each coordinate,
 #'   and the next \code{d} columns contain the upper bound. The \code{2d + 1} column contains the empirical density.
 #'    \code{hist} can be the output of \link[BetaTrees]{BuildHist} or \link[BetaTrees]{SelectNodes} function.
 #' @param d A numeric value of the data dimension.
