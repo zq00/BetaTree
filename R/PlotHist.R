@@ -3,10 +3,10 @@
 #' Draw a Beta tree histogram.
 #'
 #' \code{PlotHist} plots the histogram superimposed on the original dataset.
-#' If the number of data points exceeds \code{nsample}, randomly select \code{nsample} obs. to show in the graph. Default value is \eqn{n_sample=10^4}
+#' If the number of data points exceeds \code{nsample}, randomly select \code{nsample} obs. to show in the graph. Default value is \eqn{nsample=10^4}
 #'
 #' @param X data matrix of size n by 2.
-#' @param B matrix of rectangles returned by the function \link[BetaTrees]{SelectNodes} or \link[BetaTrees]{BuildHist}.
+#' @param B matrix of rectangles returned by the function \link[BetaTree]{SelectNodes} or \link[BetaTree]{BuildHist}.
 #' @param nsample maximum number of data points to display in the plot.
 #' @param ... additional parameter for the graph: \code{low}, \code{mid}, \code{high} specifies the colors in \link[ggplot2]{scale_fill_gradient2} function.
 #' @return A \code{ggplot} object.
