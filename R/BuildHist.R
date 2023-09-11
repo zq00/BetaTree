@@ -1,20 +1,20 @@
-#' Build a Beta tree histogram
+#' Build a Beta-tree histogram
 #'
-#' Compute a Beta tree histogram for multivariate data at a given confidence level.
+#' Compute a Beta-tree histogram for multivariate data at a given confidence level.
 #'
-#' Construct the Beta tree histogram by (1) iteratively partitioning sample space along the sample median (similar to a k-d tree).
-#' (2) construct *simultaneous* confidence interval (at level \eqn{\alpha}) for all of the regions (adjust for multiple testing with Bonferroni
-#' or weighted Bonferroni adjustment). (3) select the largest bounded regions (w.r.t. inclusion) that that pass a goodness of fit (GOF) test, i.e.,
-#' the empirical density lies within the confidence interval of all of the further partitions of the region (i.e., descendants of the node in the k-d tree).
+#' Construct the Beta-tree histogram by (1) iteratively partitioning the sample space along the sample median (similar to a k-d tree).
+#' (2) construct *simultaneous* confidence intervals (at level \eqn{\alpha}) for all of the regions (adjust for multiple inference with Bonferroni
+#' or weighted Bonferroni adjustment). (3) select the largest bounded regions (w.r.t. inclusion) that pass a goodness of fit (GOF) test, i.e.,
+#' the empirical density lies within the confidence intervals of all of the rectangles in the sub-partitions of the region (i.e., descendants of the node in the k-d tree).
 #'
 #' @param X A data matrix of size n by d.
-#' @param alpha Significance level, default is \code{alpha = 0.1}. The CI covers the average density in every region of the Beta tree histogram simultaneously with probability \eqn{1-\alpha}.
-#' @param method Use \code{method = "bonferroni"} or \code{method = "weighted_bonferroni"}(default) to adjust for multiple hypothesis testing.
+#' @param alpha Significance level, default is \code{alpha = 0.1}. The CI covers the average density in every region of the Beta-tree histogram simultaneously with probability \eqn{1-\alpha}.
+#' @param method Use \code{method = "bonferroni"} or \code{method = "weighted_bonferroni"}(default) to adjust for multiple inference.
 #' @param plot if \code{TRUE} (default), plot the histogram if the data is two-dimensional.
 #' @param ... Additional parameter if \code{bounded = T}.
 #' @inherit BuildKDTree
-#' @returns A matrix. Each row represents one regions in the histogram.
-#' The first \eqn{d} columns are the lower bounds of the region; the next \eqn{d} columns are the upper bounds (\eqn{d} is data dimension);
+#' @returns A matrix. Each row represents one region in the histogram.
+#' The first \eqn{d} columns are the lower bounds for the region; the next \eqn{d} columns are the upper bounds (\eqn{d} is data dimension);
 #' the \eqn{2d+1} column stores the empirical density in the region; the next two columns  are
 #' the lower and upper confidence bounds of the average density in the region; the last two columns are the number of obs. inside the region and the depth of the node in the k-d tree.
 #'
