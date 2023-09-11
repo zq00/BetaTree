@@ -3,9 +3,9 @@
 #' Compute a Beta-tree histogram for multivariate data at a given confidence level.
 #'
 #' Construct the Beta-tree histogram by (1) iteratively partitioning the sample space along the sample median (similar to a k-d tree).
-#' (2) construct *simultaneous* confidence intervals (at level \eqn{\alpha}) for all of the regions (adjust for multiple inference with Bonferroni
-#' or weighted Bonferroni adjustment). (3) select the largest bounded regions (w.r.t. inclusion) that pass a goodness of fit (GOF) test, i.e.,
-#' the empirical density lies within the confidence intervals of all of the rectangles in the sub-partitions of the region (i.e., descendants of the node in the k-d tree).
+#' (2) constructing *simultaneous* confidence intervals (at level \eqn{1-\alpha}) for all of the regions (adjust for multiple inference with Bonferroni
+#' or weighted Bonferroni adjustment). (3) selecting the largest bounded regions (w.r.t. inclusion) that pass a goodness of fit (GOF) test, i.e.,
+#' the empirical density lies in all confidence intervals for the average densities of the rectangles contained in the region (i.e., descendants of the node in the k-d tree).
 #'
 #' @param X A data matrix of size n by d.
 #' @param alpha Significance level, default is \code{alpha = 0.1}. The CI covers the average density in every region of the Beta-tree histogram simultaneously with probability \eqn{1-\alpha}.
