@@ -2,7 +2,7 @@
 % Please edit documentation in R/SetBounds.R
 \name{SetBounds}
 \alias{SetBounds}
-\title{Add confidence bounds to bounded region in the k-d tree}
+\title{Add confidence bounds to bounded regions in the k-d tree}
 \usage{
 SetBounds(node, ahat, n)
 }
@@ -25,19 +25,19 @@ Because
 F(R_k)\sim \mathrm{Binomial}(n_k+1,n-n_k),
 }
 where \eqn{R_k} is a region, \eqn{n} is the total number of obs. and \eqn{n_k} is the number of obs. in \eqn{R_k},
-the upper and lower confidence bounds of the average density in a bounded region at depth \eqn{D} is given by
+the upper and lower confidence bounds of the average density in a bounded region \eqn{R_k} at depth \eqn{D} is given by
 \deqn{
 \text{lower}(R_k) = \frac{qBeta(\hat{\alpha}_D/2, n_k+1, n-n_k)}{|R_k|}\\
 \text{upper}(R_k) = \frac{qBeta(1-\hat{\alpha}_D/2, n_k+1, n-n_k)}{|R_k|}
 }
-where \eqn{\hat{\alpha}_D} is the significance level at depth \eqn{D},
+where \eqn{\hat{\alpha}_D} is the significance levels at depth \eqn{D},
 and \eqn{|R_k|} is the volume of the region.
 
-We select nodes in which data are approximately uniformly distributed, i.e., when the empirical density falls within the confidence intervals of all of its children.
+We select nodes in which data are approximately uniformly distributed, i.e., for which the empirical density falls within the confidence intervals of all of its children.
 We set the lower and upper bound of each region as
 \deqn{
 \widetilde{\text{lower}} = \max\left(\text{lower}, \text{lower}(\text{1st child}), \text{lower}(\text{2nd child})\right) \\
-\widetilde{\text{upper}} = \max\left(\text{upper}, \text{upper}(\text{1st child}), \text{upper}(\text{2nd child})\right),
+\widetilde{\text{upper}} = \min\left(\text{upper}, \text{upper}(\text{1st child}), \text{upper}(\text{2nd child})\right),
 }
 so that when we select nodes, we pick the largest nodes such that the empirical density is between \eqn{\widetilde{\text{lower}}} and  \eqn{\widetilde{\text{upper}}}.
 The significance levels are computed with the function \link[BetaTrees]{ConfLevel}.

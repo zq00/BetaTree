@@ -2,7 +2,7 @@
 % Please edit documentation in R/BuildHist.R
 \name{BuildHist}
 \alias{BuildHist}
-\title{Build a Beta tree histogram}
+\title{Build a Beta-tree histogram}
 \usage{
 BuildHist(
   X,
@@ -16,15 +16,15 @@ BuildHist(
 \arguments{
 \item{X}{A data matrix of size n by d.}
 
-\item{alpha}{Significance level, default is \code{alpha = 0.1}. The CI covers the average density in every region of the Beta tree histogram simultaneously with probability \eqn{1-\alpha}.}
+\item{alpha}{Significance level, default is \code{alpha = 0.1}. The CI covers the average density in every region of the Beta-tree histogram simultaneously with probability \eqn{1-\alpha}.}
 
-\item{method}{Use \code{method = "bonferroni"} or \code{method = "weighted_bonferroni"}(default) to adjust for multiple hypothesis testing.}
+\item{method}{Use \code{method = "bonferroni"} or \code{method = "weighted_bonferroni"}(default) to adjust for multiple inference.}
 
 \item{bounded}{If \code{bounded = TRUE}, then create an initial bounding box according to user input parameters:
 \describe{
-\item{option}{Define the bounding box by the order statistics (\code{option = ndat}) or quantiles (\code{option = qt}) of observations at the boundary.}
-\item{q}{A vector of length \code{d} equal to the data dimension. Order statistics or quantiles of obs. at the boundary in each dimension. E.g. for 2-dim data, \code{option = "ndat"} and \code{qt = c(50, 40)}, then the boundary in the x-axis are the 50-th and (n-50 +1)-th order statistics in the x-axis.
-The boundary in the y-axis is defined by the 50-th and \eqn{n_1 - 40 + 1} order statistics in the y-axis for the obs. inside the boundary defined by the x-axis in the previous step.
+\item{option}{Define the bounding box by the order statistics (\code{option = ndat}) or quantiles (\code{option = qt}) of observations to be excluded.}
+\item{qt}{A vector of length \code{d} equal to the data dimension. Order statistics or quantiles of obs. to be excluded in each dimension. E.g. for 2-dim data, \code{option = "ndat"} and \code{qt = c(50, 40)}, then the boundary in the x-axis are the 50-th and (n-50 +1)-th order statistics in the x-axis.
+The boundary in the y-axis is defined by the 40-th and \eqn{n_1 - 40 + 1} order statistics in the y-axis for the obs. inside the boundary defined by the x-axis in the previous step.
 Another way to put it is to exclude 50 obs. at the lower and upper end of x-coordinate, then for the obs. within, exclude 40 obs. at the lower and upper end of y-coordinate. If \code{option = "qt"} and \code{qt = c(0.05, 0.1)},
 then the boundary are defined by the \eqn{\lceil 0.05 n \rceil} and \eqn{n - \lceil 0.05 n \rceil + 1} quantiles in the x-axis, and then the
 \eqn{\lceil 0.1 n_1 \rceil} and \eqn{n_1 - \lceil 0.1 n_1 \rceil + 1} quantiles in the y-axis among observations in the first boundary defined by x-axis.
@@ -37,19 +37,19 @@ Equivalently, exclude  \eqn{\lceil 0.05 n \rceil} obs. at the lower and upper en
 \item{...}{Additional parameter if \code{bounded = T}.}
 }
 \value{
-A matrix. Each row represents one regions in the histogram.
-The first \eqn{d} columns are the lower bounds of the region; the next \eqn{d} columns are the upper bounds (\eqn{d} is data dimension);
+A matrix. Each row represents one region in the histogram.
+The first \eqn{d} columns are the lower bounds for the region; the next \eqn{d} columns are the upper bounds (\eqn{d} is data dimension);
 the \eqn{2d+1} column stores the empirical density in the region; the next two columns  are
 the lower and upper confidence bounds of the average density in the region; the last two columns are the number of obs. inside the region and the depth of the node in the k-d tree.
 }
 \description{
-Compute a Beta tree histogram for multivariate data at a given confidence level.
+Compute a Beta-tree histogram for multivariate data at a given confidence level.
 }
 \details{
-Construct the Beta tree histogram by (1) iteratively partitioning sample space along the sample median (similar to a k-d tree).
-(2) construct \emph{simultaneous} confidence interval (at level \eqn{\alpha}) for all of the regions (adjust for multiple testing with Bonferroni
-or weighted Bonferroni adjustment). (3) select the largest bounded regions (w.r.t. inclusion) that that pass a goodness of fit (GOF) test, i.e.,
-the empirical density lies within the confidence interval of all of the further partitions of the region (i.e., descendants of the node in the k-d tree).
+Construct the Beta-tree histogram by (1) iteratively partitioning the sample space along the sample median (similar to a k-d tree).
+(2) constructing \emph{simultaneous} confidence intervals (at level \eqn{1-\alpha}) for all of the regions (adjust for multiple inference with Bonferroni
+or weighted Bonferroni adjustment). (3) selecting the largest bounded regions (w.r.t. inclusion) that pass a goodness of fit (GOF) test, i.e.,
+the empirical density lies in all confidence intervals for the average densities of the rectangles contained in the region (i.e., descendants of the node in the k-d tree).
 }
 \examples{
 X <-  matrix(rnorm(2000, 0, 1), ncol = 2)

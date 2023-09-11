@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(igraph)
 library(mvtnorm)
-library(BetaTrees)
+library(BetaTree)
 ```
 
 In this vignette, we will demonstrate how to use a Beta-tree histogram to identify modes in a continuous probability distribution. 

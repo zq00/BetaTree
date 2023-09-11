@@ -2,14 +2,14 @@
 % Please edit documentation in R/ConfLevel.R
 \name{ConfLevel}
 \alias{ConfLevel}
-\title{Set confidence level for regions at each tree depth}
+\title{Set significance level for regions at each tree depth}
 \usage{
 ConfLevel(nd, alpha, method)
 }
 \arguments{
 \item{nd}{A vector. Number of bounded regions at every depth (starting at depth 0).}
 
-\item{alpha}{Numeric. The significance level (of the average density) of all the regions adds to \eqn{\alpha}.}
+\item{alpha}{Numeric. The significance level (of the average density) of all the regions sums to \eqn{\alpha}.}
 
 \item{method}{Use \code{method = "bonferroni"} or \code{method = "weighted_bonferroni"} method to adjust for multiple hypothesis testing.}
 }
@@ -17,14 +17,15 @@ ConfLevel(nd, alpha, method)
 A vector of significance level \eqn{\alpha_D} at every tree depth (starting at depth = 0)
 }
 \description{
-Computes the confidence level at each tree depth.
+Computes the significance level at each tree depth.
 }
 \details{
+The root node automatically has significance level 0.
 If \code{method = "bonferroni"}, the significance level at depth d is
 \deqn{
 \hat{\alpha}_d =  \frac{\alpha}{(d_\max - d_\min + 1) * n_d}, D\geq D_\min,
 }
-where \eqn{d_\max} is the maximum tree depth, \eqn{d_\min} is the minimum depth where there are bounded regions, and \eqn{n_d} is number of bounded regions at depth \eqn{d}.
+where \eqn{d_\max} is the maximum tree depth, \eqn{d_\min} is the minimum depth (greater than 0) where there are bounded regions, and \eqn{n_d} is number of bounded regions at depth \eqn{d}.
 
 If \code{method = weighted_bonferroni}, the confidence level at depth d is
 \deqn{

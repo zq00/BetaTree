@@ -2,15 +2,15 @@
 % Please edit documentation in R/compute_adjacencyMat.R
 \name{compute_adjacency_mat}
 \alias{compute_adjacency_mat}
-\title{Compute adjacency matrix of regions in the histogram}
+\title{Compute the adjacency matrix of regions in the histogram}
 \usage{
 compute_adjacency_mat(hist, d)
 }
 \arguments{
 \item{hist}{A matrix. Each row represents one region in the histogram.
-If the histogram is constructed for \code{d} dimensional data, then the first \code{d} columns contain the lower bound of each dimension,
-and the next \code{d} columns contain the upper bound. The \code{2d + 1} column contains the empirical density.
-\code{hist} can be the output of \link[BetaTrees]{BuildHist} or \link[BetaTrees]{SelectNodes} function.}
+If the histogram is constructed for \code{d} dimensional data, then the first \code{d} columns contain the lower bounds for each coordinate,
+and the next \code{d} columns contain the upper bounds. The \code{2d + 1} column contains the empirical density.
+\code{hist} can be the output of \link[BetaTree]{BuildHist} or \link[BetaTree]{SelectNodes} function.}
 
 \item{d}{A numeric value of the data dimension.}
 }
@@ -21,9 +21,9 @@ A matrix A of size N*N, where N is the number of regions in the histogram, i.e. 
 Computes the adjacency matrix of regions in a Beta tree histogram
 }
 \details{
-Two regions are neighbors if and only if the interval (defined by the boundary) in each dimension intersects.
-For example, let the two regions \eqn{X} defined by \eqn{[X_{i,\mathrm{low}}, X_{i,\mathrm{up}}]}
-and \eqn{Y} defined by \eqn{[Y_{i,\mathrm{low}}, Y_{i,\mathrm{up}}]} (for \eqn{i=1,\ldots, d}), where \eqn{X_{i,\mathrm{low}}} and \eqn{X_{i,\mathrm{up}}}
+Two regions are neighbors if and only if the closures of the intervals in each direction intersect.
+For example, let the two regions \eqn{X} defined by \eqn{(X_{i,\mathrm{low}}, X_{i,\mathrm{up}})}
+and \eqn{Y} defined by \eqn{(Y_{i,\mathrm{low}}, Y_{i,\mathrm{up}})} (for \eqn{i=1,\ldots, d}), where \eqn{X_{i,\mathrm{low}}} and \eqn{X_{i,\mathrm{up}}}
 are the lower and upper bounds in dimension \eqn{i} for the region \eqn{X}. Then, \eqn{X} and \eqn{Y} are neighbors if and only if
 \eqn{[X_{i,\mathrm{low}}, X_{i,\mathrm{up}}] \cap [Y_{i,\mathrm{low}}, Y_{i,\mathrm{up}}] \neq \emptyset} for every \eqn{i=1,\ldots, d}.
 }

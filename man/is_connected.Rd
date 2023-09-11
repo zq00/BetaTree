@@ -11,7 +11,7 @@ is_connected(i, j, g, ci, cutoff = 6)
 
 \item{g}{A graph from the adjacency matrix returned by \link[igraph]{graph_from_adjacency_matrix}.}
 
-\item{ci}{A matrix of size N*2 of the confidence intervals of empirical densities.
+\item{ci}{A matrix of size N*2 of the confidence intervals for the average densities.
 Each row stores the lower and upper confidence limits of one region in the Beta tree.}
 
 \item{cutoff}{Maximum path length. By default, we only evaluate paths with length at most \code{cutoff = 6}.}
@@ -22,7 +22,7 @@ Each row stores the lower and upper confidence limits of one region in the Beta 
 \description{
 Two regions \code{i} and \code{j} are two \emph{distinct} modes if
 for \emph{every} path connecting \code{i} and \code{j}, there exists at least one region \code{R} along the path,
-such that the upper endpoint of confidence interval ofthe average density of \code{R} is \emph{below} the lower endpoints of that of
+such that the upper endpoint of the confidence interval of the average density of \code{R} is \emph{below} the lower endpoints for
 both \code{i} and \code{j}.
 }
 \details{

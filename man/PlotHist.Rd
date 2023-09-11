@@ -9,7 +9,7 @@ PlotHist(X, B, nsample = 10000, ...)
 \arguments{
 \item{X}{data matrix of size n by 2.}
 
-\item{B}{matrix of rectangles returned by the function \link[BetaTrees]{SelectNodes} or \link[BetaTrees]{BuildHist}.}
+\item{B}{matrix of rectangles returned by the function \link[BetaTree]{SelectNodes} or \link[BetaTree]{BuildHist}.}
 
 \item{nsample}{maximum number of data points to display in the plot.}
 
@@ -23,7 +23,7 @@ Draw a Beta tree histogram.
 }
 \details{
 \code{PlotHist} plots the histogram superimposed on the original dataset.
-If the number of data points exceeds \code{nsample}, randomly select \code{nsample} obs. to show in the graph. Default value is \eqn{n_sample=10^4}
+If the number of data points exceeds \code{nsample}, randomly select \code{nsample} obs. to show in the graph. Default value is \eqn{nsample=10^4}
 }
 \examples{
 X <-  matrix(rnorm(2000, 0, 1), ncol = 2)
