@@ -2,15 +2,15 @@
 #'
 #' Grow a k-d tree by iteratively partitioning along the sample median of each coordinate.
 #'
-#' \code{BuildKDTree} constructs a kd-tree from data by iteratively partitioning along the sample median of each coordinate. In 2-dim, first partition along x-axis, and then the y-axis and alternate between the two (similarly, iterate each coordiate in higher dimensions).
+#' \code{BuildKDTree} constructs a kd-tree from data by iteratively partitioning along the sample median of the \eqn{j}-th coordinate, where \eqn{j} cycles through \eqn{1,2,\ldots, d}.
 #'      Stop partitioning a node when the number of obs. inside is less than \eqn{4\log(n)}.
 #'
 #'@param X  A data matrix of size n by d.
 #'@param bounded If \code{bounded = TRUE}, then create an initial bounding box according to user input parameters:
 #'\describe{
-#'\item{option}{Define the bounding box by the order statistics (\code{option = ndat}) or quantiles (\code{option = qt}) of observations at the boundary.}
-#'\item{q}{A vector of length \code{d} equal to the data dimension. Order statistics or quantiles of obs. at the boundary in each dimension. E.g. for 2-dim data, \code{option = "ndat"} and \code{qt = c(50, 40)}, then the boundary in the x-axis are the 50-th and (n-50 +1)-th order statistics in the x-axis.
-#'    The boundary in the y-axis is defined by the 50-th and \eqn{n_1 - 40 + 1} order statistics in the y-axis for the obs. inside the boundary defined by the x-axis in the previous step.
+#'\item{option}{Define the bounding box by the order statistics (\code{option = ndat}) or quantiles (\code{option = qt}) of observations to be excluded.}
+#'\item{qt}{A vector of length \code{d} equal to the data dimension. Order statistics or quantiles of obs. to be excluded in each dimension. E.g. for 2-dim data, \code{option = "ndat"} and \code{qt = c(50, 40)}, then the boundary in the x-axis are the 50-th and (n-50 +1)-th order statistics in the x-axis.
+#'    The boundary in the y-axis is defined by the 40-th and \eqn{n_1 - 40 + 1} order statistics in the y-axis for the obs. inside the boundary defined by the x-axis in the previous step.
 #'    Another way to put it is to exclude 50 obs. at the lower and upper end of x-coordinate, then for the obs. within, exclude 40 obs. at the lower and upper end of y-coordinate. If \code{option = "qt"} and \code{qt = c(0.05, 0.1)},
 #'    then the boundary are defined by the \eqn{\lceil 0.05 n \rceil} and \eqn{n - \lceil 0.05 n \rceil + 1} quantiles in the x-axis, and then the
 #'     \eqn{\lceil 0.1 n_1 \rceil} and \eqn{n_1 - \lceil 0.1 n_1 \rceil + 1} quantiles in the y-axis among observations in the first boundary defined by x-axis.
@@ -21,7 +21,7 @@
 #'
 #' @return \code{build_tree} returns two values:
 #'\describe{
-#'\item{kdtree}{the k-d tree built from root node. Each node contains the following information:
+#'\item{kdtree}{the k-d tree built from the root node. Each node contains the following information:
 #' \describe{
 #' \item{depth}{Tree depth of the region. The depth of root node is 0.}
 #' \item{ndat}{number of obs. in this region.}
@@ -29,10 +29,10 @@
 #' \item{lower, upper}{lower and upper confidence bound for the average density.}
 #' \item{bounded}{whether the region is bounded. A region is bounded if all of (\code{low}, \code{up}) exist.}
 #' \item{leaf}{whether the node is leaf or not. A node is a leaf if the number of obs. is less than \eqn{4 \log n}, where \eqn{n} is the total number of obs. Stop partitioning if a node is leaf. }
-#' \item{leftchild, rightchild}{pointers to the left and right child of a node. \code{leftchild} points to the node representing the region less than median in partitioning dimension, and \code{rightchild} points to the node representing the region greater than the median.}
+#' \item{leftchild, rightchild}{pointers to the left and right child of a node. \code{leftchild} points to the node representing the region less than the median in the partitioning dimension, and \code{rightchild} points to the node representing the region greater than the median.}
 #' }
 #' }
-#'\item{nd}{The number of bounded regions at every level, starting at level 1.}
+#'\item{nd}{The number of bounded regions at every level, starting at level 0.}
 #'}
 #'
 #'@export
