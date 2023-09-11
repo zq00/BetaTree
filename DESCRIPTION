@@ -12,8 +12,9 @@ Authors@R:
            role = c("aut"),
            email = "gwalther@stanford.edu"))
 Description: Creates a Beta tree histogram. Iteratively partition the space by growing
-    a k-d tree on the order statistics, computes simultaneous confidence bound of average density in each region, and
-    select largest regions where data are approximately uniform. 
+    a k-d tree using the marginal order statistics, compute simultaneous confidence bounds 
+    for the average densities in each region, and prune the k-d tree to select 
+    the largest regions where data are approximately uniform. 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
