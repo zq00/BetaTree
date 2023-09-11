@@ -1,4 +1,4 @@
-# BetaTrees
+# BetaTree
 
 ## Overview
 
