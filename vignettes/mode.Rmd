@@ -96,13 +96,13 @@ ggplot() +
   theme(legend.position = c(0.85, 0.8)) 
 ```
 
-We will start by creating a Beta-tree histogram. Here, we set the confidence level `alpha = 0.1` and we use weighted bonferroni method for multiple testing correction. The densities are higher in the upper left and the lower right regions, suggesting there are two modes in the distribution. 
+We will start by creating a Beta-tree histogram. Here, we set the confidence level `alpha = 0.1` and we use the weighted Bonferroni method for multiple testing correction. The densities are higher in the upper left and the lower right regions, suggesting there are two modes in the distribution. 
 
 ```{r, fig.height = 3, fig.width= 5, fig.align='center'}
 hist <- BuildHist(X, alpha = 0.1, method = "weighted_bonferroni", plot= T)
 ```
 
-We use the `FindModes()` function to identify modes in a Beta-trees histogram. This function has three parameters, the first is the Beta-tree histogram (output of the `BuildHist` function), the second is the data dimension `d`, and the third is the cutoff value of the path length (we only check paths whose length is at most `cutoff`). We set `cutoff=1000` here, which means we will look at every path between two regions. However, it might be infeasible to check every path because of computation restraints, so typically we would set a smaller cutoff, e.g., `cutoff = 6`. 
+We use the `FindModes()` function to identify modes in a Beta-tree histogram. This function has three parameters, the first is the Beta-tree histogram (output of the `BuildHist` function), the second is the data dimension `d`, and the third is the cutoff value of the path length (we only check paths whose length is at most `cutoff`). We set `cutoff=1000` here, which means we will look at every path between two regions. However, it might be infeasible to check every path because of computational restraint, so typically we would set a smaller cutoff, e.g., `cutoff = 6`. 
 
 ```{r}
 modes <- FindModes(hist = hist, d = d, cutoff = 1000)
@@ -115,7 +115,7 @@ modes$mode # which regions are the modes?
 hist[modes$mode, 1:4] # lower and upper bounds of the two modes
 ```
 
-We highlight the two modes in the histogram, and the asterisks are the two true modes. The two modes in the Beta-trees histogram are close to the actual modes in the distribution. 
+We highlight the two modes in the histogram, and the asterisks are the two true modes. The two modes in the Beta-tree histogram are close to the actual modes in the distribution. 
 
 ```{r, echo = F}
 # function to plot the candidate modes
@@ -214,7 +214,7 @@ adj <- compute_adjacency_mat(hist = hist, d = d)
 adj[1:5, 1:5] 
 ```
 
-From the adjacency matrix, we compute an undirected graph `g` (using the function `graph_from_adjacency_matrix` from `igraph` package). 
+From the adjacency matrix, we compute an undirected graph `g` (using the function `graph_from_adjacency_matrix` from the `igraph` package). 
 
 ```{r}
 g <- igraph::graph_from_adjacency_matrix(adj, mode = "undirected")
