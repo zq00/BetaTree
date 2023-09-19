@@ -23,12 +23,12 @@ Computes the significance level at each tree depth.
 The root node automatically has significance level 0.
 If \code{method = "bonferroni"}, the significance level at depth d is
 \deqn{
-\hat{\alpha}_d =  \frac{\alpha}{(d_\max - d_\min + 1) * n_d}, D\geq D_\min,
+\hat{\alpha}_d =  \frac{\alpha}{(d_\max - d_\min + 1) * n_d}, d\geq d_\min,
 }
 where \eqn{d_\max} is the maximum tree depth, \eqn{d_\min} is the minimum depth (greater than 0) where there are bounded regions, and \eqn{n_d} is number of bounded regions at depth \eqn{d}.
 
 If \code{method = weighted_bonferroni}, the confidence level at depth d is
 \deqn{
-\hat{\alpha}_d = \frac{\alpha}{(d_\max - d + 2) n_d \sum_{B=2}^{d_\max - d_\min + 2}1/B},D\geq D_\min.
+\hat{\alpha}_d = \frac{\alpha}{(d_\max - d + 2) n_d \sum_{B=2}^{d_\max - d_\min + 2}1/B},d\geq d_\min.
 }
 }

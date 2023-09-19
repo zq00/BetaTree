@@ -26,7 +26,7 @@ BuildHist(
 \item{qt}{A vector of length \code{d} equal to the data dimension. Order statistics or quantiles of obs. to be excluded in each dimension. E.g. for 2-dim data, \code{option = "ndat"} and \code{qt = c(50, 40)}, then the boundary in the x-axis are the 50-th and (n-50 +1)-th order statistics in the x-axis.
 The boundary in the y-axis is defined by the 40-th and \eqn{n_1 - 40 + 1} order statistics in the y-axis for the obs. inside the boundary defined by the x-axis in the previous step.
 Another way to put it is to exclude 50 obs. at the lower and upper end of x-coordinate, then for the obs. within, exclude 40 obs. at the lower and upper end of y-coordinate. If \code{option = "qt"} and \code{qt = c(0.05, 0.1)},
-then the boundary are defined by the \eqn{\lceil 0.05 n \rceil} and \eqn{n - \lceil 0.05 n \rceil + 1} quantiles in the x-axis, and then the
+then the boundaries are defined by the \eqn{\lceil 0.05 n \rceil} and \eqn{n - \lceil 0.05 n \rceil + 1} quantiles in the x-axis, and then the
 \eqn{\lceil 0.1 n_1 \rceil} and \eqn{n_1 - \lceil 0.1 n_1 \rceil + 1} quantiles in the y-axis among observations in the first boundary defined by x-axis.
 Equivalently, exclude  \eqn{\lceil 0.05 n \rceil} obs. at the lower and upper end of x-coordinate, then for the obs. within, exclude  \eqn{\lceil 0.1 n_1 \rceil} obs. at the lower and upper end of the y-coordinate.
 }
