@@ -1,5 +1,5 @@
 ---
-title: "Constructing a Beta-Tree Histogram"
+title: "Creating a Beta Tree Histogram"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Creating a Beta Tree Histogram}

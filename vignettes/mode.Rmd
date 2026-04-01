@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(igraph)
 library(mvtnorm)
-library(BetaTree)
+devtools::load_all(path = "/Users/qianzhao/Documents/Research/BetaTrees/BetaTree")
 ```
 
 In this vignette, we will demonstrate how to use a Beta-tree histogram to identify modes in a continuous probability distribution. 
@@ -200,7 +200,7 @@ plotdensity(hist, d = d, g = g, A = modes$mode[1], B = modes$mode[2])
 Note that we have only examined one path here, and to check every path, we use the function `is_connected()`. It returns `connected`  if the two regions are **not** distinct modes. The function has five input values: `i` and `j` are the indices of the two regions, `g` is a graph based on the adjacency matrix (we will describe later), `ci` are the lower and upper confidence bounds, and  `cutoff`  specifies the maximum length of path the function checks.
 
 ```{r}
-BetaTrees::is_connected(i = modes$mode[1], j = modes$mode[2], g = g, ci = hist[,6:7], cutoff = 6)
+is_connected(i = modes$mode[1], j = modes$mode[2], g = g, ci = hist[,6:7], cutoff = 6)
 ```
 
 We need the adjacency matrix in order to compute the path between two regions. The function `compute_adjacency_mat()` computes the adjacency matrix for all of the regions in the histogram. The two inputs of the function is a Beta-tree histogram `hist` and data dimension `d`. In the output adjacency matrix $A$, $A_{i,j} = 1$ if $i$-th and $j$-th regions are neighbors and 0 otherwise. We say that $R_1$ and $R_2$ are neighbors if 

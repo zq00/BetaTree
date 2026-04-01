@@ -4,79 +4,62 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Mode Hunting Using Beta-Trees • BetaTree</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Mode Hunting Using Beta-Trees">
-<meta property="og:description" content="BetaTree">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Mode Hunting Using Beta-Trees">
 </head>
-<body data-spy="scroll" data-target="#toc">
-    
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">BetaTree</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
-      </span>
-    </div>
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/beta_trees.html">Constructing a Beta-Tree Histogram</a>
-    </li>
-    <li>
-      <a href="../articles/mode.html">Mode Hunting Using Beta-Trees</a>
-    </li>
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
+    <a class="navbar-brand me-2" href="../index.html">BetaTree</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/beta_trees.html">Creating a Beta Tree Histogram</a></li>
+    <li><a class="dropdown-item" href="../articles/mode.html">Mode Hunting Using Beta-Trees</a></li>
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+      </ul>
 </div>
-<!--/.nav-collapse -->
+
+
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+</nav><div class="container template-article">
 
-      
 
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Mode Hunting Using Beta-Trees</h1>
+
+
+<div class="row">
+  <main id="main" class="col-md-9"><div class="page-header">
+
+      <h1>Mode Hunting Using Beta-Trees</h1>
             
       
-      
-      <div class="hidden name"><code>mode.Rmd</code></div>
 
+      <div class="d-none name"><code>mode.Rmd</code></div>
     </div>
 
     
@@ -91,62 +74,73 @@ indicate the two modes of the density function. We are often interested
 to identify modes in a distribution because they indicate
 sub-populations (here, the two modes indicate the two mixture
 components).</p>
-<p><img src="mode_files/figure-html/unnamed-chunk-3-1.png" width="384" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
+<span><span class="co">## <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">## <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">## <span style="color: #555555;">generated.</span></span></span></code></pre>
+<p><img src="mode_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="384" style="display: block; margin: auto;"></p>
 <p>For a histogram, we can think of a mode as a region whose average
 density is higher compared to its neighbors. Put in a different way,
-suppose two regions <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span> are distinct modes, then along any
-path connecting <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span> there exists at least one region
-<span class="math inline">\(R\)</span> whose average density is lower
-than those of both <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span>.</p>
+suppose two regions
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>1</mn></msub><annotation encoding="application/x-tex">R_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>2</mn></msub><annotation encoding="application/x-tex">R_2</annotation></semantics></math>
+are distinct modes, then along any path connecting
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>1</mn></msub><annotation encoding="application/x-tex">R_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>2</mn></msub><annotation encoding="application/x-tex">R_2</annotation></semantics></math>
+there exists at least one region
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>
+whose average density is lower than those of both
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>1</mn></msub><annotation encoding="application/x-tex">R_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>2</mn></msub><annotation encoding="application/x-tex">R_2</annotation></semantics></math>.</p>
 <div class="section level2">
 <h2 id="example-detecting-modes-in-a-mixture-of-2-dim-gaussian">Example: Detecting modes in a mixture of 2-dim Gaussian<a class="anchor" aria-label="anchor" href="#example-detecting-modes-in-a-mixture-of-2-dim-gaussian"></a>
 </h2>
-<p>In this example, we simulate <span class="math inline">\(n=\)</span>
+<p>In this example, we simulate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">n=</annotation></semantics></math>
 2000 obs. from a 2-dim Gaussian mixture we showed before</p>
-<p><span class="math display">\[
-\frac{2}{5} {N}\left(\left(\begin{matrix}-1.5
-\\0.6\end{matrix}\right),\left(\begin{matrix}1 &amp; 0.5 \\ 0.5 &amp;
-1\end{matrix}\right) \right) + \frac{3}{5}
-{N}\left(\left(\begin{matrix}2
-\\-1.5\end{matrix}\right),\left(\begin{matrix}1 &amp; 0 \\ 0 &amp;
-1\end{matrix}\right) \right),
-\]</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>2</mn><mn>5</mn></mfrac><mi>N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1.5</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.6</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.5</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.5</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mfrac><mn>3</mn><mn>5</mn></mfrac><mi>N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1.5</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\frac{2}{5} {N}\left(\left(\begin{matrix}-1.5 \\0.6\end{matrix}\right),\left(\begin{matrix}1 &amp; 0.5 \\ 0.5 &amp; 1\end{matrix}\right) \right) + \frac{3}{5} {N}\left(\left(\begin{matrix}2 \\-1.5\end{matrix}\right),\left(\begin{matrix}1 &amp; 0 \\ 0 &amp; 1\end{matrix}\right) \right), 
+</annotation></semantics></math></p>
 <p>We will start by creating a Beta-tree histogram. Here, we set the
-confidence level <code>alpha = 0.1</code> and we use weighted bonferroni
-method for multiple testing correction. The densities are higher in the
-upper left and the lower right regions, suggesting there are two modes
-in the distribution.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/BuildHist.html">BuildHist</a></span><span class="op">(</span><span class="va">X</span>, alpha <span class="op">=</span> <span class="fl">0.1</span>, method <span class="op">=</span> <span class="st">"weighted_bonferroni"</span>, plot<span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
-<p><img src="mode_files/figure-html/unnamed-chunk-7-1.png" width="480" style="display: block; margin: auto;"></p>
+confidence level <code>alpha = 0.1</code> and we use the weighted
+Bonferroni method for multiple testing correction. The densities are
+higher in the upper left and the lower right regions, suggesting there
+are two modes in the distribution.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/BuildHist.html">BuildHist</a></span><span class="op">(</span><span class="va">X</span>, alpha <span class="op">=</span> <span class="fl">0.1</span>, method <span class="op">=</span> <span class="st">"weighted_bonferroni"</span>, plot<span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<p><img src="mode_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="480" style="display: block; margin: auto;"></p>
 <p>We use the <code><a href="../reference/FindModes.html">FindModes()</a></code> function to identify modes in a
-Beta-trees histogram. This function has three parameters, the first is
+Beta-tree histogram. This function has three parameters, the first is
 the Beta-tree histogram (output of the <code>BuildHist</code> function),
 the second is the data dimension <code>d</code>, and the third is the
 cutoff value of the path length (we only check paths whose length is at
 most <code>cutoff</code>). We set <code>cutoff=1000</code> here, which
 means we will look at every path between two regions. However, it might
-be infeasible to check every path because of computation restraints, so
+be infeasible to check every path because of computational restraint, so
 typically we would set a smaller cutoff, e.g.,
 <code>cutoff = 6</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">modes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FindModes.html">FindModes</a></span><span class="op">(</span>hist <span class="op">=</span> <span class="va">hist</span>, d <span class="op">=</span> <span class="va">d</span>, cutoff <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">modes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FindModes.html">FindModes</a></span><span class="op">(</span>hist <span class="op">=</span> <span class="va">hist</span>, d <span class="op">=</span> <span class="va">d</span>, cutoff <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
 <p>The <code>FindModes</code> function returns a list with three
 components: <code>mode</code> returns the index of the modes,
 <code>hist</code> returns the input histogram, and <code>g</code>
 returns the adjacency graph of regions in the histogram.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">modes</span><span class="op">$</span><span class="va">mode</span> <span class="co"># which regions are the modes?</span></code></pre></div>
-<pre><code><span class="co">## [1] 20  8</span></code></pre>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hist</span><span class="op">[</span><span class="va">modes</span><span class="op">$</span><span class="va">mode</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span> <span class="co"># lower and upper bounds of the two modes</span></code></pre></div>
-<pre><code><span class="co">##           [,1]       [,2]      [,3]       [,4]</span>
-<span class="co">## [1,]  1.079403 -1.4891923  2.193951 -0.8053697</span>
-<span class="co">## [2,] -1.738694  0.8557582 -1.246862  1.3160574</span></code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">modes</span><span class="op">$</span><span class="va">mode</span> <span class="co"># which regions are the modes?</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 20  8</span></span></code></pre>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hist</span><span class="op">[</span><span class="va">modes</span><span class="op">$</span><span class="va">mode</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span> <span class="co"># lower and upper bounds of the two modes</span></span></code></pre></div>
+<pre><code><span><span class="co">##           [,1]       [,2]      [,3]       [,4]</span></span>
+<span><span class="co">## [1,]  1.079403 -1.4891923  2.193951 -0.8053697</span></span>
+<span><span class="co">## [2,] -1.738694  0.8557582 -1.246862  1.3160574</span></span></code></pre>
 <p>We highlight the two modes in the histogram, and the asterisks are
-the two true modes. The two modes in the Beta-trees histogram are close
+the two true modes. The two modes in the Beta-tree histogram are close
 to the actual modes in the distribution.</p>
-<p><img src="mode_files/figure-html/unnamed-chunk-11-1.png" width="432" style="display: block; margin: auto;"></p>
+<p><img src="mode_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="432" style="display: block; margin: auto;"></p>
 <p>In the next section, we describe details of the
 <code>FindModes</code> function.</p>
 </div>
@@ -155,28 +149,50 @@ to the actual modes in the distribution.</p>
 </h2>
 <p>Let’s rephrase the question of mode detection as the following: how
 can we tell that the two regions highlighted in red (let’s call them
-<span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span>) are two distinct modes? (If we know
-how to do this, then we can detect modes by iterating through all the
-regions , compare each one with the current list of distinct modes, and
-declare it a mode if it is distinct from all the current modes.) Suppose
-that <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span> are distinct modes, then along every
-path that connects <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span>, there should exist at least one
-region <span class="math inline">\(R\)</span> whose average density is
-lower than those of both <span class="math inline">\(R_1\)</span> and
-<span class="math inline">\(R_2\)</span>. Because the Beta-tree
-histogram returns a CI for the average density, we compare the lower and
-upper bound of the CI, that is, there should exist a region <span class="math inline">\(R\)</span> such that</p>
-<p><span class="math display">\[
-\mathrm{CI}_\mathrm{up}(R) &lt; \min(\mathrm{CI}_\mathrm{low}(R_1),
-\mathrm{CI}_\mathrm{low}(R_2)),
-\]</span> where <span class="math inline">\([\mathrm{CI}_\mathrm{low}(R),
-\mathrm{CI}_\mathrm{up}(R)]\)</span> is the confidence interval of the
-average density of <span class="math inline">\(R\)</span>.</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>1</mn></msub><annotation encoding="application/x-tex">R_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>2</mn></msub><annotation encoding="application/x-tex">R_2</annotation></semantics></math>)
+are two distinct modes? (If we know how to do this, then we can detect
+modes by iterating through all the regions , compare each one with the
+current list of distinct modes, and declare it a mode if it is distinct
+from all the current modes.) Suppose that
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>1</mn></msub><annotation encoding="application/x-tex">R_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>2</mn></msub><annotation encoding="application/x-tex">R_2</annotation></semantics></math>
+are distinct modes, then along every path that connects
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>1</mn></msub><annotation encoding="application/x-tex">R_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>2</mn></msub><annotation encoding="application/x-tex">R_2</annotation></semantics></math>,
+there should exist at least one region
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>
+whose average density is lower than those of both
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>1</mn></msub><annotation encoding="application/x-tex">R_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>2</mn></msub><annotation encoding="application/x-tex">R_2</annotation></semantics></math>.
+Because the Beta-tree histogram returns a CI for the average density, we
+compare the lower and upper bound of the CI, that is, there should exist
+a region
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>
+such that</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">I</mi></mrow><mrow><mi mathvariant="normal">u</mi><mi mathvariant="normal">p</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>R</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>&lt;</mo><mo>min</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">I</mi></mrow><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>R</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><msub><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">I</mi></mrow><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>R</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\mathrm{CI}_\mathrm{up}(R) &lt; \min(\mathrm{CI}_\mathrm{low}(R_1), \mathrm{CI}_\mathrm{low}(R_2)),
+</annotation></semantics></math> where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">[</mo><msub><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">I</mi></mrow><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>R</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><msub><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">I</mi></mrow><mrow><mi mathvariant="normal">u</mi><mi mathvariant="normal">p</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>R</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[\mathrm{CI}_\mathrm{low}(R), \mathrm{CI}_\mathrm{up}(R)]</annotation></semantics></math>
+is the confidence interval of the average density of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>.</p>
 <p>For example, we plot the confidence intervals for every region along
-the shortest path <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span>. As we can see, the upper confidence
-bound of the third region is below the lower endpoints of both modes.
-Suppose this is true for every path, then we declare <span class="math inline">\(R_1\)</span> and <span class="math inline">\(R_2\)</span> are two distinct modes.</p>
-<p><img src="mode_files/figure-html/unnamed-chunk-14-1.png" width="384" style="display: block; margin: auto;"></p>
+the shortest path
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>1</mn></msub><annotation encoding="application/x-tex">R_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>2</mn></msub><annotation encoding="application/x-tex">R_2</annotation></semantics></math>.
+As we can see, the upper confidence bound of the third region is below
+the lower endpoints of both modes. Suppose this is true for every path,
+then we declare
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>1</mn></msub><annotation encoding="application/x-tex">R_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>2</mn></msub><annotation encoding="application/x-tex">R_2</annotation></semantics></math>
+are two distinct modes.</p>
+<p><img src="mode_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="384" style="display: block; margin: auto;"></p>
 <p>Note that we have only examined one path here, and to check every
 path, we use the function <code><a href="../reference/is_connected.html">is_connected()</a></code>. It returns
 <code>connected</code> if the two regions are <strong>not</strong>
@@ -186,40 +202,47 @@ graph based on the adjacency matrix (we will describe later),
 <code>ci</code> are the lower and upper confidence bounds, and
 <code>cutoff</code> specifies the maximum length of path the function
 checks.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">BetaTrees</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BetaTrees/man/is_connected.html" class="external-link">is_connected</a></span><span class="op">(</span>i <span class="op">=</span> <span class="va">modes</span><span class="op">$</span><span class="va">mode</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, j <span class="op">=</span> <span class="va">modes</span><span class="op">$</span><span class="va">mode</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, g <span class="op">=</span> <span class="va">g</span>, ci <span class="op">=</span> <span class="va">hist</span><span class="op">[</span>,<span class="fl">6</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span>, cutoff <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "unconnected"</span></code></pre>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/is_connected.html">is_connected</a></span><span class="op">(</span>i <span class="op">=</span> <span class="va">modes</span><span class="op">$</span><span class="va">mode</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, j <span class="op">=</span> <span class="va">modes</span><span class="op">$</span><span class="va">mode</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, g <span class="op">=</span> <span class="va">g</span>, ci <span class="op">=</span> <span class="va">hist</span><span class="op">[</span>,<span class="fl">6</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span>, cutoff <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "unconnected"</span></span></code></pre>
 <p>We need the adjacency matrix in order to compute the path between two
 regions. The function <code><a href="../reference/compute_adjacency_mat.html">compute_adjacency_mat()</a></code> computes the
 adjacency matrix for all of the regions in the histogram. The two inputs
 of the function is a Beta-tree histogram <code>hist</code> and data
-dimension <code>d</code>. In the output adjacency matrix <span class="math inline">\(A\)</span>, <span class="math inline">\(A_{i,j} =
-1\)</span> if <span class="math inline">\(i\)</span>-th and <span class="math inline">\(j\)</span>-th regions are neighbors and 0
-otherwise. We say that <span class="math inline">\(R_1\)</span> and
-<span class="math inline">\(R_2\)</span> are neighbors if <span class="math display">\[
-[x^{\mathrm{low}}_{1,j}, x^{\mathrm{up}}_{1,j}] \cap
-[x^{\mathrm{low}}_{2,j}, x^{\mathrm{up}}_{2,j}] \neq \emptyset,\quad
-\forall j=1,\ldots, d.
-\]</span> Here, we represent each region by the lower and upper bound in
-each coordinate, i.e., <span class="math inline">\(R_1\)</span> can be
-represented as <span class="math inline">\((x^{\mathrm{low}}_{1,1},
-x^{\mathrm{up}}_{1,1})\times \ldots \times (x^{\mathrm{low}}_{1,d},
-x^{\mathrm{up}}_{1,d})\)</span>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">adj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compute_adjacency_mat.html">compute_adjacency_mat</a></span><span class="op">(</span>hist <span class="op">=</span> <span class="va">hist</span>, d <span class="op">=</span> <span class="va">d</span><span class="op">)</span> 
-<span class="va">adj</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span> </code></pre></div>
-<pre><code><span class="co">##      [,1] [,2] [,3] [,4] [,5]</span>
-<span class="co">## [1,]    0    1    0    0    1</span>
-<span class="co">## [2,]    1    0    0    0    1</span>
-<span class="co">## [3,]    0    0    0    1    1</span>
-<span class="co">## [4,]    0    0    1    0    0</span>
-<span class="co">## [5,]    1    1    1    0    0</span></code></pre>
+dimension <code>d</code>. In the output adjacency matrix
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">A_{i,j} = 1</annotation></semantics></math>
+if
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>-th
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>-th
+regions are neighbors and 0 otherwise. We say that
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>1</mn></msub><annotation encoding="application/x-tex">R_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>2</mn></msub><annotation encoding="application/x-tex">R_2</annotation></semantics></math>
+are neighbors if
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">[</mo><msubsup><mi>x</mi><mrow><mn>1</mn><mo>,</mo><mi>j</mi></mrow><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></msubsup><mo>,</mo><msubsup><mi>x</mi><mrow><mn>1</mn><mo>,</mo><mi>j</mi></mrow><mrow><mi mathvariant="normal">u</mi><mi mathvariant="normal">p</mi></mrow></msubsup><mo stretchy="true" form="postfix">]</mo></mrow><mo>∩</mo><mrow><mo stretchy="true" form="prefix">[</mo><msubsup><mi>x</mi><mrow><mn>2</mn><mo>,</mo><mi>j</mi></mrow><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></msubsup><mo>,</mo><msubsup><mi>x</mi><mrow><mn>2</mn><mo>,</mo><mi>j</mi></mrow><mrow><mi mathvariant="normal">u</mi><mi mathvariant="normal">p</mi></mrow></msubsup><mo stretchy="true" form="postfix">]</mo></mrow><mo>≠</mo><mi>∅</mi><mo>,</mo><mspace width="1.0em"></mspace><mo>∀</mo><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>d</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+[x^{\mathrm{low}}_{1,j}, x^{\mathrm{up}}_{1,j}] \cap [x^{\mathrm{low}}_{2,j}, x^{\mathrm{up}}_{2,j}] \neq \emptyset,\quad \forall j=1,\ldots, d. 
+</annotation></semantics></math> Here, we represent each region by the
+lower and upper bound in each coordinate, i.e.,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>1</mn></msub><annotation encoding="application/x-tex">R_1</annotation></semantics></math>
+can be represented as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>x</mi><mrow><mn>1</mn><mo>,</mo><mn>1</mn></mrow><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></msubsup><mo>,</mo><msubsup><mi>x</mi><mrow><mn>1</mn><mo>,</mo><mn>1</mn></mrow><mrow><mi mathvariant="normal">u</mi><mi mathvariant="normal">p</mi></mrow></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><mo>×</mo><mi>…</mi><mo>×</mo><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>x</mi><mrow><mn>1</mn><mo>,</mo><mi>d</mi></mrow><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></msubsup><mo>,</mo><msubsup><mi>x</mi><mrow><mn>1</mn><mo>,</mo><mi>d</mi></mrow><mrow><mi mathvariant="normal">u</mi><mi mathvariant="normal">p</mi></mrow></msubsup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">(x^{\mathrm{low}}_{1,1}, x^{\mathrm{up}}_{1,1})\times \ldots \times (x^{\mathrm{low}}_{1,d}, x^{\mathrm{up}}_{1,d})</annotation></semantics></math>.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compute_adjacency_mat.html">compute_adjacency_mat</a></span><span class="op">(</span>hist <span class="op">=</span> <span class="va">hist</span>, d <span class="op">=</span> <span class="va">d</span><span class="op">)</span> </span>
+<span><span class="va">adj</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span> </span></code></pre></div>
+<pre><code><span><span class="co">##      [,1] [,2] [,3] [,4] [,5]</span></span>
+<span><span class="co">## [1,]    0    1    0    0    1</span></span>
+<span><span class="co">## [2,]    1    0    0    0    1</span></span>
+<span><span class="co">## [3,]    0    0    0    1    1</span></span>
+<span><span class="co">## [4,]    0    0    1    0    0</span></span>
+<span><span class="co">## [5,]    1    1    1    0    0</span></span></code></pre>
 <p>From the adjacency matrix, we compute an undirected graph
 <code>g</code> (using the function
-<code>graph_from_adjacency_matrix</code> from <code>igraph</code>
+<code>graph_from_adjacency_matrix</code> from the <code>igraph</code>
 package).</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_adjacency_matrix.html" class="external-link">graph_from_adjacency_matrix</a></span><span class="op">(</span><span class="va">adj</span>, mode <span class="op">=</span> <span class="st">"undirected"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/graph_from_adjacency_matrix.html" class="external-link">graph_from_adjacency_matrix</a></span><span class="op">(</span><span class="va">adj</span>, mode <span class="op">=</span> <span class="st">"undirected"</span><span class="op">)</span></span></code></pre></div>
 <p>To summarize, <code>FindModes</code> proceeds in the following
 steps:</p>
 <ol style="list-style-type: decimal">
@@ -234,35 +257,26 @@ modes.</p></li>
 <li><p>Return the list of modes.</p></li>
 </ol>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
-
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
-  <p></p>
-<p>Developed by Qian Zhao, Guenther Walther.</p>
+    <footer><div class="pkgdown-footer-left">
+  <p>Developed by Qian Zhao, Guenther Walther.</p>
 </div>
 
-<div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<div class="pkgdown-footer-right">
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
-  
 
 
-  
+
 
   </body>
 </html>
