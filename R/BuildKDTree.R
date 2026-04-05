@@ -80,8 +80,9 @@ BuildKDTree <- function(X, bounded = F, ...){
       up  =  bounds[,2],
       lower = NA,  # lower confidence bound for average density
       upper = NA,  # upper confidence bound
-      leaf  = FALSE,
-      bounded = TRUE)      # node is leaf or not
+      leaf  = FALSE,# node is leaf or not
+      bounded = TRUE,
+      inside = NA)
   }else{
     rootnode <- list(
       leftchild = NULL,
@@ -93,7 +94,8 @@ BuildKDTree <- function(X, bounded = F, ...){
       lower = NULL,
       upper = NULL,
       bounded = FALSE,
-      leaf  = FALSE)
+      leaf  = FALSE,
+      inside = NA)
 
     Xinside <- X
   }

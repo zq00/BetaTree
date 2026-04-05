@@ -30,12 +30,19 @@
 #' @return An updated k-d tree starting at input node with \code{lower} and \code{upper} filled in.
 #' @export
 SetBounds <- function(node, ahat, n){
+
   if (node$bounded){
     lower <- stats::qbeta(ahat[node$depth + 1] / 2, node$ndat + 1, n - node$ndat) / prod(node$up - node$low)
     upper <- stats::qbeta(1 - ahat[node$depth + 1] / 2, node$ndat + 1, n - node$ndat) / prod(node$up - node$low)
+
+    if(node$leaf){
+      node$lower <- lower; node$upper <- upper;
+    }
+
+    cat(c(lower, upper, "\n"))
   }
-  if(node$leaf){if (node$bounded) {node$lower <- lower; node$upper <- upper}
-  }else{
+
+  if(!node$leaf){
     node$leftchild <- SetBounds(node$leftchild, ahat, n)
     node$rightchild <- SetBounds(node$rightchild, ahat, n)
   }
@@ -43,5 +50,14 @@ SetBounds <- function(node, ahat, n){
     node$lower <- max(lower, node$leftchild$lower,node$rightchild$lower)
     node$upper <- min(upper, node$leftchild$upper, node$rightchild$upper)
   }
+
+  if(!node$bounded){
+    node$inside <- NA
+  }else{
+    h <- (node$ndat +1)/n/prod(node$up - node$low)
+    inside <- (node$lower <= h) & (h <= node$upper)
+    node$inside <- all(inside, node$leftchild$inside, node$rightchild$inside, na.rm = T)
+  }
+
   return(node)
 }
