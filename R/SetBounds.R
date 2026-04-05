@@ -38,8 +38,6 @@ SetBounds <- function(node, ahat, n){
     if(node$leaf){
       node$lower <- lower; node$upper <- upper;
     }
-
-    cat(c(lower, upper, "\n"))
   }
 
   if(!node$leaf){
@@ -51,12 +49,13 @@ SetBounds <- function(node, ahat, n){
     node$upper <- min(upper, node$leftchild$upper, node$rightchild$upper)
   }
 
-  if(!node$bounded){
-    node$inside <- NA
-  }else{
+  if(node$bounded){
     h <- (node$ndat +1)/n/prod(node$up - node$low)
     inside <- (node$lower <= h) & (h <= node$upper)
-    node$inside <- all(inside, node$leftchild$inside, node$rightchild$inside, na.rm = T)
+
+    if(node$leaf){ node$inside <-  inside}else{
+      node$inside <- all(inside, node$leftchild$inside, node$rightchild$inside, na.rm = T)
+    }
   }
 
   return(node)
