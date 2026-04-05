@@ -38,6 +38,7 @@ PlotHist <- function(X, B, nsample = 10000, ...){
                                   name = "Density") +
     ggplot2::geom_point(ggplot2::aes(x = x_small[,1], y = x_small[,2]), size = 0.4, alpha =n^(-0.25)) +
     ggplot2::xlab("x") +  ggplot2::ylab("y") +
+    ggplot2::theme_classic() +
     ggplot2::theme(text=ggplot2::element_text(size =18))
 
   return(g)
