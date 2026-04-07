@@ -25,7 +25,8 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     tidyverse (>= 1.1.1),
-    mvtnorm (>= 1.1.3)
+    mvtnorm (>= 1.1.3),
+    goftest 
 VignetteBuilder: knitr
 Imports: 
     stats,
