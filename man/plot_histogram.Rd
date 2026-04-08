@@ -25,7 +25,7 @@ Visualize an adaptive beta-tree histogram in two-dimensions marginally or condit
 }
 \examples{
 
-#' \dontrun{
+\dontrun{
 n <- 10000
 p <- 4
 X <- matrix(rnorm(n*p), nrow = n, ncol = p)
