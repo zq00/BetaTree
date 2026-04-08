@@ -1,4 +1,4 @@
 library(testthat)
-library(BetaTrees)
+library(BetaTree)
 
-test_check("BetaTrees")
+test_check("BetaTree")
