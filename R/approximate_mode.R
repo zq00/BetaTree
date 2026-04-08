@@ -270,6 +270,6 @@ connected_to_modes <- function(candidate_mode, curr_mode, g, cluster,
   }
 
   return(list(
-    connected = if (connected) "connected" else "unconnected",
+    connected = if (connected) "connected" else "unconnected"
   ))
 }
