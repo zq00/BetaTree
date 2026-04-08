@@ -50,4 +50,5 @@ each region as \$\$ \widetilde{\text{lower}} = \max\left(\text{lower},
 \$\$ so that when we select nodes, we pick the largest nodes such that
 the empirical density is between \\\widetilde{\text{lower}}\\ and
 \\\widetilde{\text{upper}}\\. The significance levels are computed with
-the function ConfLevel.
+the function
+[ConfLevel](https://zq00.github.io/BetaTree/reference/ConfLevel.md).

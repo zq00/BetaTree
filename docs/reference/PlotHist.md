@@ -17,7 +17,9 @@ PlotHist(X, B, nsample = 10000, ...)
 - B:
 
   matrix of rectangles returned by the function
-  [SelectNodes](SelectNodes.md) or [BuildHist](BuildHist.md).
+  [SelectNodes](https://zq00.github.io/BetaTree/reference/SelectNodes.md)
+  or
+  [BuildHist](https://zq00.github.io/BetaTree/reference/BuildHist.md).
 
 - nsample:
 

@@ -29,8 +29,8 @@ devtools::install_github("zq00/BetaTree")
 
 You can find the function documentations under the Reference tab. To get
 started, you can take a look at the function
-[`BuildHist()`](reference/BuildHist.md), which computes a Beta tree
-histogram.
+[`BuildHist()`](https://zq00.github.io/BetaTree/reference/BuildHist.md),
+which computes a Beta tree histogram.
 
 ## Source code
 

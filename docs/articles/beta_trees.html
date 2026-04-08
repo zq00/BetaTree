@@ -496,6 +496,117 @@ as defined in the previous section:
 region and its tree depth. The function <code>BuildHist</code> returns
 <code>hist</code>.</p>
 </div>
+<div class="section level2">
+<h2 id="adaptive-beta-tree-histogram">Adaptive Beta-tree histogram<a class="anchor" aria-label="anchor" href="#adaptive-beta-tree-histogram"></a>
+</h2>
+<p>When we construct the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>-d
+tree described before, we iterate through each coordinate
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>d</mi><mo>,</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi></mrow><annotation encoding="application/x-tex">1, 2, 3,\ldots, d, 1, 2,\ldots</annotation></semantics></math>)
+and partition at the sample medians. Sometimes it can be beneficial to
+choose partition dimensions <em>adaptively</em>, for example, when only
+a few coordinates are correlated and the remaining coordinates are from
+a uniform distribution.</p>
+<p>The adaptive Beta-tree algorithm chooses partition dimension of a
+region
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>
+by testing marginal uniformity and pairwise independence:</p>
+<ul>
+<li><p>First, we use Anderson-Darling statistics to test whether the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>-th
+coordinate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mi>i</mi></msub><annotation encoding="application/x-tex">X_i</annotation></semantics></math>
+follows a uniform distribution marginally conditional on
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>∈</mo><mi>R</mi></mrow><annotation encoding="application/x-tex">X\in R</annotation></semantics></math>.
+We randomly choose a coordinate that significantly differs from a
+uniform distribution.</p></li>
+<li><p>Second, if no rejections is made in the first step, we test
+pairwise independence of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mi>i</mi></msub><annotation encoding="application/x-tex">X_i</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mi>j</mi></msub><annotation encoding="application/x-tex">X_j</annotation></semantics></math>
+by using Fisher’s exact test to the counts in the four quadrants of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>-th
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>-th
+coordinate. The four quadrants are defined by dividing
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>
+along the middle of the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>-th
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>-th
+coordinate. We combine the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mi>d</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(d-1)</annotation></semantics></math>
+p-values for the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>-th
+coordinate as
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>i</mi></msub><mo>=</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>≠</mo><mi>i</mi></mrow></munder><mo>log</mo><msub><mi>p</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">
+p_i = \sum_{j\neq i} \log p_{i,j}
+</annotation></semantics></math> and we randomly choose a coordinate
+with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>i</mi></msub><mo>≥</mo><mi>τ</mi></mrow><annotation encoding="application/x-tex">p_i \geq \tau</annotation></semantics></math>
+for some threshold
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>
+to partition.</p></li>
+</ul>
+<p>As an example, we simulate 5-dimensional observations where only the
+first two coordinates are correlated.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10000</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
+<span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">*</span><span class="va">p</span><span class="op">)</span>, <span class="va">n</span>, <span class="va">p</span><span class="op">)</span></span>
+<span><span class="va">X</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">X</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.8</span>, <span class="fl">0.8</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>We can compute an adaptive Beta-tree histogram using
+<code>build_adaptive_histogram</code> function.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.1</span> </span>
+<span><span class="va">adaptive_beta_tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_adaptive_histogram.html">build_adaptive_histogram</a></span><span class="op">(</span><span class="va">X</span>, </span>
+<span>                                               alpha  <span class="op">=</span> <span class="va">alpha</span>,</span>
+<span>                                               thresh_marginal <span class="op">=</span> <span class="va">alpha</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>,</span>
+<span>                                               thresh_interaction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">qgamma</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,rate <span class="op">=</span> <span class="fl">1</span>, p <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">alpha</span><span class="op">)</span>,</span>
+<span>                                               method <span class="op">=</span> <span class="st">"weighted_bonferroni"</span><span class="op">)</span></span></code></pre></div>
+<p>There are five parameters for this function:</p>
+<ul>
+<li><p><code>X</code> is the data matrix</p></li>
+<li><p><code>alpha</code> is the significance level, by default
+<code>alpha=0.1</code>.</p></li>
+<li><p><code>thresh_marginal</code> is the p-value threshold for testing
+marginal uniformity, by default this is <code>alpha / d</code>
+(<code>d = ncol(X)</code>).</p></li>
+<li><p><code>thresh_interaction</code> is the threshold for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mi>i</mi></msub><annotation encoding="application/x-tex">p_i</annotation></semantics></math>
+for testing pairwise independence, by default this is the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">1-\alpha</annotation></semantics></math>
+quantile of a gamma distribution with shape parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">d-1</annotation></semantics></math>
+and rate parameter 1.</p></li>
+<li><p><code>method</code> specifies the approach used to correct for
+multiple hypothesis testing as before.</p></li>
+</ul>
+<p>You can visualize the estimated distribution using the functions
+<code>plot_histogram_data</code> (to prepare data for plotting) and
+<code>plot_histogram</code> (to create the plot). You can use these
+functions to compute the marginal distribution or the conditional
+distribution within a given hyperrectangle. Below, we visualize the
+estimated marginal distribution in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>X</mi><mn>1</mn></msub><mo>,</mo><msub><mi>X</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(X_1, X_2)</annotation></semantics></math>
+and plot a subsample of 500 observations.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">plot_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_histogram_data.html">plot_histogram_data</a></span><span class="op">(</span> X <span class="op">=</span> <span class="va">X</span>,</span>
+<span>                                 hist   <span class="op">=</span> <span class="va">adaptive_beta_tree</span><span class="op">$</span><span class="va">hist</span>,</span>
+<span>                                 plot_coord <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                                 nint  <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>                                 show_data  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                 ndat     <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot_histogram.html">plot_histogram</a></span><span class="op">(</span><span class="va">plot_dat</span><span class="op">)</span></span></code></pre></div>
+<p><img src="beta_trees_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" width="576"></p>
+<p>We can see that the adaptive histogram is able to capture the
+correlation between
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mn>1</mn></msub><annotation encoding="application/x-tex">X_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mn>2</mn></msub><annotation encoding="application/x-tex">X_2</annotation></semantics></math>
+in the five dimensional data.</p>
+</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>

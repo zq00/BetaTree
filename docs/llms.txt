@@ -29,8 +29,8 @@ devtools::install_github("zq00/BetaTree")
 
 You can find the function documentations under the Reference tab. To get
 started, you can take a look at the function
-[`BuildHist()`](reference/BuildHist.md), which computes a Beta tree
-histogram.
+[`BuildHist()`](https://zq00.github.io/BetaTree/reference/BuildHist.md),
+which computes a Beta tree histogram.
 
 ## Source code
 
@@ -47,23 +47,46 @@ us. Thank you!
 
 ## All functions
 
-- [`BuildHist()`](BuildHist.md) : Build a Beta-tree histogram
-- [`BuildKDTree()`](BuildKDTree.md) : Build a k-d tree
-- [`ConfLevel()`](ConfLevel.md) : Set significance level for regions at
-  each tree depth
-- [`FindModes()`](FindModes.md) : Identifies distinct modes in
-  Beta-trees histogram
-- [`PlotHist()`](PlotHist.md) : Plot a 2D Beta tree histogram
-- [`SelectNodes()`](SelectNodes.md) : Select nodes in the histogram
-- [`SetBounds()`](SetBounds.md) : Add confidence bounds to bounded
-  regions in the k-d tree
-- [`compute_adjacency_mat()`](compute_adjacency_mat.md) : Compute the
-  adjacency matrix of regions in the histogram
-- [`is_connected()`](is_connected.md) : Are two regions distinct modes?
+- [`BuildHist()`](https://zq00.github.io/BetaTree/reference/BuildHist.md)
+  : Build a Beta-tree histogram
+- [`BuildKDTree()`](https://zq00.github.io/BetaTree/reference/BuildKDTree.md)
+  : Build a k-d tree
+- [`ConfLevel()`](https://zq00.github.io/BetaTree/reference/ConfLevel.md)
+  : Set significance level for regions at each tree depth
+- [`FindModes()`](https://zq00.github.io/BetaTree/reference/FindModes.md)
+  : Identifies distinct modes in Beta-trees histogram
+- [`FindModesApproximate()`](https://zq00.github.io/BetaTree/reference/FindModesApproximate.md)
+  : Identify Modes in a Beta-tree Histogram via Monte Carlo
+  approximation
+- [`PlotHist()`](https://zq00.github.io/BetaTree/reference/PlotHist.md)
+  : Plot a 2D Beta tree histogram
+- [`SelectNodes()`](https://zq00.github.io/BetaTree/reference/SelectNodes.md)
+  : Select nodes in the histogram
+- [`SetBounds()`](https://zq00.github.io/BetaTree/reference/SetBounds.md)
+  : Add confidence bounds to bounded regions in the k-d tree
+- [`build_adaptive_histogram()`](https://zq00.github.io/BetaTree/reference/build_adaptive_histogram.md)
+  : Build an Adaptive Beta-Tree Histogram
+- [`compute_adjacency_mat()`](https://zq00.github.io/BetaTree/reference/compute_adjacency_mat.md)
+  : Compute the adjacency matrix of regions in the histogram
+- [`connected_to_modes()`](https://zq00.github.io/BetaTree/reference/connected_to_modes.md)
+  : Is a Region a Distinct Mode? (Approximate Algorithm)
+- [`find_neighbors()`](https://zq00.github.io/BetaTree/reference/find_neighbors.md)
+  : Find Regions in the Neighborhood of a Mode
+- [`get_partition_dim()`](https://zq00.github.io/BetaTree/reference/get_partition_dim.md)
+  : Choose Partition Dimension
+- [`is_connected()`](https://zq00.github.io/BetaTree/reference/is_connected.md)
+  : Are two regions distinct modes?
+- [`plot_histogram()`](https://zq00.github.io/BetaTree/reference/plot_histogram.md)
+  : Plot a multivariate histogram in two dimensions
+- [`plot_histogram_data()`](https://zq00.github.io/BetaTree/reference/plot_histogram_data.md)
+  : Prepare data for visualizing a multivariate histogram in two chosen
+  dimensions
 
 # Articles
 
 ### All vignettes
 
-- [Creating a Beta Tree Histogram](beta_trees.md):
-- [Mode Hunting Using Beta-Trees](mode.md):
+- [Creating a Beta Tree
+  Histogram](https://zq00.github.io/BetaTree/articles/beta_trees.md):
+- [Mode Hunting Using
+  Beta-Trees](https://zq00.github.io/BetaTree/articles/mode.md):

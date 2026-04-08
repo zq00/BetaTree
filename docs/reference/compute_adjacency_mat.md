@@ -17,7 +17,9 @@ compute_adjacency_mat(hist, d)
   columns contain the lower bounds for each coordinate, and the next `d`
   columns contain the upper bounds. The `2d + 1` column contains the
   empirical density. `hist` can be the output of
-  [BuildHist](BuildHist.md) or [SelectNodes](SelectNodes.md) function.
+  [BuildHist](https://zq00.github.io/BetaTree/reference/BuildHist.md) or
+  [SelectNodes](https://zq00.github.io/BetaTree/reference/SelectNodes.md)
+  function.
 
 - d:
 

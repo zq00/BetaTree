@@ -47,9 +47,11 @@ distribution and visualized below:
 
 ![](beta_trees_files/figure-html/unnamed-chunk-4-1.png)
 
-We use the [`BuildHist()`](../reference/BuildHist.md) function to create
-a Beta-tree histogram. (If `plot = T`, then the function plots the
-Beta-tree histogram if the data are two-dimensional. )
+We use the
+[`BuildHist()`](https://zq00.github.io/BetaTree/reference/BuildHist.md)
+function to create a Beta-tree histogram. (If `plot = T`, then the
+function plots the Beta-tree histogram if the data are two-dimensional.
+)
 
 ``` r
 hist <- BuildHist(X, alpha = 0.1, method = "weighted_bonferroni", plot = T)
@@ -383,3 +385,93 @@ $`f(R_k)`$ as defined in the previous section:
 
 The last two columns store the number of observations inside the region
 and its tree depth. The function `BuildHist` returns `hist`.
+
+## Adaptive Beta-tree histogram
+
+When we construct the $`k`$-d tree described before, we iterate through
+each coordinate ($`1, 2, 3,\ldots, d, 1, 2,\ldots`$) and partition at
+the sample medians. Sometimes it can be beneficial to choose partition
+dimensions *adaptively*, for example, when only a few coordinates are
+correlated and the remaining coordinates are from a uniform
+distribution.
+
+The adaptive Beta-tree algorithm chooses partition dimension of a region
+$`R`$ by testing marginal uniformity and pairwise independence:
+
+- First, we use Anderson-Darling statistics to test whether the $`i`$-th
+  coordinate $`X_i`$ follows a uniform distribution marginally
+  conditional on $`X\in R`$. We randomly choose a coordinate that
+  significantly differs from a uniform distribution.
+
+- Second, if no rejections is made in the first step, we test pairwise
+  independence of $`X_i`$ and $`X_j`$ by using Fisher’s exact test to
+  the counts in the four quadrants of $`i`$-th and $`j`$-th coordinate.
+  The four quadrants are defined by dividing $`R`$ along the middle of
+  the $`i`$-th and $`j`$-th coordinate. We combine the $`(d-1)`$
+  p-values for the $`i`$-th coordinate as
+  ``` math
+
+  p_i = \sum_{j\neq i} \log p_{i,j}
+  ```
+  and we randomly choose a coordinate with $`p_i \geq \tau`$ for some
+  threshold $`\tau`$ to partition.
+
+As an example, we simulate 5-dimensional observations where only the
+first two coordinates are correlated.
+
+``` r
+n <- 10000
+p <- 5
+X <- matrix(rnorm(n*p), n, p)
+X[,1:2] <- X[,1:2] %*% chol(matrix(c(1, 0.8, 0.8, 1), 2, 2))
+```
+
+We can compute an adaptive Beta-tree histogram using
+`build_adaptive_histogram` function.
+
+``` r
+alpha <- 0.1 
+adaptive_beta_tree <- build_adaptive_histogram(X, 
+                                               alpha  = alpha,
+                                               thresh_marginal = alpha / ncol(X),
+                                               thresh_interaction = qgamma(shape = ncol(X) - 1,rate = 1, p = 1 - alpha),
+                                               method = "weighted_bonferroni")
+```
+
+There are five parameters for this function:
+
+- `X` is the data matrix
+
+- `alpha` is the significance level, by default `alpha=0.1`.
+
+- `thresh_marginal` is the p-value threshold for testing marginal
+  uniformity, by default this is `alpha / d` (`d = ncol(X)`).
+
+- `thresh_interaction` is the threshold for $`p_i`$ for testing pairwise
+  independence, by default this is the $`1-\alpha`$ quantile of a gamma
+  distribution with shape parameter $`d-1`$ and rate parameter 1.
+
+- `method` specifies the approach used to correct for multiple
+  hypothesis testing as before.
+
+You can visualize the estimated distribution using the functions
+`plot_histogram_data` (to prepare data for plotting) and
+`plot_histogram` (to create the plot). You can use these functions to
+compute the marginal distribution or the conditional distribution within
+a given hyperrectangle. Below, we visualize the estimated marginal
+distribution in $`(X_1, X_2)`$ and plot a subsample of 500 observations.
+
+``` r
+plot_dat <- plot_histogram_data( X = X,
+                                 hist   = adaptive_beta_tree$hist,
+                                 plot_coord = c(1, 2),
+                                 nint  = 10,
+                                 show_data  = TRUE,
+                                 ndat     = 500)
+plot_histogram(plot_dat)
+```
+
+![](beta_trees_files/figure-html/unnamed-chunk-16-1.png)
+
+We can see that the adaptive histogram is able to capture the
+correlation between $`X_1`$ and $`X_2`$ in the five dimensional data.

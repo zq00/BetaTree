@@ -2,5 +2,7 @@
 
 ### All vignettes
 
-- [Creating a Beta Tree Histogram](beta_trees.md):
-- [Mode Hunting Using Beta-Trees](mode.md):
+- [Creating a Beta Tree
+  Histogram](https://zq00.github.io/BetaTree/articles/beta_trees.md):
+- [Mode Hunting Using
+  Beta-Trees](https://zq00.github.io/BetaTree/articles/mode.md):

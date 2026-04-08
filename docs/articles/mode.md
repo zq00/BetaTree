@@ -11,12 +11,6 @@ to identify modes in a distribution because they indicate
 sub-populations (here, the two modes indicate the two mixture
 components).
 
-    ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-    ## ℹ Please use `linewidth` instead.
-    ## This warning is displayed once every 8 hours.
-    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-    ## generated.
-
 ![](mode_files/figure-html/unnamed-chunk-3-1.png)
 
 For a histogram, we can think of a mode as a region whose average
@@ -48,9 +42,10 @@ hist <- BuildHist(X, alpha = 0.1, method = "weighted_bonferroni", plot= T)
 
 ![](mode_files/figure-html/unnamed-chunk-7-1.png)
 
-We use the [`FindModes()`](../reference/FindModes.md) function to
-identify modes in a Beta-tree histogram. This function has three
-parameters, the first is the Beta-tree histogram (output of the
+We use the
+[`FindModes()`](https://zq00.github.io/BetaTree/reference/FindModes.md)
+function to identify modes in a Beta-tree histogram. This function has
+three parameters, the first is the Beta-tree histogram (output of the
 `BuildHist` function), the second is the data dimension `d`, and the
 third is the cutoff value of the path length (we only check paths whose
 length is at most `cutoff`). We set `cutoff=1000` here, which means we
@@ -119,22 +114,21 @@ are two distinct modes.
 ![](mode_files/figure-html/unnamed-chunk-14-1.png)
 
 Note that we have only examined one path here, and to check every path,
-we use the function [`is_connected()`](../reference/is_connected.md). It
-returns `connected` if the two regions are **not** distinct modes. The
-function has five input values: `i` and `j` are the indices of the two
-regions, `g` is a graph based on the adjacency matrix (we will describe
-later), `ci` are the lower and upper confidence bounds, and `cutoff`
-specifies the maximum length of path the function checks.
+we use the function
+[`is_connected()`](https://zq00.github.io/BetaTree/reference/is_connected.md).
+It returns `connected` if the two regions are **not** distinct modes.
+The function has five input values: `i` and `j` are the indices of the
+two regions, `g` is a graph based on the adjacency matrix (we will
+describe later), `ci` are the lower and upper confidence bounds, and
+`cutoff` specifies the maximum length of path the function checks.
 
 ``` r
 is_connected(i = modes$mode[1], j = modes$mode[2], g = g, ci = hist[,6:7], cutoff = 6)
 ```
 
-    ## [1] "unconnected"
-
 We need the adjacency matrix in order to compute the path between two
 regions. The function
-[`compute_adjacency_mat()`](../reference/compute_adjacency_mat.md)
+[`compute_adjacency_mat()`](https://zq00.github.io/BetaTree/reference/compute_adjacency_mat.md)
 computes the adjacency matrix for all of the regions in the histogram.
 The two inputs of the function is a Beta-tree histogram `hist` and data
 dimension `d`. In the output adjacency matrix $`A`$, $`A_{i,j} = 1`$ if
@@ -178,3 +172,27 @@ To summarize, `FindModes` proceeds in the following steps:
     modes, then we add it to the list of modes.
 
 3.  Return the list of modes.
+
+## Approximate mode hunting
+
+When the number of histogram regions is large, enumerating all of the
+paths connecting two regions would be computationally unfeasible. The
+approximate mode hunting algorithm samples $`B`$ random paths of length
+$`L`$ starting at a candidate mode and evaluates those that reach any of
+the current modes. While we might include “false positives” using the
+approximate algorithm, it allows us to identify modes using less
+computation.
+
+You can use the `FindModesApproximate` function to use the approximate
+mode hunting algorithm:
+
+``` r
+modes_approximate <- FindModesApproximate(hist = hist, d = d, L = 100, B = 10000) 
+
+modes_approximate$mode # which region are the modes? 
+```
+
+    ## [1] 20  8
+
+Here the approximate algorithm returns the same two histogram regions as
+the exact algorithm.
