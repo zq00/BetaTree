@@ -8,7 +8,7 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 library(tidyverse)
 library(igraph)
 library(mvtnorm)
@@ -227,6 +227,33 @@ To summarize, `FindModes` proceeds in the following steps:
 2. Iterate through every region by the order given in (1), test if it is a *distinct mode* from the current list of modes using `is_connected` function. If it is `unconnected` from all the current modes, then we add it to the list of modes.  
 
 3. Return the list of modes. 
+
+## Approximate mode hunting
+
+When the number of histogram regions is large, enumerating all of the paths connecting two regions would be computationally unfeasible. The approximate mode hunting algorithm samples $B$ random paths of length $L$ starting at a candidate mode and evaluates those that reach any of the current modes. While we might include "false positives" using the approximate algorithm, it allows us to identify modes using less computation. 
+
+You can use the `FindModesApproximate` function to use the approximate mode hunting algorithm: 
+
+```{r}
+modes_approximate <- FindModesApproximate(hist = hist, d = d, L = 100, B = 10000) 
+
+modes_approximate$mode # which region are the modes? 
+```
+
+Here the approximate algorithm returns the same two histogram regions as the exact algorithm. 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
