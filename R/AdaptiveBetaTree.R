@@ -221,9 +221,9 @@ get_partition_dim <- function(x, thresh_marginal, thresh_interaction,
 #'
 #' @export
 build_adaptive_histogram <- function(X,
+                                     alpha  = 0.1,
                                      thresh_marginal = alpha / ncol(X),
                                      thresh_interaction = qgamma(shape = ncol(X) - 1,rate = 1, p = 1 - alpha),
-                                     alpha  = 0.1,
                                      method = "weighted_bonferroni") {
 
   # ---- Input validation ----
