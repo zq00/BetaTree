@@ -6,15 +6,19 @@
 \usage{
 build_adaptive_histogram(
   X,
-  thresh_marginal = alpha/ncol(X),
-  thresh_interaction = qgamma(shape = ncol(X) - 1, rate = 1, p = 1 - alpha),
   alpha = 0.1,
+  thresh_marginal = alpha/ncol(X),
+  thresh_interaction = stats::qgamma(shape = ncol(X) - 1, rate = 1, p = 1 - alpha),
   method = "weighted_bonferroni"
 )
 }
 \arguments{
 \item{X}{A numeric matrix dimension \eqn{n \times d} containing observations falling inside the current
 region. Each row corresponds to one observation.}
+
+\item{alpha}{Significance level, default is \code{alpha = 0.1}.
+The Beta-tree histogram provides simultaneous confidence intervals for average densities
+in each histogram region with coverage probability \eqn{1-\alpha}.}
 
 \item{thresh_marginal}{A numeric value between \eqn{(0, 1)}. The significance
 threshold for the marginal Anderson-Darling uniformity test. Default value is \code{alpha / d}.}
@@ -23,10 +27,6 @@ threshold for the marginal Anderson-Darling uniformity test. Default value is \c
 combined interaction score \eqn{\sum_{j\neq i} -\log p_{ij}} for coordinate
 \eqn{i}, where \eqn{p_{ij}} is the p-value of testing independence between \eqn{X_i} and \eqn{X_j}.
 Default value is \eqn{(1-\alpha)} quantile of a Gamma variable with shape \eqn{d-1} and rate 1.}
-
-\item{alpha}{Significance level, default is \code{alpha = 0.1}.
-The Beta-tree histogram provides simultaneous confidence intervals for average densities
-in each histogram region with coverage probability \eqn{1-\alpha}.}
 
 \item{method}{A character string specifying whether to use \code{method = "bonferroni"} or \code{method = "weighted_bonferroni"} method to
 adjust for multiple hypothesis testing when computing significance levels.}
