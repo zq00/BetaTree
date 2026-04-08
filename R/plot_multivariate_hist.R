@@ -200,7 +200,7 @@ plot_histogram_data <- function(X, hist,
 #'
 #' @examples
 #'
-#' #' \dontrun{
+#' \dontrun{
 #' n <- 10000
 #' p <- 4
 #' X <- matrix(rnorm(n*p), nrow = n, ncol = p)

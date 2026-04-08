@@ -14,6 +14,7 @@
 #' @inheritParams FindModes
 #' @returns \code{unconnected} if the two regions are distinct modes and \code{connected} otherwise.
 #' @importFrom igraph all_simple_paths
+#'
 #' @export
 
 is_connected <- function(i, j, g, ci, cutoff = 6){

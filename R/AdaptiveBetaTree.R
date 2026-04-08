@@ -93,7 +93,7 @@ get_partition_dim <- function(x, thresh_marginal, thresh_interaction,
   # test marginal uniformity
   p_marginal <- numeric(d)
   for (i in seq_len(d)) {
-    p_marginal[i] <- ad.test(x[, i], null = "punif",
+    p_marginal[i] <- goftest::ad.test(x[, i], null = "punif",
                              min = lower[i], max = upper[i])$p
   }
 
@@ -128,7 +128,7 @@ get_partition_dim <- function(x, thresh_marginal, thresh_interaction,
 
         # compute Fisher's exact test p-value
         mlog_p_interaction[i, j] <-
-          mlog_p_interaction[j, i] <- -log(fisher.test(dat)$p.value)
+          mlog_p_interaction[j, i] <- -log(stat::fisher.test(dat)$p.value)
       }
     }
   }
@@ -223,7 +223,7 @@ get_partition_dim <- function(x, thresh_marginal, thresh_interaction,
 build_adaptive_histogram <- function(X,
                                      alpha  = 0.1,
                                      thresh_marginal = alpha / ncol(X),
-                                     thresh_interaction = qgamma(shape = ncol(X) - 1,rate = 1, p = 1 - alpha),
+                                     thresh_interaction = stats::qgamma(shape = ncol(X) - 1,rate = 1, p = 1 - alpha),
                                      method = "weighted_bonferroni") {
 
   # ---- Input validation ----
