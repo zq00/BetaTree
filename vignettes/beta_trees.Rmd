@@ -18,9 +18,8 @@ knitr::opts_chunk$set(
 
 ```{r setup, include = F }
 library(tidyverse)
-# library(BetaTree)
+library(BetaTree)
 library(mvtnorm)
-devtools::load_all(path = "/Users/qianzhao/Documents/Research/BetaTrees/BetaTree")
 ```
 
 First introduced by Pearson in 1895, the histogram is one of the basic tools for summarizing and visualizing data. In order to construct a histogram for univariate data, one first defines a set of "bins" (i.e., intervals), and then counts the number of observations within each bin. We can do the same for two- or higher- dimensional data. However, as the dimension increases, creating a histogram becomes challenging because of the *curse of dimensionality*. In essence, if we use the same number of bins in each dimension, then in order to have the same number of observations per bin as in the univariate setting, the sample size needs to increase *exponentially* with the dimension.  

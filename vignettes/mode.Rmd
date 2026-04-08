@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 library(tidyverse)
 library(igraph)
 library(mvtnorm)
-devtools::load_all(path = "/Users/qianzhao/Documents/Research/BetaTrees/BetaTree")
+library(BetaTree)
 ```
 
 In this vignette, we will demonstrate how to use a Beta-tree histogram to identify modes in a continuous probability distribution. 
@@ -199,7 +199,7 @@ plotdensity(hist, d = d, g = g, A = modes$mode[1], B = modes$mode[2])
 
 Note that we have only examined one path here, and to check every path, we use the function `is_connected()`. It returns `connected`  if the two regions are **not** distinct modes. The function has five input values: `i` and `j` are the indices of the two regions, `g` is a graph based on the adjacency matrix (we will describe later), `ci` are the lower and upper confidence bounds, and  `cutoff`  specifies the maximum length of path the function checks.
 
-```{r}
+```{r, eval = F}
 is_connected(i = modes$mode[1], j = modes$mode[2], g = g, ci = hist[,6:7], cutoff = 6)
 ```
 
