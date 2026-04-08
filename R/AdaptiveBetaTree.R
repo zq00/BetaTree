@@ -128,7 +128,7 @@ get_partition_dim <- function(x, thresh_marginal, thresh_interaction,
 
         # compute Fisher's exact test p-value
         mlog_p_interaction[i, j] <-
-          mlog_p_interaction[j, i] <- -log(stat::fisher.test(dat)$p.value)
+          mlog_p_interaction[j, i] <- -log(stats::fisher.test(dat)$p.value)
       }
     }
   }
